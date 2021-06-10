@@ -1,7 +1,9 @@
 package com.example.exoticpets;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ArrayAdapter;
@@ -33,7 +35,22 @@ public class MainActivity extends AppCompatActivity {
         plus.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(MainActivity.this, "Test", Toast.LENGTH_SHORT).show();
+                new AlertDialog.Builder(MainActivity.this)
+                        .setTitle("Enter Pet Name")
+                        .setMessage("Enter your pet name!")
+                        // Specifying a listener allows you to take an action before dismissing the dialog.
+                        // The dialog is automatically dismissed when a dialog button is clicked.
+                        .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int which) {
+                                // Continue with delete operation
+                            }
+                        })
+
+                        // A null listener allows the button to dismiss the dialog and take no further action.
+                        .setNegativeButton(android.R.string.no, null)
+                        .show();
+
+//                Toast.makeText(MainActivity.this, "Test", Toast.LENGTH_SHORT).show();
             }
         });
         
