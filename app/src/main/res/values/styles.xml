@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <style name="CustomCalendarMonth" parent="AppTheme">
+        <item name="android:textColorPrimary">@color/white</item>
+    </style>
+
+    <style name="CustomCalendarDay" parent="TextAppearance.MaterialComponents.Caption">
+        <item name="android:textColor">@color/white</item>
+    </style>
+
+    <style name="CustomCalendarWeek" parent="TextAppearance.MaterialComponents.Caption">
+        <item name="android:textColor">@color/white</item>
+    </style>
+
+    <style name="AppTheme"></style>
+
+
+</resources>

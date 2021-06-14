@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/black"
     tools:context=".MainActivity">
 
     <TextView
@@ -13,6 +14,7 @@
         android:layout_marginTop="3dp"
         android:text="My Pets"
         android:textSize="20dp"
+        android:textColor="@color/white"
         android:layout_centerHorizontal="true" />
 
     <ListView
@@ -23,12 +25,23 @@
         />
 
     <com.google.android.material.button.MaterialButton
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
         android:id="@+id/addPet"
+        android:layout_width="61dp"
+        android:layout_height="44dp"
         android:layout_below="@+id/myPets"
         android:background="@drawable/plus"
-        app:backgroundTint="@android:color/holo_green_dark"
+        app:backgroundTint="@android:color/holo_green_dark" />
+
+    <CalendarView
+        android:theme="@style/CustomCalendarMonth"
+        android:id="@+id/calendarView"
+        android:layout_width="match_parent"
+        android:layout_height="384dp"
+        android:layout_below="@+id/addPet"
+        android:dateTextAppearance="@style/CustomCalendarDay"
+        android:weekDayTextAppearance="@style/CustomCalendarWeek"
+
+
         />
 
 
