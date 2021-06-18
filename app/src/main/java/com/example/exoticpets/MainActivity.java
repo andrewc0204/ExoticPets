@@ -24,6 +24,7 @@ public class MainActivity extends AppCompatActivity {
     String[] myList;
     Button plus;
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -34,27 +35,22 @@ public class MainActivity extends AppCompatActivity {
         ArrayAdapter<String> myarrayAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, myList);
         myPets.setAdapter(myarrayAdapter);
         myPets.setBackgroundColor(Color.parseColor("#0E86D4"));
-        final EditText input = new EditText(this);
-
-
-
         plus = findViewById(R.id.addPet);
+
+        final EditText input = new EditText(this);
         plus.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 new AlertDialog.Builder(MainActivity.this)
                         .setTitle("Enter Pet Name")
-                        .setMessage("Enter your pet name!")
-
+                        //.setMessage("Enter your pet name!")
+                        .setView(input)
                         // Specifying a listener allows you to take an action before dismissing the dialog.
                         // The dialog is automatically dismissed when a dialog button is clicked.
                         .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int which) {
-                                // Continue with delete operation
                             }
                         })
-
-
                         // A null listener allows the button to dismiss the dialog and take no further action.
                         .setNegativeButton(android.R.string.no, null)
                         .show();
@@ -62,7 +58,7 @@ public class MainActivity extends AppCompatActivity {
                 //Toast.makeText(MainActivity.this, "Test", Toast.LENGTH_SHORT).show();
             }
         });
-        
+
 
 
 
