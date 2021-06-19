@@ -36,7 +36,7 @@ public class MainActivity extends AppCompatActivity {
         myPets = findViewById(R.id.myPets);
         plus = findViewById(R.id.addPet);
 
-        myList = new String[]{"Wally", "Chinnok"};
+        //myList = new String[]{"Wally", "Chinnok"};
         ArrayAdapter<String> myarrayAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, arrayNames);
         myPets.setAdapter(myarrayAdapter);
         myPets.setBackgroundColor(Color.parseColor("#0E86D4"));
@@ -49,15 +49,20 @@ public class MainActivity extends AppCompatActivity {
                 new AlertDialog.Builder(MainActivity.this)
                         .setTitle("Enter Pet Name")
                         .setView(input)
+
                         // Specifying a listener allows you to take an action before dismissing the dialog.
 
                         // The dialog is automatically dismissed when a dialog button is clicked.
                         .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int which) {
+                                //Add items to array list
                               myarrayAdapter.add(input.getText().toString());
                               myPets.deferNotifyDataSetChanged();
+                              //Clears alert dialog box when pet is added
                                 if(input.getParent()!=null)
                                     ((ViewGroup)input.getParent()).removeView(input);
+                                //sets EditText to blank when user enters name
+                                input.setText("");
                             }
                         })
                         // A null listener allows the button to dismiss the dialog and take no further action.
