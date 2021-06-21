@@ -37,9 +37,14 @@ public class MainActivity extends AppCompatActivity {
         plus = findViewById(R.id.addPet);
 
         //myList = new String[]{"Wally", "Chinnok"};
-        ArrayAdapter<String> myarrayAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, arrayNames);
+        ArrayAdapter<String> myarrayAdapter = new ArrayAdapter<String>(this,R.layout.arraytext, arrayNames);
         myPets.setAdapter(myarrayAdapter);
         myPets.setBackgroundColor(Color.parseColor("#0E86D4"));
+
+
+
+
+
 
 
         final EditText input = new EditText(this);
@@ -63,6 +68,7 @@ public class MainActivity extends AppCompatActivity {
                                     ((ViewGroup)input.getParent()).removeView(input);
                                 //sets EditText to blank when user enters name
                                 input.setText("");
+
                             }
                         })
                         // A null listener allows the button to dismiss the dialog and take no further action.
