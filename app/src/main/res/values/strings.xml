@@ -1,5 +1,6 @@
 <resources>
     <string name="app_name">Exotic Pets</string>
     <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
+
+    <string name="my_pets">My Pets</string>
 </resources>
