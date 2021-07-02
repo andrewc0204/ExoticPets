@@ -3,31 +3,22 @@ package com.example.exoticpets;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
-import android.content.DialogInterface;
-import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.EditText;
-import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.Spinner;
-import android.widget.TextView;
-import android.widget.Toast;
 
 import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.List;
 //Hello
 
 public class MainActivity extends AppCompatActivity {
 
-    ListView myPets;
+    ListView myPetsListView;
 
-    Button plus;
+    Button plusButton;
     ArrayList<String> arrayNames = new ArrayList<String>();
 
 
@@ -37,17 +28,41 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        myPets = findViewById(R.id.myPets);
-        plus = findViewById(R.id.addPet);
-        
 
-        ArrayAdapter<String> myarrayAdapter = new ArrayAdapter<String>(this,R.layout.arraytext, arrayNames);
-        myPets.setAdapter(myarrayAdapter);
-        myPets.setBackgroundColor(Color.parseColor("#0E86D4"));
+        plusButton = findViewById(R.id.addPet);
+
+
+        /**
+         * This is the List View, the actual list.
+         */
+        myPetsListView = findViewById(R.id.myPets);
+
+
+        /**
+         * A Adapter, which is used to populate data (array) into the listview (UI)
+         */
+        ArrayAdapter<String> myArrayAdapter = new ArrayAdapter<String>(this,R.layout.arraytext, arrayNames);
+        myPetsListView.setAdapter(myArrayAdapter);
+
+        /**
+         * UI
+         * Adapter
+         * Data
+         *
+         *
+         * UI.setAdapter(adapter)
+         *
+         *
+         *
+         */
+
+
+
+        myPetsListView.setBackgroundColor(Color.parseColor("#0E86D4"));
 
 
 //        final EditText input = new EditText(MainActivity.this);
-        plus.setOnClickListener(new View.OnClickListener() {
+        plusButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
@@ -55,11 +70,7 @@ public class MainActivity extends AppCompatActivity {
                 /**
                  * Fiz: I created a list of different animals, and created something called an adapter.
                  * The adapter is what is "between" the UI (what people see) and the data (what is in "the back").
-                 *
                  */
-
-                String[] s = { "Arachnids", "Amphibians", "Reptiles", "Dogs", "Cats "};
-                ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(MainActivity.this, android.R.layout.simple_spinner_item, s);
 
 
                 /**
@@ -80,6 +91,10 @@ public class MainActivity extends AppCompatActivity {
                  * I populated the Spinner (located in the create_pet_layout) with the data from earlier (Like the arachnids, amphibians, etc) using the adapter i made earlier.
                  *
                  */
+
+                String[] s = { "Arachnids", "Amphibians", "Reptiles", "Dogs", "Cats", "Fish"};
+                ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(MainActivity.this, android.R.layout.simple_spinner_item, s);
+
                 Spinner spinner = view.findViewById(R.id.spinner);
                 spinner.setAdapter(arrayAdapter);
 

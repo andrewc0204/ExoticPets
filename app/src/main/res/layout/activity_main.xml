@@ -18,21 +18,22 @@
         android:textSize="25sp" />
 
     <ListView
-        android:layout_width="match_parent"
-        android:layout_height="100dp"
-        android:layout_below="@+id/textView"
         android:id="@+id/myPets"
-        />
+        android:layout_width="match_parent"
+        android:layout_height="400dp"
+        android:layout_below="@+id/textView" />
 
     <com.google.android.material.button.MaterialButton
         android:id="@+id/addPet"
         android:layout_width="61dp"
-        android:layout_height="44dp"
+        android:layout_height="55dp"
         android:layout_below="@+id/myPets"
         android:layout_alignParentEnd="true"
         android:background="@drawable/plus"
         app:backgroundTint="@android:color/holo_green_dark" />
 
+
+    <!--
 
     <CalendarView
         android:id="@+id/calendarView"
@@ -43,6 +44,7 @@
         android:theme="@style/CustomCalendarMonth"
         android:weekDayTextAppearance="@style/CustomCalendarWeek" />
 
+    -->
 
 
 </RelativeLayout>
