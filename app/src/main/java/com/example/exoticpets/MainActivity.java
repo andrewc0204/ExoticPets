@@ -30,8 +30,7 @@ public class MainActivity extends AppCompatActivity {
     Button plus;
     ArrayList<String> arrayNames = new ArrayList<String>();
 
-    String[] s = { "India ", "Arica", "India ", "Arica", "India ", "Arica",
-            "India ", "Arica", "India ", "Arica" };
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,42 +46,59 @@ public class MainActivity extends AppCompatActivity {
         myPets.setBackgroundColor(Color.parseColor("#0E86D4"));
 
 
-        final EditText input = new EditText(this);
+//        final EditText input = new EditText(MainActivity.this);
         plus.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
-                final ArrayAdapter<String> adp = new ArrayAdapter<String>(MainActivity.this,
-                        android.R.layout.simple_spinner_item, s);
 
-                TextView tx = (TextView) findViewById(R.id.txt1);
-                final Spinner sp = new Spinner(MainActivity.this);
-                sp.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT));
-                sp.setAdapter(adp);
+                /**
+                 * Fiz: I created a list of different animals, and created something called an adapter.
+                 * The adapter is what is "between" the UI (what people see) and the data (what is in "the back").
+                 *
+                 */
 
+                String[] s = { "Arachnids", "Amphibians", "Reptiles", "Dogs", "Cats "};
+                ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(MainActivity.this, android.R.layout.simple_spinner_item, s);
+
+
+                /**
+                 * Fiz: I created a view (create_pet_layout) located in the layout folder.
+                 * I then made and initialized a view from the layout (hence the view = create_pet_layout)
+                 *
+                 * Take a look at create_pet_layout
+                 */
+                View view = getLayoutInflater().inflate(R.layout.create_pet_layout, null);
+
+                /**
+                 * Fiz: Then, i created a new Alert Dialog, and used the view object (create_pet_layout) to make the alert
+                 */
                 AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
-                builder.setView(sp);
+
+
+                /**
+                 * I populated the Spinner (located in the create_pet_layout) with the data from earlier (Like the arachnids, amphibians, etc) using the adapter i made earlier.
+                 *
+                 */
+                Spinner spinner = view.findViewById(R.id.spinner);
+                spinner.setAdapter(arrayAdapter);
+
+
+                /**
+                 * This is where i attach the custom layout (create_pet_layout) to the alert dialog
+                 *
+                 */
+                builder.setView(view);
+
+                /**
+                 *
+                 * Fiz: Then, i showed the alert (The actual alert coming into view)
+                 *
+                 * See how the create_pet_layout and the alert dialog look the same? I'm basically manually creating a layout file,
+                 * and using it as the alert.
+                 */
                 builder.create().show();
-                /*new AlertDialog.Builder(MainActivity.this)
-                        .setTitle("Enter Pet Name")
-                        .setView(input)
-                        // Specifying a listener allows you to take an action before dismissing the dialog.
-                        // The dialog is automatically dismissed when a dialog button is clicked.
-                        .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog, int which) {
-                                //Add items to array list
-                              myarrayAdapter.add(input.getText().toString());
-                              myPets.deferNotifyDataSetChanged();
-                              //Clears alert dialog box when pet is added
-                                if(input.getParent()!=null)
-                                    ((ViewGroup)input.getParent()).removeView(input);
-                                //sets EditText to blank when user enters name
-                                input.setText("");
-                            }
-                        })
-                        // A null listener allows the button to dismiss the dialog and take no further action.
-                        .setNegativeButton(android.R.string.no, null)
-                        .show();*/
+
                 //Toast.makeText(MainActivity.this, "Test", Toast.LENGTH_SHORT).show();
             }
         });
