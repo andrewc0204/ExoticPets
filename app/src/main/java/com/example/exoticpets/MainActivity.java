@@ -136,6 +136,12 @@ public class MainActivity extends AppCompatActivity {
 
                         //NotifyDataSetChanged basically tells the adapter, "Hey man, we have new data. Please refresh the UI to reflect the new data"
                         mAdapter.notifyDataSetChanged();
+                        String spinnerSelectedPet = spinner.getSelectedItem().toString();
+
+                        if (spinnerSelectedPet.equals("Arachnid")){
+                            mImageUrls.add("https://i.pinimg.com/originals/b6/73/95/b67395ec910f2d6df475987efc4330e3.gif");
+                        }
+
                         alertDialog.dismiss();
                     }
                 });
