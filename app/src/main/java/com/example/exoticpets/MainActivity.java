@@ -5,16 +5,13 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.ListView;
+import android.widget.EditText;
 import android.widget.Spinner;
-
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.util.ArrayList;
 
@@ -26,6 +23,8 @@ public class MainActivity extends AppCompatActivity {
     //RecycleView vars
     private ArrayList<String> mNames = new ArrayList<>();
     private ArrayList<String> mImageUrls = new ArrayList<>();
+
+    RecyclerViewAdapter mAdapter;
 
     Button plusButton;
     //ArrayList<String> arrayNames = new ArrayList<String>();
@@ -91,6 +90,26 @@ public class MainActivity extends AppCompatActivity {
                  */
                 View view = getLayoutInflater().inflate(R.layout.create_pet_layout, null);
 
+
+                /**
+                 * We initialized a Button from the create_pet_layout
+                 */
+                Button createPetButton = view.findViewById(R.id.create_pet_button);
+                EditText petNameEditText = view.findViewById(R.id.edittext_pet_name);
+
+
+                createPetButton.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        //When the user clicks the button, whatever code we write here will be run
+                        mNames.add(petNameEditText.getText().toString());
+                        mImageUrls.add("https://ohiobiota.com/wp-content/uploads/Vertebrates/Reptiles/Butlers_Garter_Snake/Butlers-Garter-Snake-Andy-Avram-1.jpg");
+
+                        //NotifyDataSetChanged basically tells the adapter, "Hey man, we have new data. Please refresh the UI to reflect the new data"
+                        mAdapter.notifyDataSetChanged();
+                    }
+                });
+
                 /**
                  * Fiz: Then, i created a new Alert Dialog, and used the view object (create_pet_layout) to make the alert
                  */
@@ -154,16 +173,27 @@ public class MainActivity extends AppCompatActivity {
         mImageUrls.add("https://ohiobiota.com/wp-content/uploads/Vertebrates/Reptiles/Butlers_Garter_Snake/Butlers-Garter-Snake-Andy-Avram-1.jpg");
         mNames.add("Garter Snake");
 
+        mImageUrls.add("https://ohiobiota.com/wp-content/uploads/Vertebrates/Reptiles/Butlers_Garter_Snake/Butlers-Garter-Snake-Andy-Avram-1.jpg");
+        mNames.add("Rainbow Unicorn");
 
 
         initRecyclerView();
     }
     //This method sets up the RecycleView in the app
+
+
+
+
+
     private void initRecyclerView(){
         Log.d(TAG, "initRecyclerView: init recyclerview.");
         RecyclerView recyclerView = findViewById(R.id.recyclerv_view);
-        RecyclerViewAdapter adapter = new RecyclerViewAdapter(this, mNames, mImageUrls);
-        recyclerView.setAdapter(adapter);
+        mAdapter = new RecyclerViewAdapter(this, mNames, mImageUrls);
+        recyclerView.setAdapter(mAdapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
     }
+
+
+    //Member Variables
+    //Local Variables
 }

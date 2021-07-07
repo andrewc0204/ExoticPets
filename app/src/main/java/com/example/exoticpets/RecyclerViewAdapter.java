@@ -46,7 +46,25 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
                 .asBitmap()
                 .load(mImages.get(position))
                 .into(holder.image);
+
+
         holder.imageName.setText(mImageNames.get(position));
+
+        //Position = 0 -> Orchid Mantis
+
+        //mImageNames
+        //0 = Orchid Mantis
+        //1 = Bold Jumping Spider
+        //2 = Bearded Dragon
+        //3 = Leopard Gecko
+
+        //mImages
+        //0 = Image of Orchid Mantis
+        //1 = Bold Jumping Spider
+        //2 Image of Bearded Dragon
+
+        //holder 1 [First Row] -> Name:Orchid Mantis , Image: Orchid Mantis Image
+        //holder.imageName.setText.(mImageNames.
 
         holder.parentLayout.setOnClickListener(new View.OnClickListener(){
         @Override
