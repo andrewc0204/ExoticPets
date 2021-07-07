@@ -25,9 +25,7 @@ public class MainActivity extends AppCompatActivity {
     private ArrayList<String> mImageUrls = new ArrayList<>();
 
     RecyclerViewAdapter mAdapter;
-
     Button plusButton;
-    //ArrayList<String> arrayNames = new ArrayList<String>();
 
 
     @Override
@@ -39,44 +37,9 @@ public class MainActivity extends AppCompatActivity {
         plusButton = findViewById(R.id.addPet);
         initImageBitmaps();
 
-        /**
-         * This is the List View, the actual list.
-         */
-        //myPetsListView = findViewById(R.id.myPets);
-
-
-        /**
-         * A Adapter, which is used to populate data (array) into the listview (UI)
-         */
-        //ArrayAdapter<String> myArrayAdapter = new ArrayAdapter<String>(this,R.layout.arraytext, arrayNames);
-        //myPetsListView.setAdapter(myArrayAdapter);
-
-        /**
-         * UI
-         * Adapter
-         * Data
-         *
-         *
-         * UI.setAdapter(adapter)
-         *
-         *
-         *
-         */
-
-
-        //       myPetsListView.setBackgroundColor(Color.parseColor("#0E86D4"));
-//        final EditText input = new EditText(MainActivity.this);
-
-
         plusButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
-
-                /**
-                 * Fiz: I created a list of different animals, and created something called an adapter.
-                 * The adapter is what is "between" the UI (what people see) and the data (what is in "the back").
-                 */
 
 
                 /**
@@ -99,13 +62,11 @@ public class MainActivity extends AppCompatActivity {
                  */
                 AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
 
-
                 /**
                  * I populated the Spinner (located in the create_pet_layout) with the data from earlier (Like the arachnids, amphibians, etc) using the adapter i made earlier.
-                 *
                  */
 
-                String[] s = {"Arachnid", "Amphibian", "Reptile", "Insect", "Snake", "Fish"};
+                String[] s = {"Arachnid", "Amphibian", "Reptile", "Insect", "Fish"};
                 ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(MainActivity.this, android.R.layout.simple_spinner_item, s);
 
                 Spinner spinner = view.findViewById(R.id.spinner);
@@ -114,14 +75,11 @@ public class MainActivity extends AppCompatActivity {
 
                 /**
                  * This is where i attach the custom layout (create_pet_layout) to the alert dialog
-                 *
                  */
                 builder.setView(view);
 
                 /**
-                 *
                  * Fiz: Then, i showed the alert (The actual alert coming into view)
-                 *
                  * See how the create_pet_layout and the alert dialog look the same? I'm basically manually creating a layout file,
                  * and using it as the alert.
                  */
@@ -132,16 +90,30 @@ public class MainActivity extends AppCompatActivity {
                     public void onClick(View v) {
                         //When the user clicks the button, whatever code we write here will be run
                         mNames.add(petNameEditText.getText().toString());
-                        mImageUrls.add("https://ohiobiota.com/wp-content/uploads/Vertebrates/Reptiles/Butlers_Garter_Snake/Butlers-Garter-Snake-Andy-Avram-1.jpg");
-
-                        //NotifyDataSetChanged basically tells the adapter, "Hey man, we have new data. Please refresh the UI to reflect the new data"
-                        mAdapter.notifyDataSetChanged();
                         String spinnerSelectedPet = spinner.getSelectedItem().toString();
 
-                        if (spinnerSelectedPet.equals("Arachnid")){
-                            mImageUrls.add("https://i.pinimg.com/originals/b6/73/95/b67395ec910f2d6df475987efc4330e3.gif");
+                        switch(spinnerSelectedPet) {
+                            case "Arachnid":
+                                mImageUrls.add("https://i.pinimg.com/originals/b6/73/95/b67395ec910f2d6df475987efc4330e3.gif");
+                                break;
+                            case "Amphibian":
+                                mImageUrls.add("https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTPw_xYUc0rjL5QuYa6CIEk7z1D7eH6BI5gsg&usqp=CAU");
+                                break;
+                            case "Reptile":
+                                mImageUrls.add("https://image.shutterstock.com/image-vector/vector-illustration-cartoon-snake-pixel-260nw-398666929.jpg");
+                                break;
+                            case "Insect":
+                                mImageUrls.add("https://art.pixilart.com/eb6f46cc7831237.gif");
+                                break;
+                            case "Fish":
+                                mImageUrls.add("https://image.shutterstock.com/image-vector/fish-icon-pixel-style-animal-260nw-1789259792.jpg");
+                                break;
+                            default:
+                                mImageUrls.add("https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQrADorfjbjLGdl18wl5_5bE3pJnSS5A0tg7A&usqp=CAU");
+                                break;
                         }
-
+                        //NotifyDataSetChanged basically tells the adapter, "Hey man, we have new data. Please refresh the UI to reflect the new data"
+                        mAdapter.notifyDataSetChanged();
                         alertDialog.dismiss();
                     }
                 });
@@ -175,11 +147,7 @@ public class MainActivity extends AppCompatActivity {
 
         mImageUrls.add("https://ohiobiota.com/wp-content/uploads/Vertebrates/Reptiles/Butlers_Garter_Snake/Butlers-Garter-Snake-Andy-Avram-1.jpg");
         mNames.add("Garter Snake");
-
-        mImageUrls.add("https://ohiobiota.com/wp-content/uploads/Vertebrates/Reptiles/Butlers_Garter_Snake/Butlers-Garter-Snake-Andy-Avram-1.jpg");
-        mNames.add("Rainbow Unicorn");
-
-
+        
         initRecyclerView();
     }
     //This method sets up the RecycleView in the app
