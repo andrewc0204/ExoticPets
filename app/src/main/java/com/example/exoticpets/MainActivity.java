@@ -14,6 +14,8 @@ import android.widget.Button;
 import android.widget.ListView;
 import android.widget.Spinner;
 
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
+
 import java.util.ArrayList;
 
 
@@ -100,7 +102,7 @@ public class MainActivity extends AppCompatActivity {
                  *
                  */
 
-                String[] s = { "Arachnids", "Amphibians", "Reptiles", "Dogs", "Cats", "Fish"};
+                String[] s = { "Arachnid", "Amphibian", "Reptile", "Insect", "Snake", "Fish"};
                 ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(MainActivity.this, android.R.layout.simple_spinner_item, s);
 
                 Spinner spinner = view.findViewById(R.id.spinner);
