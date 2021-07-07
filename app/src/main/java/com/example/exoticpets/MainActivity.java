@@ -30,8 +30,6 @@ public class MainActivity extends AppCompatActivity {
     //ArrayList<String> arrayNames = new ArrayList<String>();
 
 
-
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -66,8 +64,7 @@ public class MainActivity extends AppCompatActivity {
          */
 
 
-
- //       myPetsListView.setBackgroundColor(Color.parseColor("#0E86D4"));
+        //       myPetsListView.setBackgroundColor(Color.parseColor("#0E86D4"));
 //        final EditText input = new EditText(MainActivity.this);
 
 
@@ -97,19 +94,6 @@ public class MainActivity extends AppCompatActivity {
                 Button createPetButton = view.findViewById(R.id.create_pet_button);
                 EditText petNameEditText = view.findViewById(R.id.edittext_pet_name);
 
-
-                createPetButton.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        //When the user clicks the button, whatever code we write here will be run
-                        mNames.add(petNameEditText.getText().toString());
-                        mImageUrls.add("https://ohiobiota.com/wp-content/uploads/Vertebrates/Reptiles/Butlers_Garter_Snake/Butlers-Garter-Snake-Andy-Avram-1.jpg");
-
-                        //NotifyDataSetChanged basically tells the adapter, "Hey man, we have new data. Please refresh the UI to reflect the new data"
-                        mAdapter.notifyDataSetChanged();
-                    }
-                });
-
                 /**
                  * Fiz: Then, i created a new Alert Dialog, and used the view object (create_pet_layout) to make the alert
                  */
@@ -121,7 +105,7 @@ public class MainActivity extends AppCompatActivity {
                  *
                  */
 
-                String[] s = { "Arachnid", "Amphibian", "Reptile", "Insect", "Snake", "Fish"};
+                String[] s = {"Arachnid", "Amphibian", "Reptile", "Insect", "Snake", "Fish"};
                 ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(MainActivity.this, android.R.layout.simple_spinner_item, s);
 
                 Spinner spinner = view.findViewById(R.id.spinner);
@@ -141,13 +125,26 @@ public class MainActivity extends AppCompatActivity {
                  * See how the create_pet_layout and the alert dialog look the same? I'm basically manually creating a layout file,
                  * and using it as the alert.
                  */
-                builder.create().show();
+                AlertDialog alertDialog = builder.create();
+                alertDialog.show();
+                createPetButton.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        //When the user clicks the button, whatever code we write here will be run
+                        mNames.add(petNameEditText.getText().toString());
+                        mImageUrls.add("https://ohiobiota.com/wp-content/uploads/Vertebrates/Reptiles/Butlers_Garter_Snake/Butlers-Garter-Snake-Andy-Avram-1.jpg");
 
+                        //NotifyDataSetChanged basically tells the adapter, "Hey man, we have new data. Please refresh the UI to reflect the new data"
+                        mAdapter.notifyDataSetChanged();
+                        alertDialog.dismiss();
+                    }
+                });
                 //Toast.makeText(MainActivity.this, "Test", Toast.LENGTH_SHORT).show();
             }
         });
     }
-    private void initImageBitmaps(){
+
+    private void initImageBitmaps() {
         Log.d(TAG, "initImageBitmaps: preparing bitmaps");
         mImageUrls.add("https://images.ctfassets.net/cnu0m8re1exe/4p84Xg3bCdVn0Rx8HILCVx/c22c167e9f392e37ec7e8ba50bac3f4d/shutterstock_167834045.jpg?fm=jpg&fl=progressive&w=660&h=433&fit=fill");
         mNames.add("Orchid Mantis");
@@ -182,10 +179,7 @@ public class MainActivity extends AppCompatActivity {
     //This method sets up the RecycleView in the app
 
 
-
-
-
-    private void initRecyclerView(){
+    private void initRecyclerView() {
         Log.d(TAG, "initRecyclerView: init recyclerview.");
         RecyclerView recyclerView = findViewById(R.id.recyclerv_view);
         mAdapter = new RecyclerViewAdapter(this, mNames, mImageUrls);
