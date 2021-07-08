@@ -19,7 +19,7 @@
 
 
     <com.google.android.material.button.MaterialButton
-        android:id="@+id/addPet"
+        android:id="@+id/addPetButton"
         android:layout_width="61dp"
         android:layout_height="55dp"
         android:background="@drawable/plus"

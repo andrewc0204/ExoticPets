@@ -11,6 +11,7 @@ import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.Spinner;
 
 import java.util.ArrayList;
@@ -24,18 +25,30 @@ public class MainActivity extends AppCompatActivity {
     private ArrayList<String> mNames = new ArrayList<>();
     private ArrayList<String> mImageUrls = new ArrayList<>();
 
+    //Vars
     RecyclerViewAdapter mAdapter;
     Button plusButton;
+    ImageButton petImageButton;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
         Log.d(TAG, "onCreate: started");
-        plusButton = findViewById(R.id.addPet);
-        initImageBitmaps();
+        getSupportActionBar().hide();
+
+        //Vars
+        plusButton = findViewById(R.id.addPetButton);
+        petImageButton = findViewById(R.id.petImageButton);
+
+        petImageButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                
+
+            }
+        });
 
         plusButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -120,6 +133,7 @@ public class MainActivity extends AppCompatActivity {
                 //Toast.makeText(MainActivity.this, "Test", Toast.LENGTH_SHORT).show();
             }
         });
+        initImageBitmaps();
     }
 
     private void initImageBitmaps() {
@@ -147,7 +161,7 @@ public class MainActivity extends AppCompatActivity {
 
         mImageUrls.add("https://ohiobiota.com/wp-content/uploads/Vertebrates/Reptiles/Butlers_Garter_Snake/Butlers-Garter-Snake-Andy-Avram-1.jpg");
         mNames.add("Garter Snake");
-        
+
         initRecyclerView();
     }
     //This method sets up the RecycleView in the app
