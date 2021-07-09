@@ -44,6 +44,31 @@ public class MainActivity extends AppCompatActivity {
         plusButton = findViewById(R.id.addPetButton);
         instructionView = findViewById(R.id.instructionView);
 
+        //For Loops Tutorial (Not part of app)
+        /*
+        What is a for loop? A for loop is used for iterating through a array or objects.
+
+        ArrayList<String> colors = new ArrayList<>;
+        colors = {"red", "blue", "green", "orange", "yellow"};
+
+        for(color in colors)
+        if(color == orange){
+        Toast("Found orange!")
+        }
+
+        for(all of the pets){
+        comparePetThatNeedsToBeFedRightMostUrgently()
+
+        Wally (In 2 hours)
+        Spider Pig (Sunday at 2pm)
+        Rainbow Unicorn (Monday at 4pm)
+
+
+        To summarize, a for loop goes through all of the items (or in this case, the pets and their feeding times)
+        }
+
+         */
+
 
 
         plusButton.setOnClickListener(new View.OnClickListener() {
