@@ -14,6 +14,7 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 
@@ -38,6 +39,8 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         Log.d(TAG, "onCreate: started");
+
+        //Hides the action bar
         getSupportActionBar().hide();
 
         //Vars
@@ -136,9 +139,11 @@ public class MainActivity extends AppCompatActivity {
                         mNames.add(petNameEditText.getText().toString());
                         String spinnerSelectedPet = spinner.getSelectedItem().toString();
 
+
+                        //Sets text to disappear once the user adds a pet
                         instructionView.setVisibility(View.GONE);
 
-                        
+
 
                         switch(spinnerSelectedPet) {
                             case "Arachnid":
@@ -160,7 +165,6 @@ public class MainActivity extends AppCompatActivity {
                                 mImageUrls.add("https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQrADorfjbjLGdl18wl5_5bE3pJnSS5A0tg7A&usqp=CAU");
                                 break;
                         }
-
 
                         //NotifyDataSetChanged basically tells the adapter, "Hey man, we have new data. Please refresh the UI to reflect the new data"
                         mAdapter.notifyDataSetChanged();
