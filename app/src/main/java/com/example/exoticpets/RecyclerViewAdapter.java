@@ -47,6 +47,8 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
                 .load(mImages.get(position))
                 .into(holder.image);
 
+        System.out.println();
+
 
         holder.imageName.setText(mImageNames.get(position));
 

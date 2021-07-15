@@ -109,6 +109,10 @@ public class MainActivity extends AppCompatActivity {
                 Spinner spinner = view.findViewById(R.id.spinner);
                 spinner.setAdapter(arrayAdapter);
 
+                Button closeBtn = view.findViewById(R.id.close_btn);
+
+
+
 
                 /**
                  * This is where i attach the custom layout (create_pet_layout) to the alert dialog
@@ -121,6 +125,15 @@ public class MainActivity extends AppCompatActivity {
                  * and using it as the alert.
                  */
                 AlertDialog alertDialog = builder.create();
+
+                closeBtn.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        alertDialog.dismiss();
+                    }
+                });
+
+
                 alertDialog.show();
 
                 petImageButton.setOnClickListener(new View.OnClickListener() {
