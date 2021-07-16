@@ -160,7 +160,7 @@ public class MainActivity extends AppCompatActivity {
 
                         switch(spinnerSelectedPet) {
                             case "Arachnid":
-                                mImageUrls.add("https://i.pinimg.com/originals/b6/73/95/b67395ec910f2d6df475987efc4330e3.gif");
+                                mImageUrls.add("https://opengameart.org/sites/default/files/styles/medium/public/SpiderEnemy.png");
                                 break;
                             case "Amphibian":
                                 mImageUrls.add("https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTPw_xYUc0rjL5QuYa6CIEk7z1D7eH6BI5gsg&usqp=CAU");
