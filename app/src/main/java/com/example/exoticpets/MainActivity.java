@@ -74,6 +74,9 @@ public class MainActivity extends AppCompatActivity {
 
 
 
+
+
+
         plusButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -103,8 +106,8 @@ public class MainActivity extends AppCompatActivity {
                  * I populated the Spinner (located in the create_pet_layout) with the data from earlier (Like the arachnids, amphibians, etc) using the adapter i made earlier.
                  */
 
-                String[] s = {"Arachnid", "Amphibian", "Reptile", "Insect", "Fish"};
-                ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(MainActivity.this, android.R.layout.simple_spinner_item, s);
+                String[] listOfAnimals = {"Choose Animal", "Arachnid", "Amphibian", "Reptile", "Insect", "Fish"};
+                ArrayAdapter<String> arrayAdapter = new CustomSpinnerAdapter(MainActivity.this, android.R.layout.simple_spinner_dropdown_item, listOfAnimals);
 
                 Spinner spinner = view.findViewById(R.id.spinner);
                 spinner.setAdapter(arrayAdapter);
