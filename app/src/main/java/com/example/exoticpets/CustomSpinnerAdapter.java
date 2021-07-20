@@ -5,7 +5,7 @@ import android.widget.ArrayAdapter;
 
 import androidx.annotation.NonNull;
 
-public class CustomSpinnerAdapter extends ArrayAdapter<String> {
+public class  CustomSpinnerAdapter extends ArrayAdapter<String> {
 
 
     public CustomSpinnerAdapter(@NonNull Context context, int resource, @NonNull String[] objects) {
