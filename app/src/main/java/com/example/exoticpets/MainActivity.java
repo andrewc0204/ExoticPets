@@ -1,10 +1,13 @@
 package com.example.exoticpets;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -22,6 +25,12 @@ import com.bumptech.glide.Glide;
 
 import java.util.ArrayList;
 
+import pl.aprilapps.easyphotopicker.ChooserType;
+import pl.aprilapps.easyphotopicker.DefaultCallback;
+import pl.aprilapps.easyphotopicker.EasyImage;
+import pl.aprilapps.easyphotopicker.MediaFile;
+import pl.aprilapps.easyphotopicker.MediaSource;
+
 
 public class MainActivity extends AppCompatActivity {
 
@@ -36,7 +45,35 @@ public class MainActivity extends AppCompatActivity {
     Button plusButton;
     ImageButton petImageButton;
     TextView instructionView;
+    EasyImage easyImage;
 
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable @org.jetbrains.annotations.Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        easyImage.handleActivityResult(requestCode, resultCode, data, this, new DefaultCallback() {
+            View view = getLayoutInflater().inflate(R.layout.create_pet_layout, null);
+            ImageView defaultImage = view.findViewById(R.id.paw_imageview);
+            @Override
+            public void onMediaFilesPicked(MediaFile[] imageFiles, MediaSource source) {
+                Glide.with(MainActivity.this)
+                        .asBitmap()
+                        .load(imageFiles)
+                        .into(defaultImage);
+            }
+
+            @Override
+            public void onImagePickerError(@NonNull Throwable error, @NonNull MediaSource source) {
+                //Some error handling
+                error.printStackTrace();
+            }
+
+            @Override
+            public void onCanceled(@NonNull MediaSource source) {
+                //Not necessary to remove any files manually anymore
+            }
+        });
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -77,16 +114,16 @@ public class MainActivity extends AppCompatActivity {
          */
 
 
-        EasyImage easyImage = new EasyImage.Builder(context)
+         easyImage = new EasyImage.Builder(MainActivity.this)
 
 // Chooser only
 // Will appear as a system chooser title, DEFAULT empty string
 //.setChooserTitle("Pick media")
 // Will tell chooser that it should show documents or gallery apps
 //.setChooserType(ChooserType.CAMERA_AND_DOCUMENTS)  you can use this or the one below
-//.setChooserType(ChooserType.CAMERA_AND_GALLERY)
+                .setChooserType(ChooserType.CAMERA_AND_GALLERY)
 // saving EasyImage state (as for now: last camera file link)
-                .setMemento(memento)
+
 
 // Setting to true will cause taken pictures to show up in the device gallery, DEFAULT false
                 .setCopyImagesToPublicGalleryFolder(false)
@@ -98,7 +135,6 @@ public class MainActivity extends AppCompatActivity {
                 .build();
 
 
-
         plusButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -107,10 +143,9 @@ public class MainActivity extends AppCompatActivity {
                 /**
                  * Fiz: I created a view (create_pet_layout) located in the layout folder.
                  * I then made and initialized a view from the layout (hence the view = create_pet_layout)
-                 *
                  * Take a look at create_pet_layout
                  */
-                
+
                 View view = getLayoutInflater().inflate(R.layout.create_pet_layout, null);
                 petImageButton = view.findViewById(R.id.petImageButton);
 
@@ -140,7 +175,7 @@ public class MainActivity extends AppCompatActivity {
                 spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
                     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                         String petTypeName = parent.getItemAtPosition(position).toString();
-                        switch (petTypeName){
+                        switch (petTypeName) {
                             case "Arachnid":
                                 Glide.with(MainActivity.this)
                                         .asBitmap()
@@ -210,6 +245,7 @@ public class MainActivity extends AppCompatActivity {
                 petImageButton.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
+                        easyImage.openCameraForImage(MainActivity.this);
                     }
                 });
 
@@ -219,9 +255,9 @@ public class MainActivity extends AppCompatActivity {
                     public void onClick(View v) {
                         //When the user clicks the button, whatever code we write here will be run
                         //Checks to see if user type in a pet name
-                        if(petNameEditText.getText().toString().isEmpty()){
+                        if (petNameEditText.getText().toString().isEmpty()) {
                             Toast.makeText(MainActivity.this, "Type Pet Name", Toast.LENGTH_SHORT).show();
-                        }else{
+                        } else {
                             mNames.add(petNameEditText.getText().toString());
                             String spinnerSelectedPet = spinner.getSelectedItem().toString();
 
@@ -258,7 +294,7 @@ public class MainActivity extends AppCompatActivity {
                             mAdapter.notifyDataSetChanged();
                             //alertDialog.dismiss();
                         }
-                        }
+                    }
 
 
                 });
@@ -281,7 +317,6 @@ public class MainActivity extends AppCompatActivity {
         recyclerView.setAdapter(mAdapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
     }
-
 
 
 }

@@ -38,8 +38,8 @@ dependencies {
     androidTestImplementation 'androidx.test.ext:junit:1.1.2'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.3.0'
 
-
-
+    //Kotlin
+    implementation 'org.jetbrains.kotlin:kotlin-stdlib-jdk7:1.2.50'
     implementation 'androidx.cardview:cardview:1.0.0'
     //recyclerview
     implementation "androidx.recyclerview:recyclerview:1.2.1"
@@ -49,11 +49,12 @@ dependencies {
     annotationProcessor 'com.github.bumptech.glide:compiler:4.12.0'
 
     //EasyImage - get photos from gallery
-    implementation 'com.github.jkwiecien:EasyImage:3.2.0'
+    implementation 'com.github.jkwiecien:EasyImage:3.0.4'
 
     repositories {
         google()
         mavenCentral()
+        maven { url 'https://jitpack.io' }
     }
 
     //
