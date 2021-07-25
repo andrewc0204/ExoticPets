@@ -8,7 +8,10 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
@@ -165,12 +168,15 @@ public class MainActivity extends AppCompatActivity {
                  * I populated the Spinner (located in the create_pet_layout) with the data from earlier (Like the arachnids, amphibians, etc) using the adapter i made earlier.
                  */
 
+
+
+
+
                 String[] listOfAnimals = {"Choose Animal", "Arachnid", "Amphibian", "Reptile", "Insect", "Fish"};
                 ArrayAdapter<String> arrayAdapter = new CustomSpinnerAdapter(MainActivity.this, android.R.layout.simple_spinner_dropdown_item, listOfAnimals);
 
                 Spinner spinner = view.findViewById(R.id.spinner);
                 spinner.setAdapter(arrayAdapter);
-
                 //sets default image if user has not selected one from gallery
                 spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
                     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
@@ -242,12 +248,15 @@ public class MainActivity extends AppCompatActivity {
 
                 alertDialog.show();
 
+                //Camera Button
                 petImageButton.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
                         easyImage.openCameraForImage(MainActivity.this);
                     }
                 });
+
+
 
 
                 createPetButton.setOnClickListener(new View.OnClickListener() {
@@ -260,6 +269,7 @@ public class MainActivity extends AppCompatActivity {
                         } else {
                             mNames.add(petNameEditText.getText().toString());
                             String spinnerSelectedPet = spinner.getSelectedItem().toString();
+                            createPetButton.setEnabled(true);
 
                             //Sets text to disappear once the user adds a pet
                             instructionView.setVisibility(View.GONE);
