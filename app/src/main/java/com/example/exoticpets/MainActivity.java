@@ -57,6 +57,7 @@ public class MainActivity extends AppCompatActivity {
         easyImage.handleActivityResult(requestCode, resultCode, data, this, new DefaultCallback() {
             View view = getLayoutInflater().inflate(R.layout.create_pet_layout, null);
             ImageView defaultImage = view.findViewById(R.id.paw_imageview);
+
             @Override
             public void onMediaFilesPicked(MediaFile[] imageFiles, MediaSource source) {
                 Glide.with(MainActivity.this)
@@ -117,7 +118,7 @@ public class MainActivity extends AppCompatActivity {
          */
 
 
-         easyImage = new EasyImage.Builder(MainActivity.this)
+        easyImage = new EasyImage.Builder(MainActivity.this)
 
 // Chooser only
 // Will appear as a system chooser title, DEFAULT empty string
@@ -169,9 +170,6 @@ public class MainActivity extends AppCompatActivity {
                  */
 
 
-
-
-
                 String[] listOfAnimals = {"Choose Animal", "Arachnid", "Amphibian", "Reptile", "Insect", "Fish"};
                 ArrayAdapter<String> arrayAdapter = new CustomSpinnerAdapter(MainActivity.this, android.R.layout.simple_spinner_dropdown_item, listOfAnimals);
 
@@ -213,7 +211,10 @@ public class MainActivity extends AppCompatActivity {
                                         .into(defaultImage);
                                 break;
                             default:
-                                mImageUrls.add("https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQrADorfjbjLGdl18wl5_5bE3pJnSS5A0tg7A&usqp=CAU");
+                                Glide.with(MainActivity.this)
+                                        .asBitmap()
+                                        .load(R.drawable.ic_baseline_image_24)
+                                        .into(defaultImage);
                                 break;
                         }
 
@@ -257,62 +258,63 @@ public class MainActivity extends AppCompatActivity {
                 });
 
 
-
-
                 createPetButton.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
                         //When the user clicks the button, whatever code we write here will be run
                         //Checks to see if user type in a pet name
+                        String spinnerSelectedPet = spinner.getSelectedItem().toString();
                         if (petNameEditText.getText().toString().isEmpty()) {
                             Toast.makeText(MainActivity.this, "Type Pet Name", Toast.LENGTH_SHORT).show();
-                        } else {
-                            mNames.add(petNameEditText.getText().toString());
-                            String spinnerSelectedPet = spinner.getSelectedItem().toString();
-                            createPetButton.setEnabled(true);
-
-                            //Sets text to disappear once the user adds a pet
-                            instructionView.setVisibility(View.GONE);
-
-
-                            switch (spinnerSelectedPet) {
-                                case "Arachnid":
-                                    mImageUrls.add("https://opengameart.org/sites/default/files/styles/medium/public/SpiderEnemy.png");
-                                    alertDialog.dismiss();
-                                    break;
-                                case "Amphibian":
-                                    mImageUrls.add("https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTPw_xYUc0rjL5QuYa6CIEk7z1D7eH6BI5gsg&usqp=CAU");
-                                    alertDialog.dismiss();
-                                    break;
-                                case "Reptile":
-                                    mImageUrls.add("https://image.shutterstock.com/image-vector/vector-illustration-cartoon-snake-pixel-260nw-398666929.jpg");
-                                    alertDialog.dismiss();
-                                    break;
-                                case "Insect":
-                                    mImageUrls.add("https://art.pixilart.com/eb6f46cc7831237.gif");
-                                    alertDialog.dismiss();
-                                    break;
-                                case "Fish":
-                                    mImageUrls.add("https://image.shutterstock.com/image-vector/fish-icon-pixel-style-animal-260nw-1789259792.jpg");
-                                    alertDialog.dismiss();
-                                    break;
-                                default:
-                                    Toast.makeText(MainActivity.this, "Type Pet Name", Toast.LENGTH_SHORT).show();
-                                    break;
-                            }
-                            //NotifyDataSetChanged basically tells the adapter, "Hey man, we have new data. Please refresh the UI to reflect the new data"
-                            mAdapter.notifyDataSetChanged();
-                            //alertDialog.dismiss();
+                        } else if (spinner.getSelectedItem().toString().equals("Choose Animal")) {
+                            Toast.makeText(MainActivity.this, "Choose Animal", Toast.LENGTH_SHORT).show();
                         }
+                        else{
+                        mNames.add(petNameEditText.getText().toString());
+                        //Sets text to disappear once the user adds a pet
+                        instructionView.setVisibility(View.GONE);
+
+
+                        switch (spinnerSelectedPet) {
+                            case "Arachnid":
+                                mImageUrls.add("https://opengameart.org/sites/default/files/styles/medium/public/SpiderEnemy.png");
+                                alertDialog.dismiss();
+                                break;
+                            case "Amphibian":
+                                mImageUrls.add("https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTPw_xYUc0rjL5QuYa6CIEk7z1D7eH6BI5gsg&usqp=CAU");
+                                alertDialog.dismiss();
+                                break;
+                            case "Reptile":
+                                mImageUrls.add("https://image.shutterstock.com/image-vector/vector-illustration-cartoon-snake-pixel-260nw-398666929.jpg");
+                                alertDialog.dismiss();
+                                break;
+                            case "Insect":
+                                mImageUrls.add("https://art.pixilart.com/eb6f46cc7831237.gif");
+                                alertDialog.dismiss();
+                                break;
+                            case "Fish":
+                                mImageUrls.add("https://image.shutterstock.com/image-vector/fish-icon-pixel-style-animal-260nw-1789259792.jpg");
+                                alertDialog.dismiss();
+                                break;
+                            default:
+                                Toast.makeText(MainActivity.this, "Type Pet Name", Toast.LENGTH_SHORT).show();
+                                break;
+                        }
+                        //NotifyDataSetChanged basically tells the adapter, "Hey man, we have new data. Please refresh the UI to reflect the new data"
+                        mAdapter.notifyDataSetChanged();
+
                     }
+                }
 
 
-                });
-                //Toast.makeText(MainActivity.this, "Test", Toast.LENGTH_SHORT).show();
-            }
-        });
-        initImageBitmaps();
-    }
+            });
+            //Toast.makeText(MainActivity.this, "Test", Toast.LENGTH_SHORT).show();
+        }
+    });
+
+    initImageBitmaps();
+
+}
 
     private void initImageBitmaps() {
         Log.d(TAG, "initImageBitmaps: preparing bitmaps");
