@@ -4,6 +4,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.AppCompatButton;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -26,6 +27,7 @@ import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 
+import java.io.File;
 import java.util.ArrayList;
 
 import pl.aprilapps.easyphotopicker.ChooserType;
@@ -49,21 +51,25 @@ public class MainActivity extends AppCompatActivity {
     ImageButton petImageButton;
     TextView instructionView;
     EasyImage easyImage;
+    View view;
+    ImageView defaultImage;
 
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable @org.jetbrains.annotations.Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         easyImage.handleActivityResult(requestCode, resultCode, data, this, new DefaultCallback() {
-            View view = getLayoutInflater().inflate(R.layout.create_pet_layout, null);
-            ImageView defaultImage = view.findViewById(R.id.paw_imageview);
 
             @Override
             public void onMediaFilesPicked(MediaFile[] imageFiles, MediaSource source) {
-                Glide.with(MainActivity.this)
-                        .asBitmap()
-                        .load(imageFiles)
-                        .into(defaultImage);
+                for (MediaFile imageFile : imageFiles){
+                    Glide.with(MainActivity.this)
+                            .load(new File(String.valueOf(imageFile.getFile())))
+                            .into(defaultImage);
+                    break;
+                }
+
+
             }
 
             @Override
@@ -150,15 +156,16 @@ public class MainActivity extends AppCompatActivity {
                  * Take a look at create_pet_layout
                  */
 
-                View view = getLayoutInflater().inflate(R.layout.create_pet_layout, null);
+                view = getLayoutInflater().inflate(R.layout.create_pet_layout, null);
                 petImageButton = view.findViewById(R.id.petImageButton);
 
                 /**
                  * We initialized a Button from the create_pet_layout
                  */
-                Button createPetButton = view.findViewById(R.id.create_pet_button);
+                petImageButton = view.findViewById(R.id.petImageButton);
+                AppCompatButton createPetButton = view.findViewById(R.id.create_pet_button);
                 EditText petNameEditText = view.findViewById(R.id.edittext_pet_name);
-                ImageView defaultImage = view.findViewById(R.id.paw_imageview);
+                defaultImage = view.findViewById(R.id.paw_imageview);
 
                 /**
                  * Fiz: Then, i created a new Alert Dialog, and used the view object (create_pet_layout) to make the alert

@@ -47,7 +47,6 @@
                 android:layout_centerHorizontal="true"/>
 
             <EditText
-
                 android:id="@+id/edittext_pet_name"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -73,16 +72,18 @@
 
                 android:textAlignment="center" />
 
-            <Button
+            <androidx.appcompat.widget.AppCompatButton
                 android:id="@+id/create_pet_button"
                 android:layout_width="match_parent"
-                android:layout_height="50dp"
+                android:layout_height="40dp"
                 android:layout_below="@id/petImageButton"
-                android:layout_marginLeft="12dp"
+                android:layout_marginLeft="15dp"
                 android:layout_marginTop="5dp"
-                android:layout_marginRight="12dp"
+                android:layout_marginRight="15dp"
+                android:layout_marginBottom="10dp"
                 android:text="Create Pet"
-                android:backgroundTint="@color/button_background_selector"
+                android:textAlignment="center"
+                android:background="@drawable/gradient"
                 android:textColor="@color/white" />
 
             <ImageButton
@@ -91,10 +92,10 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_alignParentStart="true"
-                android:layout_marginStart="12dp"
-                android:layout_marginEnd="12dp"
+                android:layout_marginStart="14dp"
+                android:layout_marginEnd="14dp"
                 android:layout_below="@id/spinner"
-                android:backgroundTint="@color/button_background_selector"
+                android:background="@drawable/gradient"
                 app:srcCompat="@android:drawable/ic_menu_camera" />
 
 
