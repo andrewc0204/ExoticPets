@@ -15,8 +15,8 @@
         android:layout_centerVertical="true"
         android:layout_marginTop="3dp"
         android:text="Add your Pet"
+        android:fontFamily="@font/consola"
         android:textColor="@color/black"
-        
         android:textSize="25sp" />
 
 

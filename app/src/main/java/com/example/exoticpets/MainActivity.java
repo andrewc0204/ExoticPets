@@ -10,6 +10,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
 import android.graphics.Color;
+import android.graphics.Typeface;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -54,7 +55,6 @@ public class MainActivity extends AppCompatActivity {
     View view;
     ImageView defaultImage;
 
-
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable @org.jetbrains.annotations.Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -91,12 +91,17 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         Log.d(TAG, "onCreate: started");
 
+//        Typeface font = Typeface.createFromAsset(getAssets(), "Fonts/consola.TTF");
+//        instructionView.setTypeface(font);
+
+
         //Hides the action bar
         getSupportActionBar().hide();
 
         //Vars
         plusButton = findViewById(R.id.addPetButton);
         instructionView = findViewById(R.id.instructionView);
+
 
         //For Loops Tutorial (Not part of app)
         /*
@@ -157,7 +162,6 @@ public class MainActivity extends AppCompatActivity {
                  */
 
                 view = getLayoutInflater().inflate(R.layout.create_pet_layout, null);
-                petImageButton = view.findViewById(R.id.petImageButton);
 
                 /**
                  * We initialized a Button from the create_pet_layout
@@ -166,6 +170,7 @@ public class MainActivity extends AppCompatActivity {
                 AppCompatButton createPetButton = view.findViewById(R.id.create_pet_button);
                 EditText petNameEditText = view.findViewById(R.id.edittext_pet_name);
                 defaultImage = view.findViewById(R.id.paw_imageview);
+                Spinner spinner = view.findViewById(R.id.spinner);
 
                 /**
                  * Fiz: Then, i created a new Alert Dialog, and used the view object (create_pet_layout) to make the alert
@@ -175,12 +180,10 @@ public class MainActivity extends AppCompatActivity {
                 /**
                  * I populated the Spinner (located in the create_pet_layout) with the data from earlier (Like the arachnids, amphibians, etc) using the adapter i made earlier.
                  */
-
-
                 String[] listOfAnimals = {"Choose Animal", "Arachnid", "Amphibian", "Reptile", "Insect", "Fish"};
                 ArrayAdapter<String> arrayAdapter = new CustomSpinnerAdapter(MainActivity.this, android.R.layout.simple_spinner_dropdown_item, listOfAnimals);
 
-                Spinner spinner = view.findViewById(R.id.spinner);
+
                 spinner.setAdapter(arrayAdapter);
                 //sets default image if user has not selected one from gallery
                 spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
