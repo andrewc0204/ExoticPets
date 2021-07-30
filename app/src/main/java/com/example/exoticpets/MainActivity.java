@@ -7,13 +7,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.AppCompatButton;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-
 import android.content.Intent;
-import android.graphics.Color;
-import android.graphics.Typeface;
 import android.os.Bundle;
-import android.text.Editable;
-import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
@@ -25,12 +20,9 @@ import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import com.bumptech.glide.Glide;
-
 import java.io.File;
 import java.util.ArrayList;
-
 import pl.aprilapps.easyphotopicker.ChooserType;
 import pl.aprilapps.easyphotopicker.DefaultCallback;
 import pl.aprilapps.easyphotopicker.EasyImage;
@@ -45,6 +37,7 @@ public class MainActivity extends AppCompatActivity {
     //RecycleView vars
     private ArrayList<String> mNames = new ArrayList<>();
     private ArrayList<String> mImageUrls = new ArrayList<>();
+    private ArrayList<String> mUserPics = new ArrayList<>();
 
     //Vars
     RecyclerViewAdapter mAdapter;
@@ -68,16 +61,12 @@ public class MainActivity extends AppCompatActivity {
                             .into(defaultImage);
                     break;
                 }
-
-
             }
-
             @Override
             public void onImagePickerError(@NonNull Throwable error, @NonNull MediaSource source) {
                 //Some error handling
                 error.printStackTrace();
             }
-
             @Override
             public void onCanceled(@NonNull MediaSource source) {
                 //Not necessary to remove any files manually anymore
@@ -90,10 +79,6 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         Log.d(TAG, "onCreate: started");
-
-//        Typeface font = Typeface.createFromAsset(getAssets(), "Fonts/consola.TTF");
-//        instructionView.setTypeface(font);
-
 
         //Hides the action bar
         getSupportActionBar().hide();
@@ -149,12 +134,9 @@ public class MainActivity extends AppCompatActivity {
                 .allowMultiple(true)
                 .build();
 
-
         plusButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
-
                 /**
                  * Fiz: I created a view (create_pet_layout) located in the layout folder.
                  * I then made and initialized a view from the layout (hence the view = create_pet_layout)
@@ -227,7 +209,6 @@ public class MainActivity extends AppCompatActivity {
                                         .into(defaultImage);
                                 break;
                         }
-
                     } // to close the onItemSelected
 
                     public void onNothingSelected(AdapterView<?> parent) {
@@ -267,7 +248,6 @@ public class MainActivity extends AppCompatActivity {
                     }
                 });
 
-
                 createPetButton.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
@@ -278,8 +258,7 @@ public class MainActivity extends AppCompatActivity {
                             Toast.makeText(MainActivity.this, "Type Pet Name", Toast.LENGTH_SHORT).show();
                         } else if (spinner.getSelectedItem().toString().equals("Choose Animal")) {
                             Toast.makeText(MainActivity.this, "Choose Animal", Toast.LENGTH_SHORT).show();
-                        }
-                        else{
+                        } else{
                         mNames.add(petNameEditText.getText().toString());
                         //Sets text to disappear once the user adds a pet
                         instructionView.setVisibility(View.GONE);
@@ -312,18 +291,13 @@ public class MainActivity extends AppCompatActivity {
                         }
                         //NotifyDataSetChanged basically tells the adapter, "Hey man, we have new data. Please refresh the UI to reflect the new data"
                         mAdapter.notifyDataSetChanged();
-
                     }
                 }
-
-
             });
             //Toast.makeText(MainActivity.this, "Test", Toast.LENGTH_SHORT).show();
         }
     });
-
     initImageBitmaps();
-
 }
 
     private void initImageBitmaps() {
@@ -339,6 +313,4 @@ public class MainActivity extends AppCompatActivity {
         recyclerView.setAdapter(mAdapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
     }
-
-
 }
