@@ -255,7 +255,9 @@ public class MainActivity extends AppCompatActivity {
                         //Checks to see if user type in a pet name
                         String spinnerSelectedPet = spinner.getSelectedItem().toString();
                         if (petNameEditText.getText().toString().isEmpty()) {
-                            Toast.makeText(MainActivity.this, "Type Pet Name", Toast.LENGTH_SHORT).show();
+                            //Toast.makeText(MainActivity.this, "Type Pet Name", Toast.LENGTH_SHORT).show();
+                            petNameEditText.setError("Please type pet name");
+                            petNameEditText.requestFocus();
                         } else if (spinner.getSelectedItem().toString().equals("Choose Animal")) {
                             Toast.makeText(MainActivity.this, "Choose Animal", Toast.LENGTH_SHORT).show();
                         } else{

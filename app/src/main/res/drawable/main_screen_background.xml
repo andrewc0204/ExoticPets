@@ -7,8 +7,8 @@
         android:type="linear"
         android:useLevel="false"
         android:startColor="#3B3B8E"
-        android:centerColor="#21F380"
-        android:endColor="#21F380"
+        android:centerColor="#9c03c8"
+        android:endColor="#79029b"
         >
 
     </gradient>

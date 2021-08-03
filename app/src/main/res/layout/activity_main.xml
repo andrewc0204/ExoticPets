@@ -16,7 +16,7 @@
         android:layout_marginTop="3dp"
         android:text="Add your Pet"
         android:fontFamily="@font/consola"
-        android:textColor="@color/black"
+        android:textColor="@color/white"
         android:textSize="25sp" />
 
 
@@ -27,7 +27,7 @@
         android:layout_alignParentRight="true"
         android:layout_alignParentBottom="true"
         android:background="@drawable/ic_baseline_add_circle_outline_24"
-        app:backgroundTint="@android:color/holo_green_light" />
+        app:backgroundTint="#25CC00" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerv_view"
