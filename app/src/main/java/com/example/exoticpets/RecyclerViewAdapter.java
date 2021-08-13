@@ -1,6 +1,7 @@
 package com.example.exoticpets;
 
 import android.content.Context;
+import android.content.Intent;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -26,10 +27,13 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
     private Context mContext;
 
 
+
+
     public RecyclerViewAdapter(Context  context, ArrayList<String> imageNames, ArrayList<String> images) {
         mImageNames = imageNames;
         mImages = images;
         mContext = context;
+
     }
     //This method is responsible for inflating the view
     @Override
@@ -49,8 +53,9 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
 
         System.out.println();
 
-
         holder.imageName.setText(mImageNames.get(position));
+
+
 
         //Position = 0 -> Orchid Mantis
 
@@ -71,6 +76,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
         holder.parentLayout.setOnClickListener(new View.OnClickListener(){
         @Override
             public void onClick(View view){
+
             Log.d(TAG, "onClick: clicked on: " + mImageNames.get(position));
             Toast.makeText(mContext,mImageNames.get(position), Toast.LENGTH_SHORT).show();
         }

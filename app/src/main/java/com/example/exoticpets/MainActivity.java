@@ -37,7 +37,7 @@ public class MainActivity extends AppCompatActivity {
     //RecycleView vars
     private ArrayList<String> mNames = new ArrayList<>();
     private ArrayList<String> mImageUrls = new ArrayList<>();
-    private ArrayList<String> mUserPics = new ArrayList<>();
+
 
     //Vars
     RecyclerViewAdapter mAdapter;
@@ -48,6 +48,8 @@ public class MainActivity extends AppCompatActivity {
     View view;
     ImageView defaultImage;
 
+
+    //Camera Feature
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable @org.jetbrains.annotations.Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -78,7 +80,6 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        Log.d(TAG, "onCreate: started");
 
         //Hides the action bar
         getSupportActionBar().hide();
@@ -87,44 +88,13 @@ public class MainActivity extends AppCompatActivity {
         plusButton = findViewById(R.id.addPetButton);
         instructionView = findViewById(R.id.instructionView);
 
-
-        //For Loops Tutorial (Not part of app)
-        /*
-        What is a for loop? A for loop is used for iterating through a array or objects.
-
-        ArrayList<String> colors = new ArrayList<>;
-        colors = {"red", "blue", "green", "orange", "yellow"};
-
-        for(color in colors)
-        if(color == orange){
-        Toast("Found orange!")
-        }
-
-        for(all of the pets){
-        comparePetThatNeedsToBeFedRightMostUrgently()
-
-        Wally (In 2 hours)
-        Spider Pig (Sunday at 2pm)
-        Rainbow Unicorn (Monday at 4pm)
-
-
-        To summarize, a for loop goes through all of the items (or in this case, the pets and their feeding times)
-        }
-
-         */
-
-
         easyImage = new EasyImage.Builder(MainActivity.this)
 
-// Chooser only
-// Will appear as a system chooser title, DEFAULT empty string
 //.setChooserTitle("Pick media")
 // Will tell chooser that it should show documents or gallery apps
 //.setChooserType(ChooserType.CAMERA_AND_DOCUMENTS)  you can use this or the one below
                 .setChooserType(ChooserType.CAMERA_AND_GALLERY)
 // saving EasyImage state (as for now: last camera file link)
-
-
 // Setting to true will cause taken pictures to show up in the device gallery, DEFAULT false
                 .setCopyImagesToPublicGalleryFolder(false)
 // Sets the name for images stored if setCopyImagesToPublicGalleryFolder = true
@@ -251,11 +221,11 @@ public class MainActivity extends AppCompatActivity {
                 createPetButton.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
+
                         //When the user clicks the button, whatever code we write here will be run
                         //Checks to see if user type in a pet name
                         String spinnerSelectedPet = spinner.getSelectedItem().toString();
                         if (petNameEditText.getText().toString().isEmpty()) {
-                            //Toast.makeText(MainActivity.this, "Type Pet Name", Toast.LENGTH_SHORT).show();
                             petNameEditText.setError("Please type pet name");
                             petNameEditText.requestFocus();
                         } else if (spinner.getSelectedItem().toString().equals("Choose Animal")) {
@@ -264,7 +234,6 @@ public class MainActivity extends AppCompatActivity {
                         mNames.add(petNameEditText.getText().toString());
                         //Sets text to disappear once the user adds a pet
                         instructionView.setVisibility(View.GONE);
-
 
                         switch (spinnerSelectedPet) {
                             case "Arachnid":
@@ -296,20 +265,16 @@ public class MainActivity extends AppCompatActivity {
                     }
                 }
             });
-            //Toast.makeText(MainActivity.this, "Test", Toast.LENGTH_SHORT).show();
         }
     });
     initImageBitmaps();
 }
-
     private void initImageBitmaps() {
-        Log.d(TAG, "initImageBitmaps: preparing bitmaps");
         initRecyclerView();
     }
 
     //This method sets up the RecycleView in the app
     private void initRecyclerView() {
-        Log.d(TAG, "initRecyclerView: init recyclerview.");
         RecyclerView recyclerView = findViewById(R.id.recyclerv_view);
         mAdapter = new RecyclerViewAdapter(this, mNames, mImageUrls);
         recyclerView.setAdapter(mAdapter);
