@@ -77,8 +77,12 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
         @Override
             public void onClick(View view){
 
-            Log.d(TAG, "onClick: clicked on: " + mImageNames.get(position));
-            Toast.makeText(mContext,mImageNames.get(position), Toast.LENGTH_SHORT).show();
+            //Log.d(TAG, "onClick: clicked on: " + mImageNames.get(position));
+            //Toast.makeText(mContext,mImageNames.get(position), Toast.LENGTH_SHORT).show();
+
+            //Starts new activity with button click
+            Intent intent = new Intent(view.getContext(), animal_specs.class);
+            view.getContext().startActivity(intent);
         }
         });
     }
