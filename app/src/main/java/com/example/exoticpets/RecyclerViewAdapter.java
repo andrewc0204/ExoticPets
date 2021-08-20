@@ -50,7 +50,6 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
                 .asBitmap()
                 .load(mImages.get(position))
                 .into(holder.image);
-
         System.out.println();
 
         holder.imageName.setText(mImageNames.get(position));
@@ -74,16 +73,15 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
         //holder.imageName.setText.(mImageNames.
 
         holder.parentLayout.setOnClickListener(new View.OnClickListener(){
-        @Override
+            @Override
             public void onClick(View view){
+                //Toast.makeText(mContext,mImageNames.get(position), Toast.LENGTH_SHORT).show();
 
-            //Log.d(TAG, "onClick: clicked on: " + mImageNames.get(position));
-            //Toast.makeText(mContext,mImageNames.get(position), Toast.LENGTH_SHORT).show();
-
-            //Starts new activity with button click
-            Intent intent = new Intent(view.getContext(), animal_specs.class);
-            view.getContext().startActivity(intent);
-        }
+                Intent intent = new Intent(mContext, AnimalDetails.class);
+                intent.putExtra("image_url", mImages.get(position));
+                intent.putExtra("image_name", mImageNames.get(position));
+                mContext.startActivity(intent);
+            }
         });
     }
     //This tell the adapter how many list items are in the list
