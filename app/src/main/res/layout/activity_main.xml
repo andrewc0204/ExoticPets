@@ -4,9 +4,27 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/white"
+    android:background="@drawable/alertbackground"
     tools:context=".MainActivity">
 
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize">
+        <TextView
+            android:id="@+id/textview_selectedPet"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Your Pets"
+            android:textColor="@color/white"
+            android:textSize="20sp"
+            android:layout_gravity="center"/>
+    </androidx.appcompat.widget.Toolbar>
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="70dp"
+        android:background="@drawable/recyclerview_bg">
     <TextView
         android:id="@+id/instructionView"
         android:layout_width="wrap_content"
@@ -19,15 +37,6 @@
         android:textColor="@color/black"
         android:textSize="25sp" />
 
-    <com.google.android.material.button.MaterialButton
-        android:id="@+id/addPetButton"
-        android:layout_width="61dp"
-        android:layout_height="55dp"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentBottom="true"
-        android:background="@drawable/ic_baseline_add_circle_outline_24"
-        app:backgroundTint="#25CC00" />
-
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerv_view"
         android:layout_width="match_parent"
@@ -37,6 +46,15 @@
         android:layout_marginStart="0dp"
         android:layout_marginTop="0dp" />
 
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/addPetButton1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="625dp"
+            android:layout_marginLeft="332dp"
+            android:backgroundTint="@color/button_background_selector"
+            app:srcCompat="@drawable/plus" />
+    </RelativeLayout>
 </RelativeLayout>
     <!--
 

@@ -16,6 +16,8 @@ public class AnimalDetails extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.animal_details);
         getIncomingIntent();
+        //Hides the action bar
+        getSupportActionBar().hide();
 
     }
     private void getIncomingIntent(){

@@ -21,6 +21,8 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 import com.bumptech.glide.Glide;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
+
 import java.io.File;
 import java.util.ArrayList;
 import pl.aprilapps.easyphotopicker.ChooserType;
@@ -47,6 +49,7 @@ public class MainActivity extends AppCompatActivity {
     EasyImage easyImage;
     View view;
     ImageView defaultImage;
+    FloatingActionButton addPetButton;
 
 
     //Camera Feature
@@ -85,7 +88,7 @@ public class MainActivity extends AppCompatActivity {
         getSupportActionBar().hide();
 
         //Vars
-        plusButton = findViewById(R.id.addPetButton);
+        addPetButton = findViewById(R.id.addPetButton1);
         instructionView = findViewById(R.id.instructionView);
 
         easyImage = new EasyImage.Builder(MainActivity.this)
@@ -103,8 +106,7 @@ public class MainActivity extends AppCompatActivity {
 // Allow multiple picking
                 .allowMultiple(true)
                 .build();
-
-        plusButton.setOnClickListener(new View.OnClickListener() {
+        addPetButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 /**
