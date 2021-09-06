@@ -11,12 +11,13 @@
         android:id="@+id/toolbar"
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize">
-        <TextView
-            android:id="@+id/textview_selectedPet"
-            android:layout_width="wrap_content"
+        <EditText
+            android:id="@+id/textview_searchForPet"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Your Pets"
             android:textColor="@color/white"
+            android:layout_marginRight="17dp"
+            android:hint="Search for Pets"
             android:textSize="20sp"
             android:layout_gravity="center"/>
     </androidx.appcompat.widget.Toolbar>
