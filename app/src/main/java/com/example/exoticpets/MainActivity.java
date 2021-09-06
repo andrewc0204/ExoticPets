@@ -5,11 +5,14 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.AppCompatButton;
+import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -20,11 +23,15 @@ import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
+
 import com.bumptech.glide.Glide;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Random;
+import java.util.UUID;
+
 import pl.aprilapps.easyphotopicker.ChooserType;
 import pl.aprilapps.easyphotopicker.DefaultCallback;
 import pl.aprilapps.easyphotopicker.EasyImage;
@@ -37,19 +44,24 @@ public class MainActivity extends AppCompatActivity {
     private static final String TAG = "MainActivity";
 
     //RecycleView vars
+    private ArrayList<ExoticPet> exoticPets = new ArrayList<>();
     private ArrayList<String> mNames = new ArrayList<>();
     private ArrayList<String> mImageUrls = new ArrayList<>();
 
 
     //Vars
-    RecyclerViewAdapter mAdapter;
-    Button plusButton;
-    ImageButton petImageButton;
-    TextView instructionView;
-    EasyImage easyImage;
-    View view;
-    ImageView defaultImage;
-    FloatingActionButton addPetButton;
+    private RecyclerViewAdapter mAdapter;
+    private Button plusButton;
+    private ImageButton petImageButton;
+    private TextView searchForPetTextview;
+    private TextView instructionView;
+    private EasyImage easyImage;
+    private View view;
+    private ImageView defaultImage;
+    private FloatingActionButton addPetButton;
+    private Toolbar searchPetToobar;
+    private ArrayList<ExoticPet> mSearchedNamesArrayList = new ArrayList<>();
+
 
 
     //Camera Feature
@@ -60,18 +72,20 @@ public class MainActivity extends AppCompatActivity {
 
             @Override
             public void onMediaFilesPicked(MediaFile[] imageFiles, MediaSource source) {
-                for (MediaFile imageFile : imageFiles){
+                for (MediaFile imageFile : imageFiles) {
                     Glide.with(MainActivity.this)
                             .load(new File(String.valueOf(imageFile.getFile())))
                             .into(defaultImage);
                     break;
                 }
             }
+
             @Override
             public void onImagePickerError(@NonNull Throwable error, @NonNull MediaSource source) {
                 //Some error handling
                 error.printStackTrace();
             }
+
             @Override
             public void onCanceled(@NonNull MediaSource source) {
                 //Not necessary to remove any files manually anymore
@@ -85,25 +99,29 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         //Hides the action bar
-        getSupportActionBar().hide();
+        //getSupportActionBar().hide();
 
         //Vars
+        searchPetToobar = findViewById(R.id.toolbar);
         addPetButton = findViewById(R.id.addPetButton1);
         instructionView = findViewById(R.id.instructionView);
+        searchForPetTextview = findViewById(R.id.textview_searchForPet);
 
+        this.setSupportActionBar(searchPetToobar);
+        this.getSupportActionBar().setTitle("");
+
+        //Allows user to take pictures
         easyImage = new EasyImage.Builder(MainActivity.this)
-
-//.setChooserTitle("Pick media")
-// Will tell chooser that it should show documents or gallery apps
-//.setChooserType(ChooserType.CAMERA_AND_DOCUMENTS)  you can use this or the one below
+                //.setChooserTitle("Pick media")
+                // Will tell chooser that it should show documents or gallery apps
+                //.setChooserType(ChooserType.CAMERA_AND_DOCUMENTS)  you can use this or the one below
                 .setChooserType(ChooserType.CAMERA_AND_GALLERY)
-// saving EasyImage state (as for now: last camera file link)
-// Setting to true will cause taken pictures to show up in the device gallery, DEFAULT false
+                // saving EasyImage state (as for now: last camera file link)
+                // Setting to true will cause taken pictures to show up in the device gallery, DEFAULT false
                 .setCopyImagesToPublicGalleryFolder(false)
-// Sets the name for images stored if setCopyImagesToPublicGalleryFolder = true
+                // Sets the name for images stored if setCopyImagesToPublicGalleryFolder = true
                 .setFolderName("EasyImage sample")
-
-// Allow multiple picking
+                // Allow multiple picking
                 .allowMultiple(true)
                 .build();
         addPetButton.setOnClickListener(new View.OnClickListener() {
@@ -223,6 +241,11 @@ public class MainActivity extends AppCompatActivity {
                 createPetButton.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
+                        ExoticPet exoticPet = new ExoticPet();
+                        Random r = new Random();
+                        int randomIDNumber = r.nextInt(9999 - 1001) + 1001;
+                        exoticPet.setId(String.valueOf(randomIDNumber));
+
 
                         //When the user clicks the button, whatever code we write here will be run
                         //Checks to see if user type in a pet name
@@ -232,36 +255,43 @@ public class MainActivity extends AppCompatActivity {
                             petNameEditText.requestFocus();
                         } else if (spinner.getSelectedItem().toString().equals("Choose Animal")) {
                             Toast.makeText(MainActivity.this, "Choose Animal", Toast.LENGTH_SHORT).show();
-                        } else{
-                            mNames.add(petNameEditText.getText().toString());
+                        } else {
+                            exoticPet.setPetName(petNameEditText.getText().toString());
+//                            mNames.add(petNameEditText.getText().toString());
                             //Sets text to disappear once the user adds a pet
                             instructionView.setVisibility(View.GONE);
 
                             switch (spinnerSelectedPet) {
                                 case "Arachnid":
-                                    mImageUrls.add("https://opengameart.org/sites/default/files/styles/medium/public/SpiderEnemy.png");
+                                    exoticPet.setPetImage("https://opengameart.org/sites/default/files/styles/medium/public/SpiderEnemy.png");
+//                                    mImageUrls.add("https://opengameart.org/sites/default/files/styles/medium/public/SpiderEnemy.png");
                                     alertDialog.dismiss();
                                     break;
                                 case "Amphibian":
-                                    mImageUrls.add("https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTPw_xYUc0rjL5QuYa6CIEk7z1D7eH6BI5gsg&usqp=CAU");
+                                    exoticPet.setPetImage("https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTPw_xYUc0rjL5QuYa6CIEk7z1D7eH6BI5gsg&usqp=CAU");
+//                                    mImageUrls.add("https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTPw_xYUc0rjL5QuYa6CIEk7z1D7eH6BI5gsg&usqp=CAU");
                                     alertDialog.dismiss();
                                     break;
                                 case "Reptile":
-                                    mImageUrls.add("https://image.shutterstock.com/image-vector/vector-illustration-cartoon-snake-pixel-260nw-398666929.jpg");
+                                    exoticPet.setPetImage("https://image.shutterstock.com/image-vector/vector-illustration-cartoon-snake-pixel-260nw-398666929.jpg");
+//                                    mImageUrls.add("https://image.shutterstock.com/image-vector/vector-illustration-cartoon-snake-pixel-260nw-398666929.jpg");
                                     alertDialog.dismiss();
                                     break;
                                 case "Insect":
-                                    mImageUrls.add("https://art.pixilart.com/eb6f46cc7831237.gif");
+                                    exoticPet.setPetImage("https://art.pixilart.com/eb6f46cc7831237.gif");
+//                                    mImageUrls.add("https://art.pixilart.com/eb6f46cc7831237.gif");
                                     alertDialog.dismiss();
                                     break;
                                 case "Fish":
-                                    mImageUrls.add("https://image.shutterstock.com/image-vector/fish-icon-pixel-style-animal-260nw-1789259792.jpg");
+                                    exoticPet.setPetImage("https://image.shutterstock.com/image-vector/fish-icon-pixel-style-animal-260nw-1789259792.jpg");
+//                                    mImageUrls.add("https://image.shutterstock.com/image-vector/fish-icon-pixel-style-animal-260nw-1789259792.jpg");
                                     alertDialog.dismiss();
                                     break;
                                 default:
                                     Toast.makeText(MainActivity.this, "Type Pet Name", Toast.LENGTH_SHORT).show();
                                     break;
                             }
+                            exoticPets.add(exoticPet);
                             //NotifyDataSetChanged basically tells the adapter, "Hey man, we have new data. Please refresh the UI to reflect the new data"
                             mAdapter.notifyDataSetChanged();
                         }
@@ -271,15 +301,69 @@ public class MainActivity extends AppCompatActivity {
         });
         initImageBitmaps();
     }
+
     private void initImageBitmaps() {
-        initRecyclerView();
+        initViews();
     }
 
     //This method sets up the RecycleView in the app
-    private void initRecyclerView() {
+    private void initViews() {
         RecyclerView recyclerView = findViewById(R.id.recyclerv_view);
-        mAdapter = new RecyclerViewAdapter(this, mNames, mImageUrls);
+        mAdapter = new RecyclerViewAdapter(this, exoticPets);
         recyclerView.setAdapter(mAdapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
+
+        //While user is typing
+        searchForPetTextview.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void onTextChanged(CharSequence pet, int start, int before, int count) {
+
+
+            }
+
+            //OnSearchEmpty
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+                mSearchedNamesArrayList.clear();
+
+            }
+
+            //After Search has been completed (stopped typing)
+            @Override
+            public void afterTextChanged(Editable userTypingInSearchBar) {
+                //The Search
+                for (ExoticPet exoticPet : exoticPets) {
+                    if (exoticPet.getPetName().contains(userTypingInSearchBar)) {
+                        mSearchedNamesArrayList.add(exoticPet);
+                    }
+                }
+                //This is updating data
+                mAdapter.updateDisplayedPets(mSearchedNamesArrayList);
+                mAdapter.notifyDataSetChanged();//Equivalent of hitting F5 (refresh) on browser
+            }
+        });
     }
+
+//    //enables user to search for pets
+//    @Override
+//    public boolean onCreateOptionsMenu(Menu menu) {
+//        getMenuInflater().inflate(R.menu.menu, menu);
+//        MenuItem menuItem = menu.findItem(R.id.search_view);
+//
+//        SearchView searchView = (SearchView) menuItem.getActionView();
+//        searchView.setMaxWidth(Integer.MAX_VALUE);
+//        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+//            @Override
+//            public boolean onQueryTextSubmit(String query) {
+//                return false;
+//            }
+//
+//            @Override
+//            public boolean onQueryTextChange(String newText) {
+//                return true;
+//            }
+//        });
+//
+//        return true;
+//    }
 }
