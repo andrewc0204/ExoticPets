@@ -18,14 +18,12 @@ import java.util.ArrayList;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
-public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapter.ViewHolder> {
-    private static final String TAG = "RecyclerViewAdapter";
-
-
+public class   RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapter.ViewHolder> {
 //    private ArrayList<String> mPetNames = new ArrayList<>();
 //    private ArrayList<String> mPetImages = new ArrayList<>();
-    private ArrayList<ExoticPet> exoticPets = new ArrayList<>();
+    public ArrayList<ExoticPet> exoticPets = new ArrayList<>();
     private Context mContext;
+
 
 
     public RecyclerViewAdapter(Context context, ArrayList<ExoticPet> exoticPets) {
@@ -53,7 +51,6 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
     //This method gets called everytime a new item gets added to the list in RecycleView
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
-        Log.d(TAG, "onBindViewHolder: called");
         Glide.with(mContext)
                 .asBitmap()
                 .load(exoticPets.get(position).getPetImage())
@@ -88,12 +85,16 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
                 Intent intent = new Intent(mContext, AnimalDetails.class);
                 Bundle bundle = new Bundle();
                 bundle.putSerializable("exotic_pets", exoticPets.get(position));
+                bundle.putSerializable("image_url", exoticPets.get(position).getPetImage());
+                bundle.putSerializable("image_name", exoticPets.get(position).getPetName());
+
+
                 intent.putExtras(bundle);
                 mContext.startActivity(intent);
+//
+//               intent.putExtra("image_url", exoticPets.get(position).getPetImage());
+//                intent.putExtra("image_name", exoticPets.get(position).getPetName());
 
-//                intent.putExtra("image_url", mPetImages.get(position));
-//                intent.putExtra("image_name", mPetNames.get(position));
-//                mContext.startActivity(intent);
             }
         });
     }
