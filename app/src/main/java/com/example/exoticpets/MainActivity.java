@@ -51,7 +51,6 @@ public class MainActivity extends AppCompatActivity {
 
     //Vars
     private RecyclerViewAdapter mAdapter;
-    private Button plusButton;
     private ImageButton petImageButton;
     private TextView searchForPetTextview;
     private TextView instructionView;
