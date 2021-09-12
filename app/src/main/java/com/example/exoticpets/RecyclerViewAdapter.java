@@ -25,7 +25,6 @@ public class   RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdap
     private Context mContext;
 
 
-
     public RecyclerViewAdapter(Context context, ArrayList<ExoticPet> exoticPets) {
         this.mContext = context;
         this.exoticPets = exoticPets;
@@ -40,7 +39,12 @@ public class   RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdap
 //
 //    }
 
+    public RecyclerViewAdapter(Context  context, ArrayList<String> imageNames, ArrayList<String> images) {
+        mImageNames = imageNames;
+        mImages = images;
+        mContext = context;
 
+    }
     //This method is responsible for inflating the view
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
@@ -91,10 +95,6 @@ public class   RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdap
 
                 intent.putExtras(bundle);
                 mContext.startActivity(intent);
-//
-//               intent.putExtra("image_url", exoticPets.get(position).getPetImage());
-//                intent.putExtra("image_name", exoticPets.get(position).getPetName());
-
             }
         });
     }
