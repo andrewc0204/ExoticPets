@@ -53,8 +53,20 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="625dp"
             android:layout_marginLeft="332dp"
+            android:layout_margin="20dp"
+            android:layout_alignParentRight="true"
+            android:layout_above="@id/bottomToolbar"
             android:backgroundTint="@color/button_background_selector"
             app:srcCompat="@drawable/plus" />
+        <androidx.appcompat.widget.Toolbar
+            android:id="@+id/bottomToolbar"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            android:background="@drawable/alertbackground"
+            android:layout_alignParentBottom="true"
+            >
+        </androidx.appcompat.widget.Toolbar>
+
     </RelativeLayout>
 </RelativeLayout>
     <!--
