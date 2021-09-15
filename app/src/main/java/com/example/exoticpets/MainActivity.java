@@ -138,16 +138,14 @@ public class MainActivity extends AppCompatActivity {
                 /**
                  * We initialized a Button from the create_pet_layout
                  */
+                Button closeBtn = view.findViewById(R.id.close_btn);
                 petImageButton = view.findViewById(R.id.petImageButton);
                 AppCompatButton createPetButton = view.findViewById(R.id.create_pet_button);
                 EditText petNameEditText = view.findViewById(R.id.edittext_pet_name);
                 defaultImage = view.findViewById(R.id.paw_imageview);
                 Spinner spinner = view.findViewById(R.id.spinner);
 
-                /**
-                 * Fiz: Then, i created a new Alert Dialog, and used the view object (create_pet_layout) to make the alert
-                 */
-                AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
+
 
                 /**
                  * I populated the Spinner (located in the create_pet_layout) with the data from earlier (Like the arachnids, amphibians, etc) using the adapter i made earlier.
@@ -206,7 +204,10 @@ public class MainActivity extends AppCompatActivity {
                     }
                 });
 
-                Button closeBtn = view.findViewById(R.id.close_btn);
+                /**
+                 * Fiz: Then, i created a new Alert Dialog, and used the view object (create_pet_layout) to make the alert
+                 */
+                AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
 
                 /**
                  * This is where i attach the custom layout (create_pet_layout) to the alert dialog
@@ -219,7 +220,7 @@ public class MainActivity extends AppCompatActivity {
                  * and using it as the alert.
                  */
                 AlertDialog alertDialog = builder.create();
-
+                alertDialog.show();
 
                 closeBtn.setOnClickListener(new View.OnClickListener() {
                     @Override
@@ -228,7 +229,7 @@ public class MainActivity extends AppCompatActivity {
                     }
                 });
 
-                alertDialog.show();
+
 
                 //Camera Button
                 petImageButton.setOnClickListener(new View.OnClickListener() {
@@ -255,13 +256,14 @@ public class MainActivity extends AppCompatActivity {
                             petNameEditText.requestFocus();
                         } else if (spinner.getSelectedItem().toString().equals("Choose Animal")) {
                             Toast.makeText(MainActivity.this, "Choose Animal", Toast.LENGTH_SHORT).show();
+//                        }else if (){
+
                         } else {
                             exoticPet.setPetName(petNameEditText.getText().toString());
-//                            mNames.add(petNameEditText.getText().toString());
                             //Sets text to disappear once the user adds a pet
                             instructionView.setVisibility(View.GONE);
 
-                            switch (spinnerSelectedPet) {
+                            switch (spinnerSelectedPet){
                                 case "Arachnid":
                                     exoticPet.setPetImage("https://opengameart.org/sites/default/files/styles/medium/public/SpiderEnemy.png");
 //                                    mImageUrls.add("https://opengameart.org/sites/default/files/styles/medium/public/SpiderEnemy.png");

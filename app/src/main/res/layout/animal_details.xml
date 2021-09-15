@@ -4,23 +4,39 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:weightSum="100">
-    <androidx.appcompat.widget.Toolbar
-        android:id="@+id/toolbar"
-        android:layout_width="match_parent"
-        android:layout_height="?attr/actionBarSize"
-        android:background="@drawable/alertbackground">
-        <TextView
-            android:id="@+id/textview_selectedPet"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Selected Pet"
-            android:textColor="@color/white"
-            android:textSize="16sp"
-            android:layout_gravity="center"/>
-    </androidx.appcompat.widget.Toolbar>
+
+
+    <include
+        android:id="@+id/animal_details_toolbar"
+        layout = "@layout/animal_details_toolbar1">
+    </include>
+
     <de.hdodenhof.circleimageview.CircleImageView
+        android:id="@+id/image"
         android:layout_width="match_parent"
         android:layout_height="300dp"
-        android:id="@+id/image"
         android:src="@mipmap/ic_launcher" />
+
+    <androidx.cardview.widget.CardView
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:card_view="http://schemas.android.com/apk/res-auto"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:foreground="?android:attr/selectableItemBackground"
+        android:clickable="true"
+        android:focusable="true"
+        card_view:cardBackgroundColor = "@color/white"
+        card_view:cardCornerRadius="10dp"
+        card_view:cardElevation="5dp"
+        card_view:cardUseCompatPadding="true"
+        >
+    <CalendarView
+        android:id="@+id/calendarView"
+        android:layout_width="match_parent"
+        android:layout_height="384dp"
+        android:layout_below="@+id/addPet"
+        android:dateTextAppearance="@style/CustomCalendarDay"
+        android:theme="@style/CustomCalendarMonth"
+        android:weekDayTextAppearance="@style/CustomCalendarWeek" />
+</androidx.cardview.widget.CardView>
 </LinearLayout>
