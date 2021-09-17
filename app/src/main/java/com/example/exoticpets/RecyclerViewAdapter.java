@@ -86,6 +86,7 @@ public class   RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdap
             public void onClick(View view){
                 //Toast.makeText(mContext,mImageNames.get(position), Toast.LENGTH_SHORT).show();
 
+
                 Intent intent = new Intent(mContext, AnimalDetails.class);
                 Bundle bundle = new Bundle();
                 bundle.putSerializable("exotic_pets", exoticPets.get(position));

@@ -13,6 +13,7 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 
@@ -21,6 +22,7 @@ import java.util.ArrayList;
 
 public class AnimalDetails extends AppCompatActivity implements Serializable {
     Button cancelButton;
+    Button okButton;
    ImageView deletePetImageView;
    View view;
 
@@ -28,14 +30,16 @@ public class AnimalDetails extends AppCompatActivity implements Serializable {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.animal_details);
-        view = getLayoutInflater().inflate(R.layout.delete_pet_layout, null);
-        cancelButton = findViewById(R.id.cancel);
+
+
         deletePetImageView = findViewById(R.id.delete_pet);
 
         deletePetImageView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                view = getLayoutInflater().inflate(R.layout.delete_pet_layout, null);
+                cancelButton = view.findViewById(R.id.cancel_delete_pet_alertDialog);
+                okButton = view.findViewById(R.id.ok);
                 /**
                  * Fiz: Then, i created a new Alert Dialog, and used the view object (create_pet_layout) to make the alert
                  */
@@ -53,13 +57,20 @@ public class AnimalDetails extends AppCompatActivity implements Serializable {
                  */
                 AlertDialog alertDialog = builder.create();
                 alertDialog.show();
+
+                okButton.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Intent myIntent = new Intent(AnimalDetails.this, MainActivity.class);
+                        AnimalDetails.this.startActivity(myIntent);
+                    }
+                });
                 cancelButton.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
                         alertDialog.dismiss();
                     }
                 });
-
             }
         });
 
