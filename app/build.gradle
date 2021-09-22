@@ -40,6 +40,7 @@ dependencies {
 
     //Kotlin
     implementation 'org.jetbrains.kotlin:kotlin-stdlib-jdk7:1.2.50'
+    //cardview
     implementation 'androidx.cardview:cardview:1.0.0'
     //recyclerview
     implementation "androidx.recyclerview:recyclerview:1.2.1"

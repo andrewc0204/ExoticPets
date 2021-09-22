@@ -7,6 +7,8 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.Button;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -18,8 +20,8 @@ import java.util.ArrayList;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
-public class   RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapter.ViewHolder> {
-//    private ArrayList<String> mPetNames = new ArrayList<>();
+public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapter.ViewHolder> {
+    //    private ArrayList<String> mPetNames = new ArrayList<>();
 //    private ArrayList<String> mPetImages = new ArrayList<>();
     public ArrayList<ExoticPet> exoticPets = new ArrayList<>();
     private Context mContext;
@@ -39,12 +41,13 @@ public class   RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdap
 //
 //    }
 
-    public RecyclerViewAdapter(Context  context, ArrayList<String> imageNames, ArrayList<String> images) {
-       // mImageNames = imageNames;
+    public RecyclerViewAdapter(Context context, ArrayList<String> imageNames, ArrayList<String> images) {
+        // mImageNames = imageNames;
         //mImages = images;
         mContext = context;
 
     }
+
     //This method is responsible for inflating the view
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
@@ -52,7 +55,10 @@ public class   RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdap
         ViewHolder holder = new ViewHolder(view);
         return holder;
     }
+
+
     //This method gets called everytime a new item gets added to the list in RecycleView
+    //Treat this as a for loop method
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
         Glide.with(mContext)
@@ -62,7 +68,6 @@ public class   RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdap
 
 
         holder.imageName.setText(exoticPets.get(position).getPetName());
-
 
 
         //Position = 0 -> Orchid Mantis
@@ -81,24 +86,24 @@ public class   RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdap
         //holder 1 [First Row] -> Name:Orchid Mantis , Image: Orchid Mantis Image
         //holder.imageName.setText.(mImageNames.
 
-        holder.parentLayout.setOnClickListener(new View.OnClickListener(){
+        holder.parentLayout.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View view){
+            public void onClick(View view) {
                 //Toast.makeText(mContext,mImageNames.get(position), Toast.LENGTH_SHORT).show();
 
 
                 Intent intent = new Intent(mContext, AnimalDetails.class);
                 Bundle bundle = new Bundle();
-                bundle.putSerializable("exotic_pets", exoticPets.get(position));
-                bundle.putSerializable("image_url", exoticPets.get(position).getPetImage());
-                bundle.putSerializable("image_name", exoticPets.get(position).getPetName());
-
+                bundle.putSerializable("exotic_pet", exoticPets.get(position));
+                bundle.putSerializable("pet_picture", exoticPets.get(position).getPetImage());
+                bundle.putSerializable("pet_name", exoticPets.get(position).getPetName());
 
                 intent.putExtras(bundle);
                 mContext.startActivity(intent);
             }
         });
     }
+
     //This tell the adapter how many list items are in the list
     @Override
     public int getItemCount() {
@@ -107,21 +112,25 @@ public class   RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdap
 
     //ViewHolder holds the each individual widget in memory
     //Where we initialize data
-    public class ViewHolder extends RecyclerView.ViewHolder{
+    public class ViewHolder extends RecyclerView.ViewHolder {
 
         CircleImageView image;
         TextView imageName;
         RelativeLayout parentLayout;
+        Button okButton;
 
         public ViewHolder(View itemView) {
             super(itemView);
             image = itemView.findViewById(R.id.image);
             imageName = itemView.findViewById(R.id.image_name);
             parentLayout = itemView.findViewById(R.id.parent_layout);
+            okButton = itemView.findViewById(R.id.ok);
+
+
         }
     }
 
-    public void updateDisplayedPets(ArrayList<ExoticPet> searchedPets){
+    public void updateDisplayedPets(ArrayList<ExoticPet> searchedPets) {
         exoticPets = searchedPets;
     }
 }

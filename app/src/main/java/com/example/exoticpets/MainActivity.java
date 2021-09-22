@@ -49,8 +49,11 @@ public class MainActivity extends AppCompatActivity {
     private ArrayList<String> mImageUrls = new ArrayList<>();
 
 
+    //The ghetto term for static is basically, access that shiz anywhere (Bad practice)
+
+
     //Vars
-    private RecyclerViewAdapter mAdapter;
+    public static RecyclerViewAdapter mAdapter;
     private ImageButton petImageButton;
     private TextView searchForPetTextview;
     private TextView instructionView;
@@ -60,6 +63,7 @@ public class MainActivity extends AppCompatActivity {
     private FloatingActionButton addPetButton;
     private Toolbar searchPetToobar;
     private ArrayList<ExoticPet> mSearchedNamesArrayList = new ArrayList<>();
+    private File cameraPicture;
 
 
 
@@ -75,6 +79,7 @@ public class MainActivity extends AppCompatActivity {
                     Glide.with(MainActivity.this)
                             .load(new File(String.valueOf(imageFile.getFile())))
                             .into(defaultImage);
+                            cameraPicture = imageFile.getFile();
                     break;
                 }
             }
@@ -105,6 +110,8 @@ public class MainActivity extends AppCompatActivity {
         addPetButton = findViewById(R.id.addPetButton1);
         instructionView = findViewById(R.id.instructionView);
         searchForPetTextview = findViewById(R.id.textview_searchForPet);
+
+        initViews();
 
         this.setSupportActionBar(searchPetToobar);
         this.getSupportActionBar().setTitle("");
@@ -255,56 +262,72 @@ public class MainActivity extends AppCompatActivity {
                             petNameEditText.requestFocus();
                         } else if (spinner.getSelectedItem().toString().equals("Choose Animal")) {
                             Toast.makeText(MainActivity.this, "Choose Animal", Toast.LENGTH_SHORT).show();
-//                        }else if (){
-
                         } else {
-                            exoticPet.setPetName(petNameEditText.getText().toString());
-                            //Sets text to disappear once the user adds a pet
-                            instructionView.setVisibility(View.GONE);
+                            if (cameraPicture != null) {
+                            exoticPet.setPetImage(String.valueOf(cameraPicture));
+                                exoticPets.add(exoticPet);
+                                //NotifyDataSetChanged basically tells the adapter, "Hey man, we have new data. Please refresh the UI to reflect the new data"
+                                mAdapter.notifyDataSetChanged();
+                                alertDialog.dismiss();
+                            }else{
+                                exoticPet.setPetName(petNameEditText.getText().toString());
+                                //Sets text to disappear once the user adds a pet
+                                instructionView.setVisibility(View.GONE);
 
-                            switch (spinnerSelectedPet){
-                                case "Arachnid":
-                                    exoticPet.setPetImage("https://opengameart.org/sites/default/files/styles/medium/public/SpiderEnemy.png");
+                                switch (spinnerSelectedPet){
+                                    case "Arachnid":
+                                        exoticPet.setPetImage("https://opengameart.org/sites/default/files/styles/medium/public/SpiderEnemy.png");
 //                                    mImageUrls.add("https://opengameart.org/sites/default/files/styles/medium/public/SpiderEnemy.png");
-                                    alertDialog.dismiss();
-                                    break;
-                                case "Amphibian":
-                                    exoticPet.setPetImage("https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTPw_xYUc0rjL5QuYa6CIEk7z1D7eH6BI5gsg&usqp=CAU");
+                                        alertDialog.dismiss();
+                                        break;
+                                    case "Amphibian":
+                                        exoticPet.setPetImage("https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTPw_xYUc0rjL5QuYa6CIEk7z1D7eH6BI5gsg&usqp=CAU");
 //                                    mImageUrls.add("https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTPw_xYUc0rjL5QuYa6CIEk7z1D7eH6BI5gsg&usqp=CAU");
-                                    alertDialog.dismiss();
-                                    break;
-                                case "Reptile":
-                                    exoticPet.setPetImage("https://image.shutterstock.com/image-vector/vector-illustration-cartoon-snake-pixel-260nw-398666929.jpg");
+                                        alertDialog.dismiss();
+                                        break;
+                                    case "Reptile":
+                                        exoticPet.setPetImage("https://image.shutterstock.com/image-vector/vector-illustration-cartoon-snake-pixel-260nw-398666929.jpg");
 //                                    mImageUrls.add("https://image.shutterstock.com/image-vector/vector-illustration-cartoon-snake-pixel-260nw-398666929.jpg");
-                                    alertDialog.dismiss();
-                                    break;
-                                case "Insect":
-                                    exoticPet.setPetImage("https://art.pixilart.com/eb6f46cc7831237.gif");
+                                        alertDialog.dismiss();
+                                        break;
+                                    case "Insect":
+                                        exoticPet.setPetImage("https://art.pixilart.com/eb6f46cc7831237.gif");
 //                                    mImageUrls.add("https://art.pixilart.com/eb6f46cc7831237.gif");
-                                    alertDialog.dismiss();
-                                    break;
-                                case "Fish":
-                                    exoticPet.setPetImage("https://image.shutterstock.com/image-vector/fish-icon-pixel-style-animal-260nw-1789259792.jpg");
+                                        alertDialog.dismiss();
+                                        break;
+                                    case "Fish":
+                                        exoticPet.setPetImage("https://image.shutterstock.com/image-vector/fish-icon-pixel-style-animal-260nw-1789259792.jpg");
 //                                    mImageUrls.add("https://image.shutterstock.com/image-vector/fish-icon-pixel-style-animal-260nw-1789259792.jpg");
-                                    alertDialog.dismiss();
-                                    break;
-                                default:
-                                    Toast.makeText(MainActivity.this, "Type Pet Name", Toast.LENGTH_SHORT).show();
-                                    break;
+                                        alertDialog.dismiss();
+                                        break;
+                                    default:
+                                        Toast.makeText(MainActivity.this, "Type Pet Name", Toast.LENGTH_SHORT).show();
+                                        break;
+                                }
+
+//                                exoticPets.add(exoticPet);
+                                //mAdapter.add -> Adds a new item to the adapter
+                                //mAdapter.notifydatasetchanged tells the recyclerview (The UI) that there is new data, and to "refresh the page".
+
+                                //adapter.add
+                                //adapter.remove
+                                //adapter.notifydatasetchanged
+
+                                MainActivity.mAdapter.exoticPets.add(exoticPet);
+                                //NotifyDataSetChanged basically tells the adapter, "Hey man, we have new data. Please refresh the UI to reflect the new data"
                             }
-                            exoticPets.add(exoticPet);
-                            //NotifyDataSetChanged basically tells the adapter, "Hey man, we have new data. Please refresh the UI to reflect the new data"
-                            mAdapter.notifyDataSetChanged();
+
                         }
                     }
                 });
             }
         });
-        initImageBitmaps();
     }
 
-    private void initImageBitmaps() {
-        initViews();
+
+    @Override
+    protected void onResume() {
+        super.onResume();
     }
 
     //This method sets up the RecycleView in the app
