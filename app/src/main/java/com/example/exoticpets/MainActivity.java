@@ -66,7 +66,6 @@ public class MainActivity extends AppCompatActivity {
     private File cameraPicture;
 
 
-
     //Camera Feature
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable @org.jetbrains.annotations.Nullable Intent data) {
@@ -79,7 +78,7 @@ public class MainActivity extends AppCompatActivity {
                     Glide.with(MainActivity.this)
                             .load(new File(String.valueOf(imageFile.getFile())))
                             .into(defaultImage);
-                            cameraPicture = imageFile.getFile();
+                    cameraPicture = imageFile.getFile();
                     break;
                 }
             }
@@ -150,7 +149,6 @@ public class MainActivity extends AppCompatActivity {
                 EditText petNameEditText = view.findViewById(R.id.edittext_pet_name);
                 defaultImage = view.findViewById(R.id.paw_imageview);
                 Spinner spinner = view.findViewById(R.id.spinner);
-
 
 
                 /**
@@ -236,7 +234,6 @@ public class MainActivity extends AppCompatActivity {
                 });
 
 
-
                 //Camera Button
                 petImageButton.setOnClickListener(new View.OnClickListener() {
                     @Override
@@ -264,17 +261,17 @@ public class MainActivity extends AppCompatActivity {
                             Toast.makeText(MainActivity.this, "Choose Animal", Toast.LENGTH_SHORT).show();
                         } else {
                             if (cameraPicture != null) {
-                            exoticPet.setPetImage(String.valueOf(cameraPicture));
+                                exoticPet.setPetImage(String.valueOf(cameraPicture));
                                 exoticPets.add(exoticPet);
                                 //NotifyDataSetChanged basically tells the adapter, "Hey man, we have new data. Please refresh the UI to reflect the new data"
                                 mAdapter.notifyDataSetChanged();
                                 alertDialog.dismiss();
-                            }else{
+                            } else {
                                 exoticPet.setPetName(petNameEditText.getText().toString());
                                 //Sets text to disappear once the user adds a pet
                                 instructionView.setVisibility(View.GONE);
 
-                                switch (spinnerSelectedPet){
+                                switch (spinnerSelectedPet) {
                                     case "Arachnid":
                                         exoticPet.setPetImage("https://opengameart.org/sites/default/files/styles/medium/public/SpiderEnemy.png");
 //                                    mImageUrls.add("https://opengameart.org/sites/default/files/styles/medium/public/SpiderEnemy.png");
@@ -314,6 +311,7 @@ public class MainActivity extends AppCompatActivity {
                                 //adapter.notifydatasetchanged
 
                                 MainActivity.mAdapter.exoticPets.add(exoticPet);
+                                mAdapter.notifyDataSetChanged();
                                 //NotifyDataSetChanged basically tells the adapter, "Hey man, we have new data. Please refresh the UI to reflect the new data"
                             }
 
@@ -322,12 +320,6 @@ public class MainActivity extends AppCompatActivity {
                 });
             }
         });
-    }
-
-
-    @Override
-    protected void onResume() {
-        super.onResume();
     }
 
     //This method sets up the RecycleView in the app

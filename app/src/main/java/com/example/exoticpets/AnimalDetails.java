@@ -38,8 +38,6 @@ public class AnimalDetails extends AppCompatActivity implements Serializable {
         deletePetImageView = findViewById(R.id.delete_pet);
 
 
-
-
         deletePetImageView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -62,8 +60,6 @@ public class AnimalDetails extends AppCompatActivity implements Serializable {
                  * and using it as the alert.
                  */
                 AlertDialog alertDialog = builder.create();
-                alertDialog.show();
-
                 okButton.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
@@ -86,10 +82,12 @@ public class AnimalDetails extends AppCompatActivity implements Serializable {
                             if (exoticPet.getId().equals(selectedPet.getId())){//True
                                 mAdapter.exoticPets.remove(exoticPet);
                                 mAdapter.notifyDataSetChanged();
+                                break;
                             }
                         }
 
-//
+
+
                         //Arkansas and Kansas scenario
 //                        mAdapter.exoticPets.remove(selectedPet);
 //                        mAdapter.notifyDataSetChanged();
@@ -102,6 +100,10 @@ public class AnimalDetails extends AppCompatActivity implements Serializable {
                         alertDialog.dismiss();
                     }
                 });
+
+                alertDialog.show();
+
+
             }
         });
 
@@ -123,6 +125,7 @@ public class AnimalDetails extends AppCompatActivity implements Serializable {
         getIntent().getSerializableExtra("pet_picture");
         getIntent().getSerializableExtra("pet_name");
         selectedPet = (ExoticPet) getIntent().getSerializableExtra("exotic_pet");
+
 
         if(getIntent().hasExtra("pet_picture") && getIntent().hasExtra("pet_name")){
             String imageUrl = getIntent().getStringExtra("pet_picture");

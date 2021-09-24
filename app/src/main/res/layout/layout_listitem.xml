@@ -44,5 +44,11 @@
         android:layout_marginStart="10dp"
         android:layout_marginEnd="20dp"
         android:src="@drawable/ic_baseline_navigate_next_24" />
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/last_fed"
+        android:text="Last Fed: "
+        android:layout_marginLeft="175dp"/>
 </RelativeLayout>
 </androidx.cardview.widget.CardView>

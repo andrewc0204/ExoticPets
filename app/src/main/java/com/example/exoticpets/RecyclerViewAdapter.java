@@ -3,14 +3,16 @@ package com.example.exoticpets;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
+import android.view.ActionMode;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -21,31 +23,17 @@ import java.util.ArrayList;
 import de.hdodenhof.circleimageview.CircleImageView;
 
 public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapter.ViewHolder> {
-    //    private ArrayList<String> mPetNames = new ArrayList<>();
-//    private ArrayList<String> mPetImages = new ArrayList<>();
+
     public ArrayList<ExoticPet> exoticPets = new ArrayList<>();
     private Context mContext;
+    boolean isEnable = false;
+    boolean isSelectAll = false;
+    ArrayList<String> selectList = new ArrayList<>();
 
 
     public RecyclerViewAdapter(Context context, ArrayList<ExoticPet> exoticPets) {
         this.mContext = context;
         this.exoticPets = exoticPets;
-    }
-
-    //    public RecyclerViewAdapter(Context  context, ArrayList<String> imageNames, ArrayList<String> images) {
-//        mPetNames = imageNames;
-//        mPetImages = images;
-//        mContext = context;
-//
-//
-//
-//    }
-
-    public RecyclerViewAdapter(Context context, ArrayList<String> imageNames, ArrayList<String> images) {
-        // mImageNames = imageNames;
-        //mImages = images;
-        mContext = context;
-
     }
 
     //This method is responsible for inflating the view
@@ -56,37 +44,35 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
         return holder;
     }
 
-
     //This method gets called everytime a new item gets added to the list in RecycleView
     //Treat this as a for loop method
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
+        /**
+         * onStickDataToView
+         *
+         * This is what literally "sticks" the data to the UI (recyclerview)
+         */
+
+        /**
+         * I'm going to get the first index/position/element of the arraylist you provided,
+         * and use it to fill the layout_listitem that you provided me.
+         *
+         * Position 1 - ExoticPet exoticpet1; //Bob
+         * Position 2 - ExoticPet exoticpet1; //Greg
+         * Position 3 - ExoticPet exoticpet1; //Hafish
+         */
+
+
         Glide.with(mContext)
                 .asBitmap()
                 .load(exoticPets.get(position).getPetImage())
                 .into(holder.image);
 
 
-        holder.imageName.setText(exoticPets.get(position).getPetName());
+        holder.petName.setText(exoticPets.get(position).getPetName());
 
-
-        //Position = 0 -> Orchid Mantis
-
-        //mImageNames
-        //0 = Orchid Mantis
-        //1 = Bold Jumping Spider
-        //2 = Bearded Dragon
-        //3 = Leopard Gecko
-
-        //mImages
-        //0 = Image of Orchid Mantis
-        //1 = Bold Jumping Spider
-        //2 Image of Bearded Dragon
-
-        //holder 1 [First Row] -> Name:Orchid Mantis , Image: Orchid Mantis Image
-        //holder.imageName.setText.(mImageNames.
-
-        holder.parentLayout.setOnClickListener(new View.OnClickListener() {
+        holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 //Toast.makeText(mContext,mImageNames.get(position), Toast.LENGTH_SHORT).show();
@@ -102,6 +88,38 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
                 mContext.startActivity(intent);
             }
         });
+        holder.itemView.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View v) {
+                Toast.makeText(mContext, "Long Click", Toast.LENGTH_SHORT).show();
+                if (!isEnable){
+                    ActionMode.Callback callback = new ActionMode.Callback() {
+                        @Override
+                        public boolean onCreateActionMode(ActionMode mode, Menu menu) {
+                            return false;
+                        }
+
+                        @Override
+                        public boolean onPrepareActionMode(ActionMode mode, Menu menu) {
+                            return false;
+                        }
+
+                        @Override
+                        public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
+                            return false;
+                        }
+
+                        @Override
+                        public void onDestroyActionMode(ActionMode mode) {
+
+                        }
+                    };
+
+                }
+                return false;
+
+            }
+        });
     }
 
     //This tell the adapter how many list items are in the list
@@ -115,20 +133,19 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
     public class ViewHolder extends RecyclerView.ViewHolder {
 
         CircleImageView image;
-        TextView imageName;
+        TextView petName;
         RelativeLayout parentLayout;
         Button okButton;
 
         public ViewHolder(View itemView) {
             super(itemView);
             image = itemView.findViewById(R.id.image);
-            imageName = itemView.findViewById(R.id.image_name);
+            petName = itemView.findViewById(R.id.image_name);
             parentLayout = itemView.findViewById(R.id.parent_layout);
             okButton = itemView.findViewById(R.id.ok);
-
-
         }
     }
+
 
     public void updateDisplayedPets(ArrayList<ExoticPet> searchedPets) {
         exoticPets = searchedPets;
