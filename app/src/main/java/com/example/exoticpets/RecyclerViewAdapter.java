@@ -3,13 +3,11 @@ package com.example.exoticpets;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.view.ActionMode;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -26,9 +24,8 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
 
     public ArrayList<ExoticPet> exoticPets = new ArrayList<>();
     private Context mContext;
-    boolean isEnable = false;
-    boolean isSelectAll = false;
-    ArrayList<String> selectList = new ArrayList<>();
+
+
 
 
     public RecyclerViewAdapter(Context context, ArrayList<ExoticPet> exoticPets) {
@@ -41,6 +38,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.layout_listitem, parent, false);
         ViewHolder holder = new ViewHolder(view);
+
         return holder;
     }
 
@@ -67,7 +65,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
         Glide.with(mContext)
                 .asBitmap()
                 .load(exoticPets.get(position).getPetImage())
-                .into(holder.image);
+                .into(holder.pet_ImageView);
 
 
         holder.petName.setText(exoticPets.get(position).getPetName());
@@ -92,35 +90,18 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
             @Override
             public boolean onLongClick(View v) {
                 Toast.makeText(mContext, "Long Click", Toast.LENGTH_SHORT).show();
-                if (!isEnable){
-                    ActionMode.Callback callback = new ActionMode.Callback() {
-                        @Override
-                        public boolean onCreateActionMode(ActionMode mode, Menu menu) {
-                            return false;
-                        }
+                holder.ivCheckBoxImageView.setVisibility(View.VISIBLE);
+                holder.animalDetailsArrowImageView.setVisibility(View.GONE);
 
-                        @Override
-                        public boolean onPrepareActionMode(ActionMode mode, Menu menu) {
-                            return false;
-                        }
 
-                        @Override
-                        public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
-                            return false;
-                        }
-
-                        @Override
-                        public void onDestroyActionMode(ActionMode mode) {
-
-                        }
-                    };
-
-                }
                 return false;
 
             }
         });
     }
+
+
+
 
     //This tell the adapter how many list items are in the list
     @Override
@@ -132,17 +113,18 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
     //Where we initialize data
     public class ViewHolder extends RecyclerView.ViewHolder {
 
-        CircleImageView image;
+        CircleImageView pet_ImageView;
         TextView petName;
-        RelativeLayout parentLayout;
-        Button okButton;
+        ImageView ivCheckBoxImageView;
+        ImageView animalDetailsArrowImageView;
+
 
         public ViewHolder(View itemView) {
             super(itemView);
-            image = itemView.findViewById(R.id.image);
+            pet_ImageView = itemView.findViewById(R.id.pet_image);
             petName = itemView.findViewById(R.id.image_name);
-            parentLayout = itemView.findViewById(R.id.parent_layout);
-            okButton = itemView.findViewById(R.id.ok);
+            ivCheckBoxImageView = itemView.findViewById(R.id.iv_check_box);
+            animalDetailsArrowImageView = itemView.findViewById(R.id.animal_details_arrow);
         }
     }
 

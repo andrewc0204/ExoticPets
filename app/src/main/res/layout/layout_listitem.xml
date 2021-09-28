@@ -21,7 +21,7 @@
     <de.hdodenhof.circleimageview.CircleImageView
         android:layout_width="75dp"
         android:layout_height="75dp"
-        android:id="@+id/image"
+        android:id="@+id/pet_image"
         android:src="@mipmap/ic_launcher"/>
     <TextView
         android:layout_width="wrap_content"
@@ -29,14 +29,14 @@
         android:text="USA"
         android:fontFamily="@font/consola"
         android:id="@+id/image_name"
-        android:layout_toRightOf="@id/image"
+        android:layout_toRightOf="@id/pet_image"
         android:textColor="@color/black"
         android:layout_centerVertical="true"
         android:layout_marginLeft="30dp"
         android:textSize="17sp"/>
 
     <ImageView
-        android:id="@+id/animalDetailsImageview"
+        android:id="@+id/animal_details_arrow"
         android:layout_width="50dp"
         android:layout_height="50dp"
         android:layout_alignParentEnd="true"
@@ -44,11 +44,24 @@
         android:layout_marginStart="10dp"
         android:layout_marginEnd="20dp"
         android:src="@drawable/ic_baseline_navigate_next_24" />
+
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/last_fed"
         android:text="Last Fed: "
         android:layout_marginLeft="175dp"/>
+    <ImageView
+        android:id="@+id/iv_check_box"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_alignParentEnd="true"
+        android:layout_centerVertical="true"
+        android:layout_marginStart="10dp"
+        android:layout_marginEnd="20dp"
+        android:src="@drawable/ic_check_circle"
+        android:visibility="gone"/>
+
+
 </RelativeLayout>
 </androidx.cardview.widget.CardView>

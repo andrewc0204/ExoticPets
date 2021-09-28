@@ -1,24 +1,17 @@
 package com.example.exoticpets;
 
-import android.content.Intent;
 import android.os.Bundle;
-import android.view.Menu;
-import android.view.MenuInflater;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
-import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 
 import java.io.Serializable;
-import java.util.ArrayList;
 
 import static com.example.exoticpets.MainActivity.mAdapter;
 
@@ -138,7 +131,7 @@ public class AnimalDetails extends AppCompatActivity implements Serializable {
     private void setImage(String imageUrl, String imageName){
         TextView selectedPetName = findViewById(R.id.textview_selectedPet);
         selectedPetName.setText(imageName);
-        ImageView image = findViewById(R.id.image);
+        ImageView image = findViewById(R.id.pet_image);
         Glide.with(this)
                 .asBitmap()
                 .load(imageUrl)
