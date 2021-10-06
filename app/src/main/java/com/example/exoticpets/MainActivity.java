@@ -13,6 +13,10 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -26,6 +30,8 @@ import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+
+import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -45,9 +51,6 @@ public class MainActivity extends AppCompatActivity {
 
     //RecycleView vars
     private ArrayList<ExoticPet> exoticPets = new ArrayList<>();
-    private ArrayList<String> mNames = new ArrayList<>();
-    private ArrayList<String> mImageUrls = new ArrayList<>();
-
 
     //The ghetto term for static is basically, access that shiz anywhere (Bad practice)
 
@@ -55,15 +58,18 @@ public class MainActivity extends AppCompatActivity {
     //Vars
     public static RecyclerViewAdapter mAdapter;
     private ImageButton petImageButton;
+    private ImageView defaultImage;
+    private ImageView ivCheckBoxImageView;
+    private ImageView animalDetailsArrowImageView;
     private TextView searchForPetTextview;
     private TextView instructionView;
     private EasyImage easyImage;
     private View view;
-    private ImageView defaultImage;
     private FloatingActionButton addPetButton;
     private Toolbar searchPetToobar;
     private ArrayList<ExoticPet> mSearchedNamesArrayList = new ArrayList<>();
     private File cameraPicture;
+
 
 
     //Camera Feature
@@ -95,6 +101,7 @@ public class MainActivity extends AppCompatActivity {
             }
         });
     }
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -211,6 +218,8 @@ public class MainActivity extends AppCompatActivity {
                 /**
                  * Fiz: Then, i created a new Alert Dialog, and used the view object (create_pet_layout) to make the alert
                  */
+
+
                 AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
 
                 /**
@@ -223,6 +232,7 @@ public class MainActivity extends AppCompatActivity {
                  * See how the create_pet_layout and the alert dialog look the same? I'm basically manually creating a layout file,
                  * and using it as the alert.
                  */
+
                 AlertDialog alertDialog = builder.create();
                 alertDialog.show();
 
@@ -302,7 +312,7 @@ public class MainActivity extends AppCompatActivity {
                                         break;
                                 }
 
-//                                exoticPets.add(exoticPet);
+                                exoticPets.add(exoticPet);
                                 //mAdapter.add -> Adds a new item to the adapter
                                 //mAdapter.notifydatasetchanged tells the recyclerview (The UI) that there is new data, and to "refresh the page".
 
@@ -310,7 +320,6 @@ public class MainActivity extends AppCompatActivity {
                                 //adapter.remove
                                 //adapter.notifydatasetchanged
 
-                                MainActivity.mAdapter.exoticPets.add(exoticPet);
                                 mAdapter.notifyDataSetChanged();
                                 //NotifyDataSetChanged basically tells the adapter, "Hey man, we have new data. Please refresh the UI to reflect the new data"
                             }
@@ -325,7 +334,7 @@ public class MainActivity extends AppCompatActivity {
     //This method sets up the RecycleView in the app
     private void initViews() {
         RecyclerView recyclerView = findViewById(R.id.recyclerv_view);
-        mAdapter = new RecyclerViewAdapter(this, exoticPets);
+        mAdapter = new RecyclerViewAdapter(this,exoticPets, searchForPetTextview);
         recyclerView.setAdapter(mAdapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
@@ -360,6 +369,55 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.selectallmenu, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+
+        switch (item.getItemId()) {
+            case R.id.menu_delete:
+                for (ExoticPet exoticPet : mAdapter.selectedPetIdsToDeleteArrayList){
+                    mAdapter.exoticPets.remove(exoticPet);
+                }
+
+                mAdapter.selectedPetIdsToDeleteArrayList.clear();
+                mAdapter.notifyDataSetChanged();
+
+//                for (int i = 0; i <= mAdapter.exoticPets.size(); i++) {
+//                    if (mAdapter.exoticPets.get(i).isSelected()) {
+//                        mAdapter.exoticPets.remove(i);
+//
+//                        mAdapter.notifyItemRemoved(i);
+//////                        Log.d(TAG, "onOptionsItemSelected: " + mAdapter.exoticPets.get(i));
+//                        Log.d(TAG, "onOptionsItemSelected: " + mAdapter.getItemCount());
+//                    }
+//                }
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+
+    }
+
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
 //    //enables user to search for pets
 //    @Override
 //    public boolean onCreateOptionsMenu(Menu menu) {
@@ -381,5 +439,5 @@ public class MainActivity extends AppCompatActivity {
 //        });
 //
 //        return true;
-//    }
-}
+
+

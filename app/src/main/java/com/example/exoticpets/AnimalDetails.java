@@ -18,9 +18,9 @@ import static com.example.exoticpets.MainActivity.mAdapter;
 public class AnimalDetails extends AppCompatActivity implements Serializable {
     Button cancelButton;
     Button okButton;
-   ImageView deletePetImageView;
-   View view;
-   ExoticPet selectedPet;
+    ImageView deletePetImageView;
+    View view;
+    ExoticPet selectedPet;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,9 +56,6 @@ public class AnimalDetails extends AppCompatActivity implements Serializable {
                 okButton.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-//                        Intent myIntent = new Intent(AnimalDetails.this, MainActivity.class);
-//                        AnimalDetails.this.startActivity(myIntent);
-
                         /**
                          *
                          * selectedPet.getID = 1925
@@ -71,19 +68,13 @@ public class AnimalDetails extends AppCompatActivity implements Serializable {
                          *
                          */
                         //Removes item from recycleview
-                        for (ExoticPet exoticPet : mAdapter.exoticPets){
-                            if (exoticPet.getId().equals(selectedPet.getId())){//True
+                        for (ExoticPet exoticPet : mAdapter.exoticPets) {
+                            if (exoticPet.getId().equals(selectedPet.getId())) {//True
                                 mAdapter.exoticPets.remove(exoticPet);
                                 mAdapter.notifyDataSetChanged();
                                 break;
                             }
                         }
-
-
-
-                        //Arkansas and Kansas scenario
-//                        mAdapter.exoticPets.remove(selectedPet);
-//                        mAdapter.notifyDataSetChanged();
                         onBackPressed();
                     }
                 });
@@ -101,7 +92,6 @@ public class AnimalDetails extends AppCompatActivity implements Serializable {
         });
 
 
-
         //Hides the action bar
 //        getSupportActionBar().hide();
         //Hides title text from action bar
@@ -113,14 +103,14 @@ public class AnimalDetails extends AppCompatActivity implements Serializable {
         super.onBackPressed();
     }
 
-    private void getIncomingIntent(){
+    private void getIncomingIntent() {
 //       getIntent().getSerializableExtra("exotic_pet");
         getIntent().getSerializableExtra("pet_picture");
         getIntent().getSerializableExtra("pet_name");
         selectedPet = (ExoticPet) getIntent().getSerializableExtra("exotic_pet");
 
 
-        if(getIntent().hasExtra("pet_picture") && getIntent().hasExtra("pet_name")){
+        if (getIntent().hasExtra("pet_picture") && getIntent().hasExtra("pet_name")) {
             String imageUrl = getIntent().getStringExtra("pet_picture");
             String imageName = getIntent().getStringExtra("pet_name");
             setImage(imageUrl, imageName);
@@ -128,7 +118,8 @@ public class AnimalDetails extends AppCompatActivity implements Serializable {
 
 
     }
-    private void setImage(String imageUrl, String imageName){
+
+    private void setImage(String imageUrl, String imageName) {
         TextView selectedPetName = findViewById(R.id.textview_selectedPet);
         selectedPetName.setText(imageName);
         ImageView image = findViewById(R.id.pet_image);

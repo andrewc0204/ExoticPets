@@ -7,25 +7,39 @@
     android:background="@drawable/alertbackground"
     tools:context=".MainActivity">
 
+    <ImageView
+        android:layout_width="35dp"
+        android:layout_height="35dp"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentEnd="true"
+        android:layout_marginTop="12dp"
+        android:layout_marginEnd="9dp"
+        android:background="@drawable/ic_select_all" />
+
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/toolbar"
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize">
+
         <EditText
             android:id="@+id/textview_searchForPet"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:textColor="@color/white"
-            android:layout_marginRight="17dp"
+            android:layout_marginRight="60dp"
             android:hint="Search for Pets"
+            android:singleLine="true"
             android:textSize="20sp"
             android:layout_gravity="center"/>
+
     </androidx.appcompat.widget.Toolbar>
     <RelativeLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="70dp"
         android:background="@drawable/recyclerview_bg">
+
+
     <TextView
         android:id="@+id/instructionView"
         android:layout_width="wrap_content"
