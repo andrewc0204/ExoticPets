@@ -2,7 +2,9 @@ package com.example.exoticpets;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Color;
+import android.os.Bundle;
 import android.util.Log;
 import android.view.ActionMode;
 import android.view.LayoutInflater;
@@ -54,6 +56,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
         ViewHolder holder = new ViewHolder(view);
         //mainViewModel = ViewModelProviders.of((FragmentActivity)activity).get(MainViewModel.class);
         //Return view
+
         return holder;
     }
 
@@ -76,34 +79,37 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
          * Position 3 - ExoticPet exoticpet1; //Hafish
          */
 
+
+        if (!exoticPets.get(position).isSelected){
+            holder.ivCheckBoxImageView.setVisibility(View.GONE);
+        }
+        holder.animalDetailsArrowImageView.setVisibility(View.VISIBLE);
+
         Glide.with(mContext)
                 .asBitmap()
                 .load(exoticPets.get(position).getPetImage())
                 .into(holder.pet_ImageView);
 
 
-//        ExoticPet currentItem = exoticPets.get(position);
-
+        ExoticPet currentItem = exoticPets.get(position);
         holder.petName.setText(exoticPets.get(position).getPetName());
 
+        holder.itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                //Toast.makeText(mContext,mImageNames.get(position), Toast.LENGTH_SHORT).show();
 
 
-//        holder.itemView.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                //Toast.makeText(mContext,mImageNames.get(position), Toast.LENGTH_SHORT).show();
-//
-//
-//                Intent intent = new Intent(mContext, AnimalDetails.class);
-//                Bundle bundle = new Bundle();
-//                bundle.putSerializable("exotic_pet", exoticPets.get(position));
-//                bundle.putSerializable("pet_picture", exoticPets.get(position).getPetImage());
-//                bundle.putSerializable("pet_name", exoticPets.get(position).getPetName());
-//
-//                intent.putExtras(bundle);
-//                mContext.startActivity(intent);
-//            }
-//        });
+                Intent intent = new Intent(mContext, AnimalDetails.class);
+                Bundle bundle = new Bundle();
+                bundle.putSerializable("exotic_pet", exoticPets.get(position));
+                bundle.putSerializable("pet_picture", exoticPets.get(position).getPetImage());
+                bundle.putSerializable("pet_name", exoticPets.get(position).getPetName());
+
+                intent.putExtras(bundle);
+                mContext.startActivity(intent);
+            }
+        });
 
         holder.itemView.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
@@ -111,15 +117,29 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
 
 //                currentItem.setSelected(!currentItem.isSelected());
 //                Log.d(TAG, "onOptionsItemSelected: " + currentItem.getPetName() + " " + position);
-
+//
 //                holder.ivCheckBoxImageView.setVisibility(currentItem.isSelected() ? View.VISIBLE : View.GONE);
 //                holder.animalDetailsArrowImageView.setVisibility(currentItem.isSelected() ? View.GONE : View.VISIBLE);
+//
+//                holder.ivCheckBoxImageView.setVisibility(View.VISIBLE);
+//                searchPet.setVisibility(View.GONE);
 
-                holder.ivCheckBoxImageView.setVisibility(View.VISIBLE);
-                searchPet.setVisibility(View.GONE);
 
-                selectedPetIdsToDeleteArrayList.add(exoticPets.get(position));
+                //If pet is selected
+                if (exoticPets.get(position).isSelected){
+                    exoticPets.get(position).setSelected(false);
+                    holder.animalDetailsArrowImageView.setVisibility(View.VISIBLE);
+                    holder.ivCheckBoxImageView.setVisibility(View.GONE);
+                    selectedPetIdsToDeleteArrayList.remove(exoticPets.get(position));
 
+                }else {
+
+                //If pet is not selected
+                    exoticPets.get(position).setSelected(true);
+                    holder.animalDetailsArrowImageView.setVisibility(View.GONE);
+                    holder.ivCheckBoxImageView.setVisibility(View.VISIBLE);
+                    selectedPetIdsToDeleteArrayList.add(exoticPets.get(position));
+                }
                 return true;
             }
         });
@@ -130,6 +150,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
     public int getItemCount() {
         return exoticPets.size();
     }
+
 
     //ViewHolder holds the each individual widget in memory
     //Where we initialize data

@@ -10,6 +10,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -60,6 +61,7 @@ public class MainActivity extends AppCompatActivity {
     private ImageButton petImageButton;
     private ImageView defaultImage;
     private ImageView ivCheckBoxImageView;
+    private ImageView menuImageView;
     private ImageView animalDetailsArrowImageView;
     private TextView searchForPetTextview;
     private TextView instructionView;
@@ -69,6 +71,7 @@ public class MainActivity extends AppCompatActivity {
     private Toolbar searchPetToobar;
     private ArrayList<ExoticPet> mSearchedNamesArrayList = new ArrayList<>();
     private File cameraPicture;
+    boolean isSelectAll = false;
 
 
 
@@ -112,10 +115,12 @@ public class MainActivity extends AppCompatActivity {
         //getSupportActionBar().hide();
 
         //Vars
+        menuImageView = findViewById(R.id.menu);
         searchPetToobar = findViewById(R.id.toolbar);
         addPetButton = findViewById(R.id.addPetButton1);
         instructionView = findViewById(R.id.instructionView);
         searchForPetTextview = findViewById(R.id.textview_searchForPet);
+
 
         initViews();
 
@@ -136,6 +141,15 @@ public class MainActivity extends AppCompatActivity {
                 // Allow multiple picking
                 .allowMultiple(true)
                 .build();
+
+        menuImageView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+
+            }
+        });
+
         addPetButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -373,37 +387,48 @@ public class MainActivity extends AppCompatActivity {
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.selectallmenu, menu);
+
         return true;
     }
-
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
+        animalDetailsArrowImageView = findViewById(R.id.animal_details_arrow);
 
         switch (item.getItemId()) {
             case R.id.menu_delete:
                 for (ExoticPet exoticPet : mAdapter.selectedPetIdsToDeleteArrayList){
                     mAdapter.exoticPets.remove(exoticPet);
                 }
-
                 mAdapter.selectedPetIdsToDeleteArrayList.clear();
                 mAdapter.notifyDataSetChanged();
-
-//                for (int i = 0; i <= mAdapter.exoticPets.size(); i++) {
-//                    if (mAdapter.exoticPets.get(i).isSelected()) {
-//                        mAdapter.exoticPets.remove(i);
-//
-//                        mAdapter.notifyItemRemoved(i);
-//////                        Log.d(TAG, "onOptionsItemSelected: " + mAdapter.exoticPets.get(i));
-//                        Log.d(TAG, "onOptionsItemSelected: " + mAdapter.getItemCount());
-//                    }
-//                }
                 return true;
+
+            case R.id.menu_select_all:
+                animalDetailsArrowImageView.setVisibility(View.GONE);
+                //When click on select all, check condition
+                if(mAdapter.selectedPetIdsToDeleteArrayList.size() == exoticPets.size()){
+                    //When all item selected
+                    //Set isSelectAll false
+                    isSelectAll = false;
+                    //Clear select array list
+                    mAdapter.selectedPetIdsToDeleteArrayList.clear();
+                }else {
+                    //When all item unselected
+                    //Set isSelectAll true
+                    isSelectAll = true;
+                    //Clear select array list
+                    mAdapter.selectedPetIdsToDeleteArrayList.clear();
+                    //Add all value in select array list
+                    mAdapter.selectedPetIdsToDeleteArrayList.addAll(exoticPets);
+                    //Check condition
+                }
+                mAdapter.notifyDataSetChanged();
+
             default:
+
                 return super.onOptionsItemSelected(item);
         }
-
     }
-
 }
 
 

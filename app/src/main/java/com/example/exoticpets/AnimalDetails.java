@@ -59,13 +59,9 @@ public class AnimalDetails extends AppCompatActivity implements Serializable {
                         /**
                          *
                          * selectedPet.getID = 1925
-                         *
                          * 1 - Wally.getID (1254) = selectedPet.getID(1925)
                          * 2 - Hanna(1059) = selectedPet.getid(1925)
                          * 3 - Hafiz.getID(1925) the fish = selectedPet.getid(1925)
-                         *
-                         *
-                         *
                          */
                         //Removes item from recycleview
                         for (ExoticPet exoticPet : mAdapter.exoticPets) {
@@ -84,16 +80,13 @@ public class AnimalDetails extends AppCompatActivity implements Serializable {
                         alertDialog.dismiss();
                     }
                 });
-
                 alertDialog.show();
-
-
             }
         });
 
 
         //Hides the action bar
-//        getSupportActionBar().hide();
+        //getSupportActionBar().hide();
         //Hides title text from action bar
         //getSupportActionBar().setDisplayShowTitleEnabled(false);
     }
@@ -109,13 +102,11 @@ public class AnimalDetails extends AppCompatActivity implements Serializable {
         getIntent().getSerializableExtra("pet_name");
         selectedPet = (ExoticPet) getIntent().getSerializableExtra("exotic_pet");
 
-
         if (getIntent().hasExtra("pet_picture") && getIntent().hasExtra("pet_name")) {
             String imageUrl = getIntent().getStringExtra("pet_picture");
             String imageName = getIntent().getStringExtra("pet_name");
             setImage(imageUrl, imageName);
         }
-
 
     }
 
