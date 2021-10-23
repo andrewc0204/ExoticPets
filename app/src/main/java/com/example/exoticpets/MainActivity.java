@@ -60,18 +60,15 @@ public class MainActivity extends AppCompatActivity {
     public static RecyclerViewAdapter mAdapter;
     private ImageButton petImageButton;
     private ImageView defaultImage;
-    private ImageView ivCheckBoxImageView;
     private ImageView menuImageView;
-    private ImageView animalDetailsArrowImageView;
     private TextView searchForPetTextview;
     private TextView instructionView;
     private EasyImage easyImage;
     private View view;
     private FloatingActionButton addPetButton;
-    private Toolbar searchPetToobar;
+    public static Toolbar searchPetToobar;
     private ArrayList<ExoticPet> mSearchedNamesArrayList = new ArrayList<>();
     private File cameraPicture;
-    boolean isSelectAll = false;
 
 
 
@@ -81,6 +78,7 @@ public class MainActivity extends AppCompatActivity {
         super.onActivityResult(requestCode, resultCode, data);
         easyImage.handleActivityResult(requestCode, resultCode, data, this, new DefaultCallback() {
 
+            //Loads user picture into imageView
             @Override
             public void onMediaFilesPicked(MediaFile[] imageFiles, MediaSource source) {
                 for (MediaFile imageFile : imageFiles) {
@@ -122,10 +120,12 @@ public class MainActivity extends AppCompatActivity {
         searchForPetTextview = findViewById(R.id.textview_searchForPet);
 
 
+
+
         initViews();
 
-        this.setSupportActionBar(searchPetToobar);
-        this.getSupportActionBar().setTitle("");
+//        this.setSupportActionBar(searchPetToobar);
+//        this.getSupportActionBar().setTitle("");
 
         //Allows user to take pictures
         easyImage = new EasyImage.Builder(MainActivity.this)
@@ -145,7 +145,7 @@ public class MainActivity extends AppCompatActivity {
         menuImageView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                searchPetToobar.setVisibility(View.GONE);
 
             }
         });
@@ -257,7 +257,6 @@ public class MainActivity extends AppCompatActivity {
                     }
                 });
 
-
                 //Camera Button
                 petImageButton.setOnClickListener(new View.OnClickListener() {
                     @Override
@@ -348,7 +347,7 @@ public class MainActivity extends AppCompatActivity {
     //This method sets up the RecycleView in the app
     private void initViews() {
         RecyclerView recyclerView = findViewById(R.id.recyclerv_view);
-        mAdapter = new RecyclerViewAdapter(this,exoticPets, searchForPetTextview);
+        mAdapter = new RecyclerViewAdapter(this, exoticPets,searchPetToobar);
         recyclerView.setAdapter(mAdapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
@@ -382,87 +381,57 @@ public class MainActivity extends AppCompatActivity {
             }
         });
     }
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        MenuInflater inflater = getMenuInflater();
-        inflater.inflate(R.menu.selectallmenu, menu);
-
-        return true;
-    }
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        animalDetailsArrowImageView = findViewById(R.id.animal_details_arrow);
-
-        switch (item.getItemId()) {
-            case R.id.menu_delete:
-                for (ExoticPet exoticPet : mAdapter.selectedPetIdsToDeleteArrayList){
-                    mAdapter.exoticPets.remove(exoticPet);
-                }
-                mAdapter.selectedPetIdsToDeleteArrayList.clear();
-                mAdapter.notifyDataSetChanged();
-                return true;
-
-            case R.id.menu_select_all:
-                animalDetailsArrowImageView.setVisibility(View.GONE);
-                //When click on select all, check condition
-                if(mAdapter.selectedPetIdsToDeleteArrayList.size() == exoticPets.size()){
-                    //When all item selected
-                    //Set isSelectAll false
-                    isSelectAll = false;
-                    //Clear select array list
-                    mAdapter.selectedPetIdsToDeleteArrayList.clear();
-                }else {
-                    //When all item unselected
-                    //Set isSelectAll true
-                    isSelectAll = true;
-                    //Clear select array list
-                    mAdapter.selectedPetIdsToDeleteArrayList.clear();
-                    //Add all value in select array list
-                    mAdapter.selectedPetIdsToDeleteArrayList.addAll(exoticPets);
-                    //Check condition
-                }
-                mAdapter.notifyDataSetChanged();
-
-            default:
-
-                return super.onOptionsItemSelected(item);
-        }
-    }
-}
-
-
-
-
-
-
-
-
-
-
-
-
-
-//    //enables user to search for pets
+//
 //    @Override
 //    public boolean onCreateOptionsMenu(Menu menu) {
-//        getMenuInflater().inflate(R.menu.menu, menu);
-//        MenuItem menuItem = menu.findItem(R.id.search_view);
-//
-//        SearchView searchView = (SearchView) menuItem.getActionView();
-//        searchView.setMaxWidth(Integer.MAX_VALUE);
-//        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
-//            @Override
-//            public boolean onQueryTextSubmit(String query) {
-//                return false;
-//            }
-//
-//            @Override
-//            public boolean onQueryTextChange(String newText) {
-//                return true;
-//            }
-//        });
+//        MenuInflater inflater = getMenuInflater();
+//        inflater.inflate(R.menu.selectallmenu, menu);
 //
 //        return true;
+//    }
+//
+//    @Override
+//    public boolean onOptionsItemSelected(MenuItem item) {
+//        ivCheckBoxImageView = findViewById(R.id.iv_check_box);
+//        animalDetailsArrowImageView = findViewById(R.id.animal_details_arrow);
+//
+//        switch (item.getItemId()) {
+//            case R.id.menu_delete:
+//                for (ExoticPet exoticPet : mAdapter.selectedPetIdsToDeleteArrayList) {
+//                    mAdapter.exoticPets.remove(exoticPet);
+//                }
+//                mAdapter.selectedPetIdsToDeleteArrayList.clear();
+//                mAdapter.notifyDataSetChanged();
+//                return true;
+//
+//            case R.id.menu_select_all:
+//                //When click on select all, check condition
+//                if (mAdapter.selectedPetIdsToDeleteArrayList.size() == exoticPets.size()) {
+//                    //When all item selected
+//                    //Set isSelectAll false
+//                    isSelectAll = false;
+//                    //Clear select array list
+//                    mAdapter.selectedPetIdsToDeleteArrayList.clear();
+//                } else {
+//                    //When all item unselected
+//                    //Set isSelectAll true
+//                    isSelectAll = true;
+//                    //Clear select array list
+//                    mAdapter.selectedPetIdsToDeleteArrayList.clear();
+//                    //Add all value in select array list
+//                    mAdapter.selectedPetIdsToDeleteArrayList.addAll(exoticPets);
+//                    //Check condition
+//                }
+//                mAdapter.notifyDataSetChanged();
+//
+//            default:
+//
+//                return super.onOptionsItemSelected(item);
+//        }
+//    }
+
+
+}
+
 
 

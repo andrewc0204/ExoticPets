@@ -18,6 +18,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.ActionBarContextView;
+import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.FragmentActivity;
 import androidx.lifecycle.LifecycleOwner;
 import androidx.lifecycle.Observer;
@@ -37,14 +39,21 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
 
     public ArrayList<ExoticPet> exoticPets = new ArrayList<>();
     private Context mContext;
-    private TextView searchPet;
+
+    private Toolbar searchPetToolbar;
+
+    boolean isEnable = false;
+    boolean isSelectAll = false;
+
+
+
     public ArrayList<ExoticPet> selectedPetIdsToDeleteArrayList = new ArrayList<>();
 
 
-    public RecyclerViewAdapter(Context context, ArrayList<ExoticPet> exoticPets, TextView searchForPetTextView) {
+    public RecyclerViewAdapter(Context context, ArrayList<ExoticPet> exoticPets,Toolbar searchPetToolbar) {
         this.mContext = context;
         this.exoticPets = exoticPets;
-        this.searchPet = searchForPetTextView;
+        this.searchPetToolbar = searchPetToolbar;
 
 
     }
@@ -80,7 +89,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
          */
 
 
-        if (!exoticPets.get(position).isSelected){
+        if (!exoticPets.get(position).isSelected) {
             holder.ivCheckBoxImageView.setVisibility(View.GONE);
         }
         holder.animalDetailsArrowImageView.setVisibility(View.VISIBLE);
@@ -91,10 +100,11 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
                 .into(holder.pet_ImageView);
 
 
-        ExoticPet currentItem = exoticPets.get(position);
+
         holder.petName.setText(exoticPets.get(position).getPetName());
 
-        holder.itemView.setOnClickListener(new View.OnClickListener() {
+
+        holder.animalDetailsArrowImageView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 //Toast.makeText(mContext,mImageNames.get(position), Toast.LENGTH_SHORT).show();
@@ -125,26 +135,153 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
 //                searchPet.setVisibility(View.GONE);
 
 
-                //If pet is selected
-                if (exoticPets.get(position).isSelected){
-                    exoticPets.get(position).setSelected(false);
-                    holder.animalDetailsArrowImageView.setVisibility(View.VISIBLE);
-                    holder.ivCheckBoxImageView.setVisibility(View.GONE);
-                    selectedPetIdsToDeleteArrayList.remove(exoticPets.get(position));
+                searchPetToolbar.setVisibility(View.GONE);
 
-                }else {
 
-                //If pet is not selected
-                    exoticPets.get(position).setSelected(true);
-                    holder.animalDetailsArrowImageView.setVisibility(View.GONE);
-                    holder.ivCheckBoxImageView.setVisibility(View.VISIBLE);
-                    selectedPetIdsToDeleteArrayList.add(exoticPets.get(position));
+
+                if(!isEnable){
+                    //When action mode is not enable
+                    //Initialize action mode
+                    ActionMode.Callback callback = new ActionMode.Callback() {
+                        @Override
+                        public boolean onCreateActionMode(ActionMode actionMode, Menu menu) {
+                            //Initialize menu inflater
+                            MenuInflater menuInflater = actionMode.getMenuInflater();
+                            //Inflate menu
+                            menuInflater.inflate(R.menu.selectallmenu,menu);
+
+                            return true;
+                        }
+
+                        @Override
+                        public boolean onPrepareActionMode(ActionMode actionMode, Menu menu) {
+                            //When action mode is prepare, set isEnable true
+                            isEnable = true;
+                            ClickItem(holder);
+                            return true;
+                        }
+
+                        @Override
+                        public boolean onActionItemClicked(ActionMode actionMode, MenuItem menuItem) {
+                            //When click on action mode item, get item id
+                            int id = menuItem.getItemId();
+                            //When click on delete, user for loop
+                            switch (id){
+                                case R.id.menu_delete:
+                                    for (ExoticPet exoticPet: selectedPetIdsToDeleteArrayList){
+                                        //Remove selected item from array list
+                                        exoticPets.remove(exoticPet);
+                                        searchPetToolbar.setVisibility(View.VISIBLE);
+                                    }
+                                    //Check condition
+                                    //Finish action mode
+                                    actionMode.finish();
+                                    break;
+                                case R.id.menu_select_all:
+                                    //When click on select all, check condition
+                                    if(selectedPetIdsToDeleteArrayList.size() == exoticPets.size()){
+                                        //When all item selected
+                                        //Set isSelectAll false
+                                        isSelectAll = false;
+                                        //Clear select array list
+                                        selectedPetIdsToDeleteArrayList.clear();
+                                    }else {
+                                        //When all item unselected
+                                        //Set isSelectAll true
+                                        isSelectAll = true;
+                                        //Clear select array list
+                                        selectedPetIdsToDeleteArrayList.clear();
+                                        //Add all value in select array list
+                                        selectedPetIdsToDeleteArrayList.addAll(exoticPets);
+                                    }
+                                    //set text on view mode
+
+                                    //Notify adapter
+                                    notifyDataSetChanged();
+                                    break;
+                            }
+                            return true;
+                        }
+
+                        @Override
+                        public void onDestroyActionMode(ActionMode actionMode) {
+                            //When action mode is destroy, set isEnable false
+                            isEnable = false;
+                            //Set isSelectAll false
+                            isSelectAll = false;
+                            //Clear select array list
+                            selectedPetIdsToDeleteArrayList.clear();
+                            //Notify adapter
+                            notifyDataSetChanged();
+                        }
+                    };
+                    //Start action mode
+                    ((AppCompatActivity) v.getContext()).startActionMode(callback);
+                }else{
+                    //When action mode is already enable
+                    //Call method
+                    ClickItem(holder);
                 }
+                holder.ivCheckBoxImageView.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        if(isEnable){
+                            //When action mode is enable
+                            //Call method
+                            ClickItem(holder);
+                        } else {
+                            //When action mode is not enable
+                            //Display toast
+                            Log.d("TAG", "You clicked me");
+
+                        }
+                    }
+                });
+
+
+
+
+                //If pet is selected
+//                if (exoticPets.get(position).isSelected) {
+//                    exoticPets.get(position).setSelected(false);
+//                    holder.animalDetailsArrowImageView.setVisibility(View.VISIBLE);
+//                    holder.ivCheckBoxImageView.setVisibility(View.GONE);
+//                    selectedPetIdsToDeleteArrayList.remove(exoticPets.get(position));
+//
+//                } else {
+//
+//                    //If pet is not selected
+//                    exoticPets.get(position).setSelected(true);
+//                    holder.animalDetailsArrowImageView.setVisibility(View.GONE);
+//                    holder.ivCheckBoxImageView.setVisibility(View.VISIBLE);
+//                    selectedPetIdsToDeleteArrayList.add(exoticPets.get(position));
+//                }
+
                 return true;
             }
         });
     }
-
+    private void ClickItem(ViewHolder holder) {
+        //Get the selected item value
+        ExoticPet s = exoticPets.get(holder.getAbsoluteAdapterPosition());
+        //Check condition
+        if(holder.ivCheckBoxImageView.getVisibility() == View.GONE){
+            //When item not selected
+            //Visible check box image
+            //holder.toolbar.setVisibility(View.GONE);
+            holder.animalDetailsArrowImageView.setVisibility(View.GONE);
+            holder.ivCheckBoxImageView.setVisibility(View.VISIBLE);
+            //Set background color
+            selectedPetIdsToDeleteArrayList.add(s);
+        } else {
+            //When item selected
+            //Hide check box image
+            holder.animalDetailsArrowImageView.setVisibility(View.VISIBLE);
+            holder.ivCheckBoxImageView.setVisibility(View.GONE);
+            //Set background color
+            selectedPetIdsToDeleteArrayList.remove(s);
+        }
+    }
     //This tell the adapter how many list items are in the list
     @Override
     public int getItemCount() {
@@ -158,20 +295,20 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
 
         CircleImageView pet_ImageView;
         TextView petName;
-        TextView instructionView;
         ImageView ivCheckBoxImageView;
         ImageView animalDetailsArrowImageView;
 
 
 
+
         public ViewHolder(View itemView) {
             super(itemView);
-            instructionView = itemView.findViewById(R.id.instructionView);
+
             pet_ImageView = itemView.findViewById(R.id.pet_image);
             petName = itemView.findViewById(R.id.image_name);
             ivCheckBoxImageView = itemView.findViewById(R.id.iv_check_box);
-            ivCheckBoxImageView.setVisibility(View.GONE);
             animalDetailsArrowImageView = itemView.findViewById(R.id.animal_details_arrow);
+
         }
     }
 
