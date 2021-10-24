@@ -1,5 +1,6 @@
 package com.example.exoticpets;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -18,6 +19,7 @@ import static com.example.exoticpets.MainActivity.mAdapter;
 public class AnimalDetails extends AppCompatActivity implements Serializable {
     Button cancelButton;
     Button okButton;
+    ImageView backImageView;
     ImageView deletePetImageView;
     View view;
     ExoticPet selectedPet;
@@ -28,6 +30,8 @@ public class AnimalDetails extends AppCompatActivity implements Serializable {
         setContentView(R.layout.animal_details);
 
         getIncomingIntent();
+
+        backImageView = findViewById(R.id.back_imageview);
         deletePetImageView = findViewById(R.id.delete_pet);
 
 
@@ -84,12 +88,20 @@ public class AnimalDetails extends AppCompatActivity implements Serializable {
             }
         });
 
-
+      backImageView.setOnClickListener(new View.OnClickListener() {
+          @Override
+          public void onClick(View v) {
+              Intent intent = new Intent(AnimalDetails.this, MainActivity.class);
+              startActivity(intent);
+          }
+      });
         //Hides the action bar
         //getSupportActionBar().hide();
         //Hides title text from action bar
         //getSupportActionBar().setDisplayShowTitleEnabled(false);
     }
+
+
 
     @Override
     public void onBackPressed() {

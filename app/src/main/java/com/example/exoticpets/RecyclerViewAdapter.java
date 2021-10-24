@@ -89,10 +89,10 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
          */
 
 
-        if (!exoticPets.get(position).isSelected) {
-            holder.ivCheckBoxImageView.setVisibility(View.GONE);
-        }
-        holder.animalDetailsArrowImageView.setVisibility(View.VISIBLE);
+//        if (!exoticPets.get(position).isSelected) {
+//            holder.ivCheckBoxImageView.setVisibility(View.GONE);
+//        }
+//        holder.animalDetailsArrowImageView.setVisibility(View.VISIBLE);
 
         Glide.with(mContext)
                 .asBitmap()
@@ -104,7 +104,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
         holder.petName.setText(exoticPets.get(position).getPetName());
 
 
-        holder.animalDetailsArrowImageView.setOnClickListener(new View.OnClickListener() {
+        holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 //Toast.makeText(mContext,mImageNames.get(position), Toast.LENGTH_SHORT).show();
@@ -135,10 +135,6 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
 //                searchPet.setVisibility(View.GONE);
 
 
-                searchPetToolbar.setVisibility(View.GONE);
-
-
-
                 if(!isEnable){
                     //When action mode is not enable
                     //Initialize action mode
@@ -160,7 +156,6 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
                             ClickItem(holder);
                             return true;
                         }
-
                         @Override
                         public boolean onActionItemClicked(ActionMode actionMode, MenuItem menuItem) {
                             //When click on action mode item, get item id
@@ -171,7 +166,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
                                     for (ExoticPet exoticPet: selectedPetIdsToDeleteArrayList){
                                         //Remove selected item from array list
                                         exoticPets.remove(exoticPet);
-                                        searchPetToolbar.setVisibility(View.VISIBLE);
+
                                     }
                                     //Check condition
                                     //Finish action mode
@@ -222,22 +217,6 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
                     //Call method
                     ClickItem(holder);
                 }
-                holder.ivCheckBoxImageView.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        if(isEnable){
-                            //When action mode is enable
-                            //Call method
-                            ClickItem(holder);
-                        } else {
-                            //When action mode is not enable
-                            //Display toast
-                            Log.d("TAG", "You clicked me");
-
-                        }
-                    }
-                });
-
 
 
 
@@ -260,10 +239,51 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
                 return true;
             }
         });
+        holder.ivCheckBoxImageView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(isEnable){
+                    //When action mode is enable
+                    //Call method
+                    ClickItem(holder);
+                } else {
+                    //When action mode is not enable
+                    //Display toast
+                    Log.d("TAG", "You clicked me");
+                }
+            }
+        });
+        holder.animalDetailsArrowImageView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(isEnable){
+                    //When action mode is enable
+                    //Call method
+                    ClickItem(holder);
+                } else {
+                    //When action mode is not enable
+                    //Display toast
+                    Log.d("TAG", "You clicked me");
+                }
+            }
+        });
+                        //Check condition
+                if (isSelectAll){
+                    //When all value selected
+                    //Visible all check box image
+                    holder.animalDetailsArrowImageView.setVisibility(View.GONE);
+                    holder.ivCheckBoxImageView.setVisibility(View.VISIBLE);
+                }else{
+                    //When all value unselected
+                    //Hide all check box image
+                    holder.animalDetailsArrowImageView.setVisibility(View.VISIBLE);
+                    holder.ivCheckBoxImageView.setVisibility(View.GONE);
+                }
+
     }
     private void ClickItem(ViewHolder holder) {
         //Get the selected item value
-        ExoticPet s = exoticPets.get(holder.getAbsoluteAdapterPosition());
+        ExoticPet pets = exoticPets.get(holder.getAbsoluteAdapterPosition());
         //Check condition
         if(holder.ivCheckBoxImageView.getVisibility() == View.GONE){
             //When item not selected
@@ -272,14 +292,14 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
             holder.animalDetailsArrowImageView.setVisibility(View.GONE);
             holder.ivCheckBoxImageView.setVisibility(View.VISIBLE);
             //Set background color
-            selectedPetIdsToDeleteArrayList.add(s);
+            selectedPetIdsToDeleteArrayList.add(pets);
         } else {
             //When item selected
             //Hide check box image
             holder.animalDetailsArrowImageView.setVisibility(View.VISIBLE);
             holder.ivCheckBoxImageView.setVisibility(View.GONE);
             //Set background color
-            selectedPetIdsToDeleteArrayList.remove(s);
+            selectedPetIdsToDeleteArrayList.remove(pets);
         }
     }
     //This tell the adapter how many list items are in the list

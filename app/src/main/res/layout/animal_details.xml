@@ -5,7 +5,6 @@
     android:layout_height="match_parent"
     android:weightSum="100">
 
-
     <include
         android:id="@+id/animal_details_toolbar"
         layout = "@layout/animal_details_toolbar1">
