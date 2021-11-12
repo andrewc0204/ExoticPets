@@ -10,11 +10,13 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
+import android.view.ActionMode;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -25,16 +27,20 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.PopupMenu;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 
 import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
+import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.Random;
 import java.util.UUID;
@@ -58,9 +64,12 @@ public class MainActivity extends AppCompatActivity {
 
     //Vars
     public static RecyclerViewAdapter mAdapter;
+    private ImageView animalDetailsArrowImageView;
+    private ImageView checkBoxImageView;
     private ImageButton petImageButton;
     private ImageView defaultImage;
     private ImageView menuImageView;
+    private TextView feedPetTextView;
     private TextView searchForPetTextview;
     private TextView instructionView;
     private EasyImage easyImage;
@@ -69,6 +78,10 @@ public class MainActivity extends AppCompatActivity {
     public static Toolbar searchPetToobar;
     private ArrayList<ExoticPet> mSearchedNamesArrayList = new ArrayList<>();
     private File cameraPicture;
+    public static final String SHARED_PREFS = "sharedPrefs";
+    public static final String TEXT = "sharedPrefs";
+    public static final String KEY_CONNECTIONS = "KEY_CONNECTIONS";
+
 
 
 
@@ -109,19 +122,26 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+
+
         //Hides the action bar
         //getSupportActionBar().hide();
 
         //Vars
+
+        animalDetailsArrowImageView = findViewById(R.id.animal_details_arrow);
+        checkBoxImageView = findViewById(R.id.iv_check_box);
         menuImageView = findViewById(R.id.menu);
         searchPetToobar = findViewById(R.id.toolbar);
         addPetButton = findViewById(R.id.addPetButton1);
+        feedPetTextView = findViewById(R.id.feed_pet_textview);
         instructionView = findViewById(R.id.instructionView);
         searchForPetTextview = findViewById(R.id.textview_searchForPet);
 
 
 
 
+        loadData();
         initViews();
 
 //        this.setSupportActionBar(searchPetToobar);
@@ -147,6 +167,54 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View v) {
                 searchPetToobar.setVisibility(View.GONE);
 
+            }
+        });
+
+
+
+        feedPetTextView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ActionMode.Callback callback = new ActionMode.Callback() {
+                    @Override
+                    public boolean onCreateActionMode(ActionMode actionMode, Menu menu) {
+                        //Initialize menu inflater
+                        MenuInflater menuInflater = actionMode.getMenuInflater();
+                        //Inflate menu
+                        menuInflater.inflate(R.menu.feedpetmenu, menu);
+
+                        return true;
+                    }
+
+                    @Override
+                    public boolean onPrepareActionMode(ActionMode mode, Menu menu) {
+                        return false;
+                    }
+
+                    @Override
+                    public boolean onActionItemClicked(ActionMode mode, MenuItem menuItem) {
+
+                        //When click on action mode item, get item id
+                        int id = menuItem.getItemId();
+
+                        switch (id){
+                            case R.id.feed_pet_item:
+                                for (ExoticPet exoticPet : mAdapter.feedPet){
+                                    mAdapter.exoticPets.add(exoticPet);
+                                    animalDetailsArrowImageView.setVisibility(View.GONE);
+                                    checkBoxImageView.setVisibility(View.VISIBLE);
+                                }
+
+                        }
+                        return true;
+                    }
+
+                    @Override
+                    public void onDestroyActionMode(ActionMode mode) {
+
+                    }
+                };
+                ((AppCompatActivity) v.getContext()).startActionMode(callback);
             }
         });
 
@@ -268,6 +336,10 @@ public class MainActivity extends AppCompatActivity {
                 createPetButton.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
+
+
+
+
                         ExoticPet exoticPet = new ExoticPet();
                         Random r = new Random();
                         int randomIDNumber = r.nextInt(9999 - 1001) + 1001;
@@ -351,6 +423,8 @@ public class MainActivity extends AppCompatActivity {
         recyclerView.setAdapter(mAdapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
+
+
         //While user is typing
         searchForPetTextview.addTextChangedListener(new TextWatcher() {
             @Override
@@ -381,14 +455,49 @@ public class MainActivity extends AppCompatActivity {
             }
         });
     }
-//
+
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        saveData();
+    }
+
+
+    public void saveData(){
+
+        SharedPreferences sharedPreferences = getSharedPreferences("shared preferences", MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        Gson gson = new Gson();
+        String json = gson.toJson(exoticPets);
+        editor.putString("pet list", json);
+        editor.apply();
+        Toast.makeText(this, "Data saved", Toast.LENGTH_SHORT).show();
+
+    }
+    public void loadData(){
+        Toast.makeText(this, "Data loaded", Toast.LENGTH_SHORT).show();
+
+        SharedPreferences sharedPreferences = getSharedPreferences("shared preferences", MODE_PRIVATE);
+        Gson gson = new Gson();
+        String json = sharedPreferences.getString("pet list", null);
+        Type type = new TypeToken<ArrayList<ExoticPet>>(){}.getType();
+        exoticPets = gson.fromJson(json, type);
+
+        if (exoticPets == null){
+            exoticPets = new ArrayList<>();
+        }
+    }
+
+
+
 //    @Override
 //    public boolean onCreateOptionsMenu(Menu menu) {
 //        MenuInflater inflater = getMenuInflater();
-//        inflater.inflate(R.menu.selectallmenu, menu);
-//
+//        inflater.inflate(R.menu.feedpetmenu, menu);
 //        return true;
 //    }
+
 //
 //    @Override
 //    public boolean onOptionsItemSelected(MenuItem item) {

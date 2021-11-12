@@ -12,7 +12,8 @@
         android:icon="@drawable/ic_select_all"
         app:showAsAction="always"/>
 
-    <item android:id="@+id/feed_pet"
+    <item
+        android:id="@+id/feed_pet"
         android:title="Feed Pet"
         app:showAsAction="always"
         />

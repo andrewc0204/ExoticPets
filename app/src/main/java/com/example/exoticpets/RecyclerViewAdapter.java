@@ -13,6 +13,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.DecelerateInterpolator;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -29,7 +30,9 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
@@ -38,19 +41,15 @@ import static androidx.constraintlayout.motion.utils.Oscillator.TAG;
 public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapter.ViewHolder> {
 
     public ArrayList<ExoticPet> exoticPets = new ArrayList<>();
+    public ArrayList<ExoticPet> selectedPetIdsToDeleteArrayList = new ArrayList<>();
+    public ArrayList<ExoticPet> feedPet = new ArrayList<>();
     private Context mContext;
-
     private Toolbar searchPetToolbar;
-
     boolean isEnable = false;
     boolean isSelectAll = false;
 
 
-
-    public ArrayList<ExoticPet> selectedPetIdsToDeleteArrayList = new ArrayList<>();
-
-
-    public RecyclerViewAdapter(Context context, ArrayList<ExoticPet> exoticPets,Toolbar searchPetToolbar) {
+    public RecyclerViewAdapter(Context context, ArrayList<ExoticPet> exoticPets, Toolbar searchPetToolbar) {
         this.mContext = context;
         this.exoticPets = exoticPets;
         this.searchPetToolbar = searchPetToolbar;
@@ -63,8 +62,6 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.layout_listitem, parent, false);
         ViewHolder holder = new ViewHolder(view);
-        //mainViewModel = ViewModelProviders.of((FragmentActivity)activity).get(MainViewModel.class);
-        //Return view
 
         return holder;
     }
@@ -89,16 +86,10 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
          */
 
 
-//        if (!exoticPets.get(position).isSelected) {
-//            holder.ivCheckBoxImageView.setVisibility(View.GONE);
-//        }
-//        holder.animalDetailsArrowImageView.setVisibility(View.VISIBLE);
-
         Glide.with(mContext)
                 .asBitmap()
                 .load(exoticPets.get(position).getPetImage())
                 .into(holder.pet_ImageView);
-
 
 
         holder.petName.setText(exoticPets.get(position).getPetName());
@@ -116,8 +107,10 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
                 bundle.putSerializable("pet_picture", exoticPets.get(position).getPetImage());
                 bundle.putSerializable("pet_name", exoticPets.get(position).getPetName());
 
+
                 intent.putExtras(bundle);
                 mContext.startActivity(intent);
+
             }
         });
 
@@ -135,7 +128,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
 //                searchPet.setVisibility(View.GONE);
 
 
-                if(!isEnable){
+                if (!isEnable) {
                     //When action mode is not enable
                     //Initialize action mode
                     ActionMode.Callback callback = new ActionMode.Callback() {
@@ -144,8 +137,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
                             //Initialize menu inflater
                             MenuInflater menuInflater = actionMode.getMenuInflater();
                             //Inflate menu
-                            menuInflater.inflate(R.menu.selectallmenu,menu);
-
+                            menuInflater.inflate(R.menu.selectallmenu, menu);
                             return true;
                         }
 
@@ -156,14 +148,15 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
                             ClickItem(holder);
                             return true;
                         }
+
                         @Override
                         public boolean onActionItemClicked(ActionMode actionMode, MenuItem menuItem) {
                             //When click on action mode item, get item id
                             int id = menuItem.getItemId();
                             //When click on delete, user for loop
-                            switch (id){
+                            switch (id) {
                                 case R.id.menu_delete:
-                                    for (ExoticPet exoticPet: selectedPetIdsToDeleteArrayList){
+                                    for (ExoticPet exoticPet : selectedPetIdsToDeleteArrayList) {
                                         //Remove selected item from array list
                                         exoticPets.remove(exoticPet);
 
@@ -174,13 +167,13 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
                                     break;
                                 case R.id.menu_select_all:
                                     //When click on select all, check condition
-                                    if(selectedPetIdsToDeleteArrayList.size() == exoticPets.size()){
+                                    if (selectedPetIdsToDeleteArrayList.size() == exoticPets.size()) {
                                         //When all item selected
                                         //Set isSelectAll false
                                         isSelectAll = false;
                                         //Clear select array list
                                         selectedPetIdsToDeleteArrayList.clear();
-                                    }else {
+                                    } else {
                                         //When all item unselected
                                         //Set isSelectAll true
                                         isSelectAll = true;
@@ -189,11 +182,17 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
                                         //Add all value in select array list
                                         selectedPetIdsToDeleteArrayList.addAll(exoticPets);
                                     }
-                                    //set text on view mode
+                                case R.id.feed_pet:
+                                    Calendar c = Calendar.getInstance();
+                                    SimpleDateFormat df = new SimpleDateFormat("MMM-dd-yyyy");
+                                    String formattedDate = df.format(c.getTime());
 
+                                    holder.fedDateTextView.setVisibility(View.VISIBLE);
+                                    holder.fedDateTextView.setText(formattedDate);
+
+                                    Log.d("TAG", "You fed me");
                                     //Notify adapter
                                     notifyDataSetChanged();
-                                    break;
                             }
                             return true;
                         }
@@ -212,12 +211,11 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
                     };
                     //Start action mode
                     ((AppCompatActivity) v.getContext()).startActionMode(callback);
-                }else{
+                } else {
                     //When action mode is already enable
                     //Call method
                     ClickItem(holder);
                 }
-
 
 
                 //If pet is selected
@@ -242,7 +240,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
         holder.ivCheckBoxImageView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(isEnable){
+                if (isEnable) {
                     //When action mode is enable
                     //Call method
                     ClickItem(holder);
@@ -256,7 +254,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
         holder.animalDetailsArrowImageView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(isEnable){
+                if (isEnable) {
                     //When action mode is enable
                     //Call method
                     ClickItem(holder);
@@ -267,25 +265,27 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
                 }
             }
         });
-                        //Check condition
-                if (isSelectAll){
-                    //When all value selected
-                    //Visible all check box image
-                    holder.animalDetailsArrowImageView.setVisibility(View.GONE);
-                    holder.ivCheckBoxImageView.setVisibility(View.VISIBLE);
-                }else{
-                    //When all value unselected
-                    //Hide all check box image
-                    holder.animalDetailsArrowImageView.setVisibility(View.VISIBLE);
-                    holder.ivCheckBoxImageView.setVisibility(View.GONE);
-                }
+        //Check condition
+        if (isSelectAll) {
+            //When all value selected
+            //Visible all check box image
+            holder.animalDetailsArrowImageView.setVisibility(View.GONE);
+            holder.ivCheckBoxImageView.setVisibility(View.VISIBLE);
+        } else {
+            //When all value unselected
+            //Hide all check box image
+            holder.animalDetailsArrowImageView.setVisibility(View.VISIBLE);
+            holder.ivCheckBoxImageView.setVisibility(View.GONE);
+        }
 
     }
+
+
     private void ClickItem(ViewHolder holder) {
         //Get the selected item value
         ExoticPet pets = exoticPets.get(holder.getAbsoluteAdapterPosition());
         //Check condition
-        if(holder.ivCheckBoxImageView.getVisibility() == View.GONE){
+        if (holder.ivCheckBoxImageView.getVisibility() == View.GONE) {
             //When item not selected
             //Visible check box image
             //holder.toolbar.setVisibility(View.GONE);
@@ -302,6 +302,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
             selectedPetIdsToDeleteArrayList.remove(pets);
         }
     }
+
     //This tell the adapter how many list items are in the list
     @Override
     public int getItemCount() {
@@ -315,10 +316,9 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
 
         CircleImageView pet_ImageView;
         TextView petName;
+        TextView fedDateTextView;
         ImageView ivCheckBoxImageView;
         ImageView animalDetailsArrowImageView;
-
-
 
 
         public ViewHolder(View itemView) {
@@ -328,6 +328,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
             petName = itemView.findViewById(R.id.image_name);
             ivCheckBoxImageView = itemView.findViewById(R.id.iv_check_box);
             animalDetailsArrowImageView = itemView.findViewById(R.id.animal_details_arrow);
+            fedDateTextView = itemView.findViewById(R.id.fed_date);
 
         }
     }
