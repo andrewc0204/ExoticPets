@@ -6,7 +6,16 @@ public class ExoticPet implements Serializable {
     String id;
     String petName;
     String petImage;
+    String whenPetWasLastFed;
     boolean isSelected = false;
+
+    public String getWhenPetWasLastFed() {
+        return whenPetWasLastFed;
+    }
+
+    public void setWhenPetWasLastFed(String whenPetWasLastFed) {
+        this.whenPetWasLastFed = whenPetWasLastFed;
+    }
 
     public boolean isSelected() {
         return isSelected;

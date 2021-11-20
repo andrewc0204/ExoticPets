@@ -2,10 +2,10 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <item
-        android:id="@+id/select_pets_to_feed"
-        android:title="Select Pets"
-        app:showAsAction="always"
-        />
+        android:id="@+id/menu_feed_all"
+        android:title="Select All"
+        android:icon="@drawable/ic_select_all"
+        app:showAsAction="always"/>
     <item
         android:id="@+id/feed_pet_item"
         android:title="Feed Pet"

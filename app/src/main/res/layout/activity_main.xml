@@ -17,16 +17,17 @@
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize">
 
-        <ImageView
-            android:id="@+id/menu"
-            android:layout_width="35dp"
-            android:layout_height="35dp"
-            android:layout_alignParentTop="true"
-            android:layout_alignParentEnd="true"
-            android:layout_marginTop="12dp"
-            android:layout_marginEnd="9dp"
-            android:background="@drawable/ic_menu"
-             />
+
+<!--        <ImageView-->
+<!--            android:id="@+id/menu"-->
+<!--            android:layout_width="35dp"-->
+<!--            android:layout_height="35dp"-->
+<!--            android:layout_alignParentTop="true"-->
+<!--            android:layout_alignParentEnd="true"-->
+<!--            android:layout_marginTop="12dp"-->
+<!--            android:layout_marginEnd="9dp"-->
+<!--            android:background="@drawable/ic_menu"-->
+<!--             />-->
 
         <EditText
             android:id="@+id/textview_searchForPet"
@@ -89,12 +90,6 @@
             android:layout_alignParentBottom="true"
             android:background="@drawable/alertbackground">
 
-            <TextView
-                android:id="@+id/feed_pet_textview"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Feed Pet"
-                android:textColor="@color/white"/>
 
         </androidx.appcompat.widget.Toolbar>
 

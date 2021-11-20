@@ -42,15 +42,37 @@
             android:layout_alignParentEnd="true"
             android:layout_centerVertical="true"
             android:layout_marginStart="10dp"
-            android:layout_marginEnd="20dp"
+            android:layout_marginEnd="30dp"
             android:src="@drawable/ic_baseline_navigate_next_24" />
 
         <TextView
             android:id="@+id/last_fed"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="175dp"
-            android:text="Last Fed: " />
+            android:layout_marginLeft="130dp"
+            android:text="Last Fed:" />
+
+        <TextView
+            android:id="@+id/fed_date"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="190dp"
+            android:text="Date"
+            android:visibility="gone" />
+
+        <com.airbnb.lottie.LottieAnimationView
+            android:id="@+id/add_pet_json"
+            android:layout_width="75dp"
+            android:layout_height="75dp"
+            android:layout_alignParentEnd="true"
+            android:layout_centerVertical="true"
+            android:layout_marginStart="10dp"
+            android:layout_marginEnd="20dp"
+            card_view:lottie_autoPlay="true"
+            card_view:lottie_fileName="check.json"
+            card_view:lottie_speed="1.75"
+            android:visibility="gone"
+            />
 
         <ImageView
             android:id="@+id/iv_check_box"
@@ -63,6 +85,6 @@
             android:src="@drawable/ic_check_circle"
             android:visibility="gone" />
 
-
     </RelativeLayout>
 </androidx.cardview.widget.CardView>
+

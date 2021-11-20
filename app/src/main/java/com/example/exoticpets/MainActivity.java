@@ -131,10 +131,9 @@ public class MainActivity extends AppCompatActivity {
 
         animalDetailsArrowImageView = findViewById(R.id.animal_details_arrow);
         checkBoxImageView = findViewById(R.id.iv_check_box);
-        menuImageView = findViewById(R.id.menu);
+//        menuImageView = findViewById(R.id.menu);
         searchPetToobar = findViewById(R.id.toolbar);
         addPetButton = findViewById(R.id.addPetButton1);
-        feedPetTextView = findViewById(R.id.feed_pet_textview);
         instructionView = findViewById(R.id.instructionView);
         searchForPetTextview = findViewById(R.id.textview_searchForPet);
 
@@ -162,61 +161,15 @@ public class MainActivity extends AppCompatActivity {
                 .allowMultiple(true)
                 .build();
 
-        menuImageView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                searchPetToobar.setVisibility(View.GONE);
+//        menuImageView.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                searchPetToobar.setVisibility(View.GONE);
+//
+//            }
+//        });
 
-            }
-        });
 
-
-
-        feedPetTextView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                ActionMode.Callback callback = new ActionMode.Callback() {
-                    @Override
-                    public boolean onCreateActionMode(ActionMode actionMode, Menu menu) {
-                        //Initialize menu inflater
-                        MenuInflater menuInflater = actionMode.getMenuInflater();
-                        //Inflate menu
-                        menuInflater.inflate(R.menu.feedpetmenu, menu);
-
-                        return true;
-                    }
-
-                    @Override
-                    public boolean onPrepareActionMode(ActionMode mode, Menu menu) {
-                        return false;
-                    }
-
-                    @Override
-                    public boolean onActionItemClicked(ActionMode mode, MenuItem menuItem) {
-
-                        //When click on action mode item, get item id
-                        int id = menuItem.getItemId();
-
-                        switch (id){
-                            case R.id.feed_pet_item:
-                                for (ExoticPet exoticPet : mAdapter.feedPet){
-                                    mAdapter.exoticPets.add(exoticPet);
-                                    animalDetailsArrowImageView.setVisibility(View.GONE);
-                                    checkBoxImageView.setVisibility(View.VISIBLE);
-                                }
-
-                        }
-                        return true;
-                    }
-
-                    @Override
-                    public void onDestroyActionMode(ActionMode mode) {
-
-                    }
-                };
-                ((AppCompatActivity) v.getContext()).startActionMode(callback);
-            }
-        });
 
         addPetButton.setOnClickListener(new View.OnClickListener() {
             @Override
