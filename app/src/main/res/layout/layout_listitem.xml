@@ -47,18 +47,23 @@
 
         <TextView
             android:id="@+id/last_fed"
+            android:fontFamily="@font/consola"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="130dp"
+            android:layout_marginLeft="30dp"
+            android:layout_toRightOf="@id/pet_image"
             android:text="Last Fed:" />
 
         <TextView
             android:id="@+id/fed_date"
+            android:fontFamily="@font/consola"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="190dp"
+            android:layout_marginLeft="100dp"
+            android:layout_toRightOf="@id/pet_image"
             android:text="Date"
-            android:visibility="gone" />
+            android:visibility="gone"
+             />
 
         <com.airbnb.lottie.LottieAnimationView
             android:id="@+id/add_pet_json"

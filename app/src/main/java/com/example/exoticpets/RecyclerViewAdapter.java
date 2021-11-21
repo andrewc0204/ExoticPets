@@ -80,20 +80,17 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
     public void onBindViewHolder(RecyclerViewAdapter.ViewHolder holder, int position) {
 
 
-
-
         //pet1 //index 0
         //pet2 //index 1
         //pet3 //index 2
         //pet4 //index 3
 
-        if (exoticPets.get(position).getWhenPetWasLastFed() != null){
+        if (exoticPets.get(position).getWhenPetWasLastFed() != null) {
             holder.fedDateTextView.setVisibility(View.VISIBLE);
             holder.fedDateTextView.setText(exoticPets.get(position).getWhenPetWasLastFed());
-        }else {
+        } else {
             holder.fedDateTextView.setVisibility(View.GONE);
         }
-
 
 
         Glide.with(mContext)
@@ -108,7 +105,6 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
 
 
                 if (!isEnable) {
@@ -149,11 +145,12 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
                                     break;
                                 case R.id.menu_select_all:
                                     //When click on select all, check condition
-                                    if (selectedPetIdsToDeleteArrayList.size() == exoticPets.size()) {
+                                    if (selectedPetIdsToDeleteArrayList.size() == exoticPets.size() || feedPet.size() == exoticPets.size()) {
                                         //When all item selected
                                         //Set isSelectAll false
                                         isSelectAll = false;
                                         //Clear select array list
+                                        feedPet.clear();
                                         selectedPetIdsToDeleteArrayList.clear();
                                         notifyDataSetChanged();
                                         break;
@@ -164,15 +161,22 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
                                         //Clear select array list
                                         selectedPetIdsToDeleteArrayList.clear();
                                         //Add all value in select array list
+                                        feedPet.addAll(exoticPets);
                                         selectedPetIdsToDeleteArrayList.addAll(exoticPets);
                                         notifyDataSetChanged();
                                         break;
                                     }
+
+
                                 case R.id.feed_pet:
+
                                     Calendar c = Calendar.getInstance();
                                     SimpleDateFormat df = new SimpleDateFormat("MMM-dd-yyyy");
                                     String formattedDate = df.format(c.getTime());
-                                    exoticPets.get(position).setWhenPetWasLastFed(formattedDate);
+                                    for (ExoticPet exoticPet : feedPet) {
+                                        exoticPet.setWhenPetWasLastFed(formattedDate);
+
+                                    }
 
 
                                     //Check
@@ -189,6 +193,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
                             //Set isSelectAll false
                             isSelectAll = false;
                             //Clear select array list
+                            feedPet.clear();
                             selectedPetIdsToDeleteArrayList.clear();
                             //Notify adapter
                             notifyDataSetChanged();
