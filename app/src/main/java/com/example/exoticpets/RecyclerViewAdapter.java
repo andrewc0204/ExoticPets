@@ -38,9 +38,13 @@ import com.airbnb.lottie.value.LottieFrameInfo;
 import com.airbnb.lottie.value.SimpleLottieValueCallback;
 import com.bumptech.glide.Glide;
 
+import java.sql.Date;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collections;
+import java.util.Comparator;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
@@ -55,14 +59,14 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
     private Toolbar searchPetToolbar;
     boolean isEnable = false;
     boolean isSelectAll = false;
+    private ArrayList<String> exoticPetsFedDates = new ArrayList<>();
+
 
 
     public RecyclerViewAdapter(Context context, ArrayList<ExoticPet> exoticPets, Toolbar searchPetToolbar) {
         this.mContext = context;
         this.exoticPets = exoticPets;
         this.searchPetToolbar = searchPetToolbar;
-
-
     }
 
     //This method is responsible for inflating the view
@@ -78,6 +82,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
     //Treat this as a for loop method
     @Override
     public void onBindViewHolder(RecyclerViewAdapter.ViewHolder holder, int position) {
+
 
 
         //pet1 //index 0
@@ -100,7 +105,6 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
 
 
         holder.petName.setText(exoticPets.get(position).getPetName());
-
 
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -454,4 +458,37 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
     public void updateDisplayedPets(ArrayList<ExoticPet> searchedPets) {
         exoticPets = searchedPets;
     }
+
+    public void updatePetsLastFed(){
+        exoticPetsFedDates = new ArrayList<>();
+        for (ExoticPet exoticPet : exoticPets){
+            if (exoticPet.getWhenPetWasLastFed() != null){
+                exoticPetsFedDates.add(exoticPet.getWhenPetWasLastFed());
+            }
+        }
+
+//        System.out.println("");
+//        Collections.sort(exoticPets, byDate);
+//        System.out.println("");
+    }
+
+//    static final Comparator<ExoticPet> byDate = new Comparator<ExoticPet>() {
+//        SimpleDateFormat sdf = new SimpleDateFormat("yyyy,MM,dd");
+//
+//        public int compare(ExoticPet ord1, ExoticPet ord2) {
+//            Date d1 = null;
+//            Date d2 = null;
+//            try {
+//                d1 = (Date) sdf.parse(ord1.getWhenPetWasLastFed());
+//                d2 = (Date) sdf.parse(ord2.getWhenPetWasLastFed());
+//            } catch (ParseException e) {
+//                // TODO Auto-generated catch block
+//                e.printStackTrace();
+//            }
+//
+//
+//            //return (d1.getTime() > d2.getTime() ? -1 : 1);     //descending
+//            return (d1.getTime() > d2.getTime() ? 1 : -1);     //ascending
+//        }
+//    };
 }

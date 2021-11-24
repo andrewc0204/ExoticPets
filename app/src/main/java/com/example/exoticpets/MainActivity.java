@@ -9,17 +9,12 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.util.Log;
-import android.view.ActionMode;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -27,7 +22,6 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
-import android.widget.PopupMenu;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -37,13 +31,10 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
-import org.jetbrains.annotations.NotNull;
-
 import java.io.File;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.Random;
-import java.util.UUID;
 
 import pl.aprilapps.easyphotopicker.ChooserType;
 import pl.aprilapps.easyphotopicker.DefaultCallback;
@@ -66,10 +57,9 @@ public class MainActivity extends AppCompatActivity {
     public static RecyclerViewAdapter mAdapter;
     private ImageView animalDetailsArrowImageView;
     private ImageView checkBoxImageView;
-    private ImageButton petImageButton;
     private ImageView defaultImage;
-    private ImageView menuImageView;
-    private TextView feedPetTextView;
+    private ImageButton galleryImageButton;
+    private ImageButton petImageButton;
     private TextView searchForPetTextview;
     private TextView instructionView;
     private EasyImage easyImage;
@@ -78,6 +68,7 @@ public class MainActivity extends AppCompatActivity {
     public static Toolbar searchPetToobar;
     private ArrayList<ExoticPet> mSearchedNamesArrayList = new ArrayList<>();
     private File cameraPicture;
+    private boolean pictureTaken = false;
     public static final String SHARED_PREFS = "sharedPrefs";
     public static final String TEXT = "sharedPrefs";
     public static final String KEY_CONNECTIONS = "KEY_CONNECTIONS";
@@ -99,6 +90,7 @@ public class MainActivity extends AppCompatActivity {
                             .load(new File(String.valueOf(imageFile.getFile())))
                             .into(defaultImage);
                     cameraPicture = imageFile.getFile();
+                    pictureTaken = true;
                     break;
                 }
             }
@@ -186,6 +178,7 @@ public class MainActivity extends AppCompatActivity {
                  * We initialized a Button from the create_pet_layout
                  */
                 Button closeBtn = view.findViewById(R.id.close_btn);
+                galleryImageButton = view.findViewById(R.id.gallery_ImageButton);
                 petImageButton = view.findViewById(R.id.petImageButton);
                 AppCompatButton createPetButton = view.findViewById(R.id.create_pet_button);
                 EditText petNameEditText = view.findViewById(R.id.edittext_pet_name);
@@ -199,56 +192,68 @@ public class MainActivity extends AppCompatActivity {
                 String[] listOfAnimals = {"Choose Animal", "Arachnid", "Amphibian", "Reptile", "Insect", "Fish"};
                 ArrayAdapter<String> arrayAdapter = new CustomSpinnerAdapter(MainActivity.this, android.R.layout.simple_spinner_dropdown_item, listOfAnimals);
 
-
                 spinner.setAdapter(arrayAdapter);
-                //sets default image if user has not selected one from gallery
-                spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-                    public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                        String petTypeName = parent.getItemAtPosition(position).toString();
-                        switch (petTypeName) {
-                            case "Arachnid":
-                                Glide.with(MainActivity.this)
-                                        .asBitmap()
-                                        .load("https://opengameart.org/sites/default/files/styles/medium/public/SpiderEnemy.png")
-                                        .into(defaultImage);
-                                break;
-                            case "Amphibian":
-                                Glide.with(MainActivity.this)
-                                        .asBitmap()
-                                        .load("https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTPw_xYUc0rjL5QuYa6CIEk7z1D7eH6BI5gsg&usqp=CAU")
-                                        .into(defaultImage);
-                                break;
-                            case "Reptile":
-                                Glide.with(MainActivity.this)
-                                        .asBitmap()
-                                        .load("https://image.shutterstock.com/image-vector/vector-illustration-cartoon-snake-pixel-260nw-398666929.jpg")
-                                        .into(defaultImage);
-                                break;
-                            case "Insect":
-                                Glide.with(MainActivity.this)
-                                        .asBitmap()
-                                        .load("https://art.pixilart.com/eb6f46cc7831237.gif")
-                                        .into(defaultImage);
-                                break;
-                            case "Fish":
-                                Glide.with(MainActivity.this)
-                                        .asBitmap()
-                                        .load("https://image.shutterstock.com/image-vector/fish-icon-pixel-style-animal-260nw-1789259792.jpg")
-                                        .into(defaultImage);
-                                break;
-                            default:
-                                Glide.with(MainActivity.this)
-                                        .asBitmap()
-                                        .load(R.drawable.ic_baseline_image_24)
-                                        .into(defaultImage);
-                                break;
+                    //sets default image if user has not selected one from gallery
+
+                    spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                        public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                            String petTypeName = parent.getItemAtPosition(position).toString();
+                            switch (petTypeName) {
+                                case "Arachnid":
+                                    if (!pictureTaken){
+                                        Glide.with(MainActivity.this)
+                                                .asBitmap()
+                                                .load("https://opengameart.org/sites/default/files/styles/medium/public/SpiderEnemy.png")
+                                                .into(defaultImage);
+                                    }
+                                    break;
+                                case "Amphibian":
+                                    if (!pictureTaken) {
+                                        Glide.with(MainActivity.this)
+                                                .asBitmap()
+                                                .load("https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTPw_xYUc0rjL5QuYa6CIEk7z1D7eH6BI5gsg&usqp=CAU")
+                                                .into(defaultImage);
+                                    }
+                                    break;
+                                case "Reptile":
+                                    if (!pictureTaken) {
+                                        Glide.with(MainActivity.this)
+                                                .asBitmap()
+                                                .load("https://image.shutterstock.com/image-vector/vector-illustration-cartoon-snake-pixel-260nw-398666929.jpg")
+                                                .into(defaultImage);
+                                    }
+                                    break;
+                                case "Insect":
+                                    if (!pictureTaken) {
+                                        Glide.with(MainActivity.this)
+                                                .asBitmap()
+                                                .load("https://art.pixilart.com/eb6f46cc7831237.gif")
+                                                .into(defaultImage);
+                                    }
+                                    break;
+                                case "Fish":
+                                    if(!pictureTaken) {
+                                        Glide.with(MainActivity.this)
+                                                .asBitmap()
+                                                .load("https://image.shutterstock.com/image-vector/fish-icon-pixel-style-animal-260nw-1789259792.jpg")
+                                                .into(defaultImage);
+                                    }
+                                    break;
+                                default:
+                                    if (!pictureTaken) {
+                                        Glide.with(MainActivity.this)
+                                                .asBitmap()
+                                                .load(R.drawable.ic_pawprint)
+                                                .into(defaultImage);
+                                    }
+                                    break;
+                            }
                         }
-                    } // to close the onItemSelected
 
-                    public void onNothingSelected(AdapterView<?> parent) {
+                        public void onNothingSelected(AdapterView<?> parent) {
 
-                    }
-                });
+                        }
+                    });
 
                 /**
                  * Fiz: Then, i created a new Alert Dialog, and used the view object (create_pet_layout) to make the alert
@@ -269,12 +274,20 @@ public class MainActivity extends AppCompatActivity {
                  */
 
                 AlertDialog alertDialog = builder.create();
+                alertDialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
+                    @Override
+                    public void onDismiss(DialogInterface dialog) {
+                        pictureTaken = false;
+                    }
+                });
                 alertDialog.show();
+
 
                 closeBtn.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
                         alertDialog.dismiss();
+                        pictureTaken = false;
                     }
                 });
 
@@ -283,6 +296,14 @@ public class MainActivity extends AppCompatActivity {
                     @Override
                     public void onClick(View v) {
                         easyImage.openCameraForImage(MainActivity.this);
+
+                    }
+                });
+
+                galleryImageButton.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        easyImage.openGallery(MainActivity.this);
                     }
                 });
 
@@ -290,14 +311,10 @@ public class MainActivity extends AppCompatActivity {
                     @Override
                     public void onClick(View v) {
 
-
-
-
                         ExoticPet exoticPet = new ExoticPet();
                         Random r = new Random();
                         int randomIDNumber = r.nextInt(9999 - 1001) + 1001;
                         exoticPet.setId(String.valueOf(randomIDNumber));
-
 
                         //When the user clicks the button, whatever code we write here will be run
                         //Checks to see if user type in a pet name
@@ -350,13 +367,10 @@ public class MainActivity extends AppCompatActivity {
                                         break;
                                 }
 
+                                pictureTaken = false;
                                 exoticPets.add(exoticPet);
                                 //mAdapter.add -> Adds a new item to the adapter
-                                //mAdapter.notifydatasetchanged tells the recyclerview (The UI) that there is new data, and to "refresh the page".
 
-                                //adapter.add
-                                //adapter.remove
-                                //adapter.notifydatasetchanged
 
                                 mAdapter.notifyDataSetChanged();
                                 //NotifyDataSetChanged basically tells the adapter, "Hey man, we have new data. Please refresh the UI to reflect the new data"
