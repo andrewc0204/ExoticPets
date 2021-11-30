@@ -34,8 +34,8 @@ import com.google.gson.reflect.TypeToken;
 import java.io.File;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
-import java.util.Random;
 
+import de.hdodenhof.circleimageview.CircleImageView;
 import pl.aprilapps.easyphotopicker.ChooserType;
 import pl.aprilapps.easyphotopicker.DefaultCallback;
 import pl.aprilapps.easyphotopicker.EasyImage;
@@ -63,6 +63,8 @@ public class MainActivity extends AppCompatActivity {
     private TextView searchForPetTextview;
     private TextView instructionView;
     private EasyImage easyImage;
+    private EasyImage easyImage1;
+    private View changePetPictureView;
     private View view;
     private FloatingActionButton addPetButton;
     public static Toolbar searchPetToobar;
@@ -80,18 +82,28 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable @org.jetbrains.annotations.Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
+        CircleImageView changePetPicture = changePetPictureView.findViewById(R.id.change_pet_picture);
         easyImage.handleActivityResult(requestCode, resultCode, data, this, new DefaultCallback() {
 
             //Loads user picture into imageView
             @Override
             public void onMediaFilesPicked(MediaFile[] imageFiles, MediaSource source) {
                 for (MediaFile imageFile : imageFiles) {
-                    Glide.with(MainActivity.this)
-                            .load(new File(String.valueOf(imageFile.getFile())))
-                            .into(defaultImage);
-                    cameraPicture = imageFile.getFile();
-                    pictureTaken = true;
-                    break;
+                    if(!mAdapter.changePicture) {
+                        Glide.with(MainActivity.this)
+                                .load(new File(String.valueOf(imageFile.getFile())))
+                                .into(defaultImage);
+                        cameraPicture = imageFile.getFile();
+                        pictureTaken = true;
+                        break;
+                    }else{
+                        Glide.with(MainActivity.this)
+                                .load(new File(String.valueOf(imageFile.getFile())))
+                                .into(changePetPicture);
+                        cameraPicture = imageFile.getFile();
+                        mAdapter.changePicture = false;
+                        break;
+                    }
                 }
             }
 
@@ -106,6 +118,7 @@ public class MainActivity extends AppCompatActivity {
                 //Not necessary to remove any files manually anymore
             }
         });
+
     }
 
 
@@ -114,29 +127,25 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-
-
         //Hides the action bar
         //getSupportActionBar().hide();
 
         //Vars
-
+        //        menuImageView = findViewById(R.id.menu);
+        changePetPictureView = getLayoutInflater().inflate(R.layout.change_pet_picture, null);
         animalDetailsArrowImageView = findViewById(R.id.animal_details_arrow);
         checkBoxImageView = findViewById(R.id.iv_check_box);
-//        menuImageView = findViewById(R.id.menu);
         searchPetToobar = findViewById(R.id.toolbar);
         addPetButton = findViewById(R.id.addPetButton1);
         instructionView = findViewById(R.id.instructionView);
         searchForPetTextview = findViewById(R.id.textview_searchForPet);
-
-
+        ImageButton changePetCameraImageButton = changePetPictureView.findViewById(R.id.change_pet_camera_ImageButton);
+        ImageButton changePetGalleryImageButton = changePetPictureView.findViewById(R.id.change_pet_gallery_ImageButton);
+        AppCompatButton changePetPictureButton = changePetPictureView.findViewById(R.id.change_picture_button);
 
 
         loadData();
         initViews();
-
-//        this.setSupportActionBar(searchPetToobar);
-//        this.getSupportActionBar().setTitle("");
 
         //Allows user to take pictures
         easyImage = new EasyImage.Builder(MainActivity.this)
@@ -153,15 +162,27 @@ public class MainActivity extends AppCompatActivity {
                 .allowMultiple(true)
                 .build();
 
-//        menuImageView.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                searchPetToobar.setVisibility(View.GONE);
-//
-//            }
-//        });
 
+        changePetPictureButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
 
+            }
+        });
+
+        changePetCameraImageButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                easyImage.openCameraForImage(MainActivity.this);
+            }
+        });
+
+        changePetGalleryImageButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                easyImage.openGallery(MainActivity.this);
+            }
+        });
 
         addPetButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -178,8 +199,8 @@ public class MainActivity extends AppCompatActivity {
                  * We initialized a Button from the create_pet_layout
                  */
                 Button closeBtn = view.findViewById(R.id.close_btn);
-                galleryImageButton = view.findViewById(R.id.gallery_ImageButton);
-                petImageButton = view.findViewById(R.id.petImageButton);
+                galleryImageButton = view.findViewById(R.id.change_pet_gallery_ImageButton);
+                petImageButton = view.findViewById(R.id.change_pet_camera_ImageButton);
                 AppCompatButton createPetButton = view.findViewById(R.id.create_pet_button);
                 EditText petNameEditText = view.findViewById(R.id.edittext_pet_name);
                 defaultImage = view.findViewById(R.id.paw_imageview);
@@ -274,14 +295,14 @@ public class MainActivity extends AppCompatActivity {
                  */
 
                 AlertDialog alertDialog = builder.create();
+                alertDialog.show();
+
                 alertDialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
                     @Override
                     public void onDismiss(DialogInterface dialog) {
                         pictureTaken = false;
                     }
                 });
-                alertDialog.show();
-
 
                 closeBtn.setOnClickListener(new View.OnClickListener() {
                     @Override
@@ -388,7 +409,7 @@ public class MainActivity extends AppCompatActivity {
     //This method sets up the RecycleView in the app
     private void initViews() {
         RecyclerView recyclerView = findViewById(R.id.recyclerv_view);
-        mAdapter = new RecyclerViewAdapter(this, exoticPets,searchPetToobar);
+        mAdapter = new RecyclerViewAdapter(this, exoticPets,changePetPictureView,cameraPicture);
         recyclerView.setAdapter(mAdapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
 

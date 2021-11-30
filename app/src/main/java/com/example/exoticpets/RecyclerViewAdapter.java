@@ -17,12 +17,18 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.DecelerateInterpolator;
+import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.ActionBarContextView;
+import androidx.appcompat.widget.AppCompatButton;
 import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.FragmentActivity;
 import androidx.lifecycle.LifecycleOwner;
@@ -38,6 +44,7 @@ import com.airbnb.lottie.value.LottieFrameInfo;
 import com.airbnb.lottie.value.SimpleLottieValueCallback;
 import com.bumptech.glide.Glide;
 
+import java.io.File;
 import java.sql.Date;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -47,6 +54,11 @@ import java.util.Collections;
 import java.util.Comparator;
 
 import de.hdodenhof.circleimageview.CircleImageView;
+import pl.aprilapps.easyphotopicker.ChooserType;
+import pl.aprilapps.easyphotopicker.DefaultCallback;
+import pl.aprilapps.easyphotopicker.EasyImage;
+import pl.aprilapps.easyphotopicker.MediaFile;
+import pl.aprilapps.easyphotopicker.MediaSource;
 
 import static androidx.constraintlayout.motion.utils.Oscillator.TAG;
 
@@ -56,17 +68,21 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
     public ArrayList<ExoticPet> selectedPetIdsToDeleteArrayList = new ArrayList<>();
     public ArrayList<ExoticPet> feedPet = new ArrayList<>();
     private Context mContext;
-    private Toolbar searchPetToolbar;
+    private View changePetPictureView;
+    private File cameraPicture;
+    boolean changePicture = false;
     boolean isEnable = false;
     boolean isSelectAll = false;
     private ArrayList<String> exoticPetsFedDates = new ArrayList<>();
 
 
 
-    public RecyclerViewAdapter(Context context, ArrayList<ExoticPet> exoticPets, Toolbar searchPetToolbar) {
+
+    public RecyclerViewAdapter(Context context, ArrayList<ExoticPet> exoticPets, View changePetPictureView, File cameraPicture) {
         this.mContext = context;
         this.exoticPets = exoticPets;
-        this.searchPetToolbar = searchPetToolbar;
+        this.changePetPictureView = changePetPictureView;
+        this.cameraPicture = cameraPicture;
     }
 
     //This method is responsible for inflating the view
@@ -74,7 +90,6 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.layout_listitem, parent, false);
         ViewHolder holder = new ViewHolder(view);
-
         return holder;
     }
 
@@ -84,18 +99,11 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
     public void onBindViewHolder(RecyclerViewAdapter.ViewHolder holder, int position) {
 
 
-
-        //pet1 //index 0
-        //pet2 //index 1
-        //pet3 //index 2
-        //pet4 //index 3
-
         if (exoticPets.get(position).getWhenPetWasLastFed() != null) {
             holder.fedDateTextView.setVisibility(View.VISIBLE);
             holder.fedDateTextView.setText(exoticPets.get(position).getWhenPetWasLastFed());
         } else {
             holder.fedDateTextView.setVisibility(View.GONE);
-
         }
 
 
@@ -106,6 +114,42 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
 
 
         holder.petName.setText(exoticPets.get(position).getPetName());
+
+        holder.pet_ImageView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                AppCompatButton changePetPictureButton = changePetPictureView.findViewById(R.id.change_picture_button);
+                Button closeBtn1 = changePetPictureView.findViewById(R.id.close_btn1);
+                CircleImageView changePetPictureImageView = changePetPictureView.findViewById(R.id.change_pet_picture);
+
+                changePicture = true;
+                AlertDialog.Builder builder = new AlertDialog.Builder(mContext);
+                builder.setView(changePetPictureView);
+                AlertDialog alertDialog = builder.create();
+                alertDialog.show();
+
+                Glide.with(mContext)
+                        .asBitmap()
+                        .load(exoticPets.get(position).getPetImage())
+                        .into(changePetPictureImageView);
+
+                closeBtn1.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        alertDialog.dismiss();
+                    }
+                });
+
+                changePetPictureButton.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        ExoticPet exoticPet = new ExoticPet(null,null,null,null);
+                        exoticPet.setPetImage(String.valueOf(cameraPicture));
+                        alertDialog.dismiss();
+                    }
+                });
+            }
+        });
 
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -227,123 +271,6 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
             @Override
             public boolean onLongClick(View v) {
 
-//                currentItem.setSelected(!currentItem.isSelected());
-//                Log.d(TAG, "onOptionsItemSelected: " + currentItem.getPetName() + " " + position);
-//
-//                holder.ivCheckBoxImageView.setVisibility(currentItem.isSelected() ? View.VISIBLE : View.GONE);
-//                holder.animalDetailsArrowImageView.setVisibility(currentItem.isSelected() ? View.GONE : View.VISIBLE);
-//
-//                holder.ivCheckBoxImageView.setVisibility(View.VISIBLE);
-//                searchPet.setVisibility(View.GONE);
-
-//
-//                if (!isEnable) {
-//                    //When action mode is not enable
-//                    //Initialize action mode
-//                    ActionMode.Callback callback = new ActionMode.Callback() {
-//                        @Override
-//                        public boolean onCreateActionMode(ActionMode actionMode, Menu menu) {
-//                            //Initialize menu inflater
-//                            MenuInflater menuInflater = actionMode.getMenuInflater();
-//                            //Inflate menu
-//                            menuInflater.inflate(R.menu.selectallmenu, menu);
-//                            return true;
-//                        }
-//
-//                        @Override
-//                        public boolean onPrepareActionMode(ActionMode actionMode, Menu menu) {
-//                            //When action mode is prepare, set isEnable true
-//                            isEnable = true;
-//                            ClickItem(holder);
-//                            return true;
-//                        }
-//
-//                        @Override
-//                        public boolean onActionItemClicked(ActionMode actionMode, MenuItem menuItem) {
-//                            //When click on action mode item, get item id
-//                            int id = menuItem.getItemId();
-//                            //When click on delete, user for loop
-//                            switch (id) {
-//                                case R.id.menu_delete:
-//                                    for (ExoticPet exoticPet : selectedPetIdsToDeleteArrayList) {
-//                                        //Remove selected item from array list
-//                                        exoticPets.remove(exoticPet);
-//                                    }
-//                                    //Check condition
-//                                    //Finish action mode
-//                                    actionMode.finish();
-//                                    break;
-//                                case R.id.menu_select_all:
-//                                    //When click on select all, check condition
-//                                    if (selectedPetIdsToDeleteArrayList.size() == exoticPets.size()) {
-//                                        //When all item selected
-//                                        //Set isSelectAll false
-//                                        isSelectAll = false;
-//                                        //Clear select array list
-//                                        selectedPetIdsToDeleteArrayList.clear();
-//                                        notifyDataSetChanged();
-//                                       break;
-//                                    } else {
-//                                        //When all item unselected
-//                                        //Set isSelectAll true
-//                                        isSelectAll = true;
-//                                        //Clear select array list
-//                                        selectedPetIdsToDeleteArrayList.clear();
-//                                        //Add all value in select array list
-//                                        selectedPetIdsToDeleteArrayList.addAll(exoticPets);
-//                                        notifyDataSetChanged();
-//                                        break;
-//                                    }
-//                                case R.id.feed_pet:
-//                                    Calendar c = Calendar.getInstance();
-//                                    SimpleDateFormat df = new SimpleDateFormat("MMM-dd-yyyy");
-//                                    String formattedDate = df.format(c.getTime());
-//                                    exoticPets.get(position).setWhenPetWasLastFed(formattedDate);
-//
-//
-//                                    //Check
-//                                    actionMode.finish();
-//
-//                            }
-//                            return true;
-//                        }
-//
-//                        @Override
-//                        public void onDestroyActionMode(ActionMode actionMode) {
-//                            //When action mode is destroy, set isEnable false
-//                            isEnable = false;
-//                            //Set isSelectAll false
-//                            isSelectAll = false;
-//                            //Clear select array list
-//                            selectedPetIdsToDeleteArrayList.clear();
-//                            //Notify adapter
-//                            notifyDataSetChanged();
-//                        }
-//                    };
-//                    //Start action mode
-//                    ((AppCompatActivity) v.getContext()).startActionMode(callback);
-//                } else {
-//                    //When action mode is already enable
-//                    //Call method
-//                    ClickItem(holder);
-//                }
-//
-//
-//                //If pet is selected
-////                if (exoticPets.get(position).isSelected) {
-////                    exoticPets.get(position).setSelected(false);
-////                    holder.animalDetailsArrowImageView.setVisibility(View.VISIBLE);
-////                    holder.ivCheckBoxImageView.setVisibility(View.GONE);
-////                    selectedPetIdsToDeleteArrayList.remove(exoticPets.get(position));
-////
-////                } else {
-////
-////                    //If pet is not selected
-////                    exoticPets.get(position).setSelected(true);
-////                    holder.animalDetailsArrowImageView.setVisibility(View.GONE);
-////                    holder.ivCheckBoxImageView.setVisibility(View.VISIBLE);
-////                    selectedPetIdsToDeleteArrayList.add(exoticPets.get(position));
-////                }
 
                 return true;
             }
@@ -437,7 +364,6 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
         ImageView ivCheckBoxImageView;
         ImageView animalDetailsArrowImageView;
 
-
         public ViewHolder(View itemView) {
             super(itemView);
 
@@ -447,8 +373,6 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
             ivCheckBoxImageView = itemView.findViewById(R.id.iv_check_box);
             animalDetailsArrowImageView = itemView.findViewById(R.id.animal_details_arrow);
             fedDateTextView = itemView.findViewById(R.id.fed_date);
-
-
 
         }
     }

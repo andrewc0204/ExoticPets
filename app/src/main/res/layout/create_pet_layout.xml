@@ -78,7 +78,7 @@
                 android:textAlignment="center" />
 
             <ImageButton
-                android:id="@+id/petImageButton"
+                android:id="@+id/change_pet_camera_ImageButton"
                 android:layout_width="150dp"
                 android:layout_height="wrap_content"
                 android:layout_below="@id/spinner"
@@ -91,14 +91,14 @@
                 app:srcCompat="@android:drawable/ic_menu_camera" />
 
             <ImageButton
-                android:id="@+id/gallery_ImageButton"
+                android:id="@+id/change_pet_gallery_ImageButton"
                 android:layout_width="175dp"
                 android:layout_height="wrap_content"
                 android:layout_below="@id/spinner"
                 android:layout_marginLeft="-2dp"
                 android:layout_marginTop="20dp"
                 android:layout_marginRight="15dp"
-                android:layout_toRightOf="@id/petImageButton"
+                android:layout_toRightOf="@id/change_pet_camera_ImageButton"
                 android:background="@drawable/gradient"
                 app:srcCompat="@android:drawable/ic_menu_gallery"
 
@@ -108,7 +108,7 @@
                 android:id="@+id/create_pet_button"
                 android:layout_width="match_parent"
                 android:layout_height="40dp"
-                android:layout_below="@id/petImageButton"
+                android:layout_below="@id/change_pet_camera_ImageButton"
                 android:layout_marginLeft="15dp"
                 android:layout_marginTop="5dp"
                 android:layout_marginRight="15dp"
