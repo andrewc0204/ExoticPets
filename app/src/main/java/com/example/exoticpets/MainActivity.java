@@ -311,10 +311,10 @@ public class MainActivity extends AppCompatActivity {
                     @Override
                     public void onClick(View v) {
 
-                        ExoticPet exoticPet = new ExoticPet();
-                        Random r = new Random();
-                        int randomIDNumber = r.nextInt(9999 - 1001) + 1001;
-                        exoticPet.setId(String.valueOf(randomIDNumber));
+                        ExoticPet exoticPet = new ExoticPet(null,null, null, null);
+//                        Random r = new Random();
+////                        int randomIDNumber = r.nextInt(9999 - 1001) + 1001;
+////                        exoticPet.setId(String.valueOf(randomIDNumber));
 
                         //When the user clicks the button, whatever code we write here will be run
                         //Checks to see if user type in a pet name
@@ -328,6 +328,8 @@ public class MainActivity extends AppCompatActivity {
                             if (cameraPicture != null) {
                                 exoticPet.setPetImage(String.valueOf(cameraPicture));
                                 exoticPets.add(exoticPet);
+                                exoticPet.setPetName(petNameEditText.getText().toString());
+                                instructionView.setVisibility(View.GONE);
                                 //NotifyDataSetChanged basically tells the adapter, "Hey man, we have new data. Please refresh the UI to reflect the new data"
                                 mAdapter.notifyDataSetChanged();
                                 alertDialog.dismiss();
@@ -425,8 +427,8 @@ public class MainActivity extends AppCompatActivity {
 
 
     @Override
-    protected void onDestroy() {
-        super.onDestroy();
+    protected void onStop() {
+        super.onStop();
         saveData();
     }
 

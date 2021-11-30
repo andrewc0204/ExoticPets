@@ -13,11 +13,11 @@
         card_view:cardElevation="5dp"
         card_view:cardUseCompatPadding="true">
 
+
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@drawable/alertbackground">
-
             <Button
                 android:id="@+id/close_btn"
                 android:layout_width="25dp"
@@ -28,60 +28,19 @@
                 android:background="@drawable/ic_close"
                 app:backgroundTint="@color/white" />
 
-            <TextView
-                android:id="@+id/title_textview"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="12dp"
-                android:layout_marginTop="30dp"
-                android:layout_marginRight="12dp"
-                android:gravity="center"
-                android:singleLine="true"
-                android:text="Your Pet"
-                android:fontFamily="@font/consola"
-                android:textColor="@color/white"
-                android:textSize="25sp" />
-
-            <ImageView
-                android:id="@+id/paw_imageview"
+            <de.hdodenhof.circleimageview.CircleImageView
+                android:id="@+id/change_pet_picture"
+                android:layout_marginTop="10dp"
                 android:layout_width="200dp"
                 android:layout_height="200dp"
-                android:layout_below="@id/title_textview"
                 android:layout_centerHorizontal="true"
-                android:src="@drawable/ic_pawprint" />
-
-            <EditText
-                android:id="@+id/edittext_pet_name"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_below="@id/paw_imageview"
-                android:layout_centerHorizontal="true"
-                android:layout_marginStart="12dp"
-                android:layout_marginTop="12dp"
-                android:layout_marginEnd="12dp"
-                android:gravity="center"
-                android:textColor="@color/white"
-                android:hint="Pet Name"
-                android:fontFamily="@font/consola"
-                android:maxLines="1"
-                android:singleLine="true" />
-
-            <Spinner
-                android:id="@+id/spinner"
-                android:layout_width="match_parent"
-                android:layout_height="50dp"
-                android:layout_below="@id/edittext_pet_name"
-                android:layout_marginLeft="12dp"
-                android:layout_marginTop="10dp"
-                android:fontFamily="@font/consola"
-                android:layout_marginRight="12dp"
-                android:textAlignment="center" />
+                android:src="@mipmap/ic_launcher"/>
 
             <ImageButton
                 android:id="@+id/petImageButton"
                 android:layout_width="150dp"
                 android:layout_height="wrap_content"
-                android:layout_below="@id/spinner"
+                android:layout_below="@id/change_pet_picture"
                 android:layout_alignParentStart="true"
                 android:layout_marginLeft="15dp"
                 android:layout_marginTop="20dp"
@@ -94,18 +53,17 @@
                 android:id="@+id/gallery_ImageButton"
                 android:layout_width="175dp"
                 android:layout_height="wrap_content"
-                android:layout_below="@id/spinner"
+                android:layout_below="@id/change_pet_picture"
                 android:layout_marginLeft="-2dp"
                 android:layout_marginTop="20dp"
                 android:layout_marginRight="15dp"
                 android:layout_toRightOf="@id/petImageButton"
                 android:background="@drawable/gradient"
                 app:srcCompat="@android:drawable/ic_menu_gallery"
-
                 />
 
             <androidx.appcompat.widget.AppCompatButton
-                android:id="@+id/create_pet_button"
+                android:id="@+id/change_picture_button"
                 android:layout_width="match_parent"
                 android:layout_height="40dp"
                 android:layout_below="@id/petImageButton"
@@ -115,12 +73,11 @@
                 android:layout_marginBottom="10dp"
                 android:background="@drawable/gradient"
                 android:fontFamily="@font/consola"
-                android:text="Create Pet"
+                android:text="Change Picture"
                 android:textAlignment="center"
                 android:textColor="@color/white" />
 
         </RelativeLayout>
-
     </androidx.cardview.widget.CardView>
 
 

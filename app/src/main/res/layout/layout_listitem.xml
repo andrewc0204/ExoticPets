@@ -11,16 +11,17 @@
     card_view:cardElevation="5dp"
     card_view:cardUseCompatPadding="true">
 
-    <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    <RelativeLayout
         android:id="@+id/parent_layout"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="126dp"
         android:padding="10dp">
 
         <de.hdodenhof.circleimageview.CircleImageView
             android:id="@+id/pet_image"
             android:layout_width="75dp"
             android:layout_height="75dp"
+            android:layout_centerVertical="true"
             android:src="@mipmap/ic_launcher" />
 
         <TextView
@@ -47,23 +48,22 @@
 
         <TextView
             android:id="@+id/last_fed"
-            android:fontFamily="@font/consola"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="30dp"
             android:layout_toRightOf="@id/pet_image"
+            android:fontFamily="@font/consola"
             android:text="Last Fed:" />
 
         <TextView
             android:id="@+id/fed_date"
-            android:fontFamily="@font/consola"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="100dp"
             android:layout_toRightOf="@id/pet_image"
+            android:fontFamily="@font/consola"
             android:text="Date"
-            android:visibility="gone"
-             />
+            android:visibility="gone" />
 
         <com.airbnb.lottie.LottieAnimationView
             android:id="@+id/add_pet_json"
@@ -73,11 +73,10 @@
             android:layout_centerVertical="true"
             android:layout_marginStart="10dp"
             android:layout_marginEnd="20dp"
+            android:visibility="gone"
             card_view:lottie_autoPlay="true"
             card_view:lottie_fileName="check.json"
-            card_view:lottie_speed="1.75"
-            android:visibility="gone"
-            />
+            card_view:lottie_speed="1.75" />
 
         <ImageView
             android:id="@+id/iv_check_box"

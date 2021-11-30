@@ -1,13 +1,28 @@
 package com.example.exoticpets;
 
+import androidx.room.ColumnInfo;
+import androidx.room.Entity;
+import androidx.room.PrimaryKey;
+
 import java.io.Serializable;
 
+@Entity(tableName = "pet")
 public class ExoticPet implements Serializable {
+    @PrimaryKey(autoGenerate = true)
     String id;
+    @ColumnInfo(name = "pet_name")
     String petName;
+    @ColumnInfo(name = "pet_image")
     String petImage;
+    @ColumnInfo(name = "last_fed")
     String whenPetWasLastFed;
-    boolean isSelected = false;
+
+    public ExoticPet(String id, String petName, String petImage, String whenPetWasLastFed) {
+        this.id = id;
+        this.petName = petName;
+        this.petImage = petImage;
+        this.whenPetWasLastFed = whenPetWasLastFed;
+    }
 
     public String getWhenPetWasLastFed() {
         return whenPetWasLastFed;
@@ -15,14 +30,6 @@ public class ExoticPet implements Serializable {
 
     public void setWhenPetWasLastFed(String whenPetWasLastFed) {
         this.whenPetWasLastFed = whenPetWasLastFed;
-    }
-
-    public boolean isSelected() {
-        return isSelected;
-    }
-
-    public void setSelected(boolean selected) {
-        isSelected = selected;
     }
 
     public String getId() {

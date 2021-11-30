@@ -95,6 +95,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
             holder.fedDateTextView.setText(exoticPets.get(position).getWhenPetWasLastFed());
         } else {
             holder.fedDateTextView.setVisibility(View.GONE);
+
         }
 
 
@@ -175,14 +176,11 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
                                 case R.id.feed_pet:
 
                                     Calendar c = Calendar.getInstance();
-                                    SimpleDateFormat df = new SimpleDateFormat("MMM-dd-yyyy");
+                                    SimpleDateFormat df = new SimpleDateFormat("MMM-dd-yyyy HH:mm aa");
                                     String formattedDate = df.format(c.getTime());
                                     for (ExoticPet exoticPet : feedPet) {
                                         exoticPet.setWhenPetWasLastFed(formattedDate);
-
                                     }
-
-
                                     //Check
                                     actionMode.finish();
 
@@ -451,6 +449,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
             fedDateTextView = itemView.findViewById(R.id.fed_date);
 
 
+
         }
     }
 
@@ -459,18 +458,18 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
         exoticPets = searchedPets;
     }
 
-    public void updatePetsLastFed(){
-        exoticPetsFedDates = new ArrayList<>();
-        for (ExoticPet exoticPet : exoticPets){
-            if (exoticPet.getWhenPetWasLastFed() != null){
-                exoticPetsFedDates.add(exoticPet.getWhenPetWasLastFed());
-            }
-        }
-
-//        System.out.println("");
-//        Collections.sort(exoticPets, byDate);
-//        System.out.println("");
-    }
+//    public void updatePetsLastFed(){
+//        exoticPetsFedDates = new ArrayList<>();
+//        for (ExoticPet exoticPet : exoticPets){
+//            if (exoticPet.getWhenPetWasLastFed() != null){
+//                exoticPetsFedDates.add(exoticPet.getWhenPetWasLastFed());
+//            }
+//        }
+//
+////        System.out.println("");
+////        Collections.sort(exoticPets, byDate);
+////        System.out.println("");
+//    }
 
 //    static final Comparator<ExoticPet> byDate = new Comparator<ExoticPet>() {
 //        SimpleDateFormat sdf = new SimpleDateFormat("yyyy,MM,dd");
