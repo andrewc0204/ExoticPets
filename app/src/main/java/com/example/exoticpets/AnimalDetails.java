@@ -40,7 +40,7 @@ public class AnimalDetails extends AppCompatActivity implements Serializable {
             public void onClick(View v) {
                 view = getLayoutInflater().inflate(R.layout.delete_pet_layout, null);
                 cancelButton = view.findViewById(R.id.cancel_delete_pet_alertDialog);
-                okButton = view.findViewById(R.id.ok);
+                okButton = view.findViewById(R.id.ok_delete_pet);
                 /**
                  * Fiz: Then, i created a new Alert Dialog, and used the view object (create_pet_layout) to make the alert
                  */
@@ -69,7 +69,7 @@ public class AnimalDetails extends AppCompatActivity implements Serializable {
                          */
                         //Removes item from recycleview
                         for (ExoticPet exoticPet : mAdapter.exoticPets) {
-                            if (exoticPet.getId().equals(selectedPet.getId())) {//True
+                            if (exoticPet.getId() == (selectedPet.getId())) {//True
                                 mAdapter.exoticPets.remove(exoticPet);
                                 mAdapter.notifyDataSetChanged();
                                 break;

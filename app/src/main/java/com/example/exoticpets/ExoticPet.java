@@ -9,7 +9,7 @@ import java.io.Serializable;
 @Entity(tableName = "pet")
 public class ExoticPet implements Serializable {
     @PrimaryKey(autoGenerate = true)
-    String id;
+    int id;
     @ColumnInfo(name = "pet_name")
     String petName;
     @ColumnInfo(name = "pet_image")
@@ -17,8 +17,7 @@ public class ExoticPet implements Serializable {
     @ColumnInfo(name = "last_fed")
     String whenPetWasLastFed;
 
-    public ExoticPet(String id, String petName, String petImage, String whenPetWasLastFed) {
-        this.id = id;
+    public ExoticPet(String petName, String petImage, String whenPetWasLastFed) {
         this.petName = petName;
         this.petImage = petImage;
         this.whenPetWasLastFed = whenPetWasLastFed;
@@ -32,11 +31,11 @@ public class ExoticPet implements Serializable {
         this.whenPetWasLastFed = whenPetWasLastFed;
     }
 
-    public String getId() {
+    public int getId() {
         return id;
     }
 
-    public void setId(String id) {
+    public void setId(int id) {
         this.id = id;
     }
 

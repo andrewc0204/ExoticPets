@@ -61,6 +61,7 @@ import pl.aprilapps.easyphotopicker.MediaFile;
 import pl.aprilapps.easyphotopicker.MediaSource;
 
 import static androidx.constraintlayout.motion.utils.Oscillator.TAG;
+import static com.example.exoticpets.MainActivity.mAdapter;
 
 public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapter.ViewHolder> {
 
@@ -68,6 +69,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
     public ArrayList<ExoticPet> selectedPetIdsToDeleteArrayList = new ArrayList<>();
     public ArrayList<ExoticPet> feedPet = new ArrayList<>();
     private Context mContext;
+    private View deletePetView;
     private View changePetPictureView;
     private File cameraPicture;
     boolean changePicture = false;
@@ -78,11 +80,12 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
 
 
 
-    public RecyclerViewAdapter(Context context, ArrayList<ExoticPet> exoticPets, View changePetPictureView, File cameraPicture) {
+    public RecyclerViewAdapter(Context context, ArrayList<ExoticPet> exoticPets, View changePetPictureView, File cameraPicture, View deletePetView) {
         this.mContext = context;
         this.exoticPets = exoticPets;
         this.changePetPictureView = changePetPictureView;
         this.cameraPicture = cameraPicture;
+        this.deletePetView = deletePetView;
     }
 
     //This method is responsible for inflating the view
@@ -140,14 +143,13 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
                     }
                 });
 
-                changePetPictureButton.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        ExoticPet exoticPet = new ExoticPet(null,null,null,null);
-                        exoticPet.setPetImage(String.valueOf(cameraPicture));
-                        alertDialog.dismiss();
-                    }
-                });
+//                changePetPictureButton.setOnClickListener(new View.OnClickListener() {
+//                    @Override
+//                    public void onClick(View v) {
+//
+//                        alertDialog.dismiss();
+//                    }
+//                });
             }
         });
 
@@ -184,6 +186,10 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
                             //When click on delete, user for loop
                             switch (id) {
                                 case R.id.menu_delete:
+
+                                    Button okButton = deletePetView.findViewById(R.id.ok_delete_pet);
+                                    Button cancelButton = deletePetView.findViewById(R.id.cancel_delete_pet_alertDialog);
+
                                     for (ExoticPet exoticPet : selectedPetIdsToDeleteArrayList) {
                                         //Remove selected item from array list
                                         exoticPets.remove(exoticPet);
