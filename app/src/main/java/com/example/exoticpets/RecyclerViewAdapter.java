@@ -36,6 +36,7 @@ import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.room.Room;
 
 import com.airbnb.lottie.LottieAnimationView;
 import com.airbnb.lottie.LottieProperty;
@@ -46,12 +47,17 @@ import com.bumptech.glide.Glide;
 
 import java.io.File;
 import java.sql.Date;
+import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.concurrent.Executor;
+import java.util.concurrent.Executors;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 import pl.aprilapps.easyphotopicker.ChooserType;
@@ -68,6 +74,9 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
     public ArrayList<ExoticPet> exoticPets = new ArrayList<>();
     public ArrayList<ExoticPet> selectedPetIdsToDeleteArrayList = new ArrayList<>();
     public ArrayList<ExoticPet> feedPet = new ArrayList<>();
+    private ExoticPetDao exoticPetDao;
+    public static Executor executor;
+    private AppDatabase db;
     private Context mContext;
     private View deletePetView;
     private View changePetPictureView;
@@ -93,6 +102,14 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.layout_listitem, parent, false);
         ViewHolder holder = new ViewHolder(view);
+        //create new thread
+        executor = Executors.newSingleThreadExecutor();
+        //Database
+        db = Room.databaseBuilder(mContext.getApplicationContext(), AppDatabase.class, "pet_database").build();
+        exoticPetDao = db.exoticPetDAO();
+        executor.execute(() -> {
+            exoticPets = (ArrayList<ExoticPet>) exoticPetDao.getAll();
+        });
         return holder;
     }
 
@@ -193,6 +210,9 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
                                     for (ExoticPet exoticPet : selectedPetIdsToDeleteArrayList) {
                                         //Remove selected item from array list
                                         exoticPets.remove(exoticPet);
+                                        executor.execute(() -> {
+                                            exoticPetDao.delete(exoticPet);
+                                        });
                                     }
                                     //Check condition
                                     //Finish action mode
@@ -226,10 +246,13 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
                                 case R.id.feed_pet:
 
                                     Calendar c = Calendar.getInstance();
-                                    SimpleDateFormat df = new SimpleDateFormat("MMM-dd-yyyy HH:mm aa");
+                                    SimpleDateFormat df = new SimpleDateFormat("MMM-dd-yyyy h:mm aa");
                                     String formattedDate = df.format(c.getTime());
-                                    for (ExoticPet exoticPet : feedPet) {
+                                        for (ExoticPet exoticPet : feedPet) {
                                         exoticPet.setWhenPetWasLastFed(formattedDate);
+                                        executor.execute(() -> {
+                                            exoticPetDao.updatePet(exoticPet);
+                                        });
                                     }
                                     //Check
                                     actionMode.finish();
@@ -388,36 +411,4 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
         exoticPets = searchedPets;
     }
 
-//    public void updatePetsLastFed(){
-//        exoticPetsFedDates = new ArrayList<>();
-//        for (ExoticPet exoticPet : exoticPets){
-//            if (exoticPet.getWhenPetWasLastFed() != null){
-//                exoticPetsFedDates.add(exoticPet.getWhenPetWasLastFed());
-//            }
-//        }
-//
-////        System.out.println("");
-////        Collections.sort(exoticPets, byDate);
-////        System.out.println("");
-//    }
-
-//    static final Comparator<ExoticPet> byDate = new Comparator<ExoticPet>() {
-//        SimpleDateFormat sdf = new SimpleDateFormat("yyyy,MM,dd");
-//
-//        public int compare(ExoticPet ord1, ExoticPet ord2) {
-//            Date d1 = null;
-//            Date d2 = null;
-//            try {
-//                d1 = (Date) sdf.parse(ord1.getWhenPetWasLastFed());
-//                d2 = (Date) sdf.parse(ord2.getWhenPetWasLastFed());
-//            } catch (ParseException e) {
-//                // TODO Auto-generated catch block
-//                e.printStackTrace();
-//            }
-//
-//
-//            //return (d1.getTime() > d2.getTime() ? -1 : 1);     //descending
-//            return (d1.getTime() > d2.getTime() ? 1 : -1);     //ascending
-//        }
-//    };
 }

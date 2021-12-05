@@ -3,12 +3,13 @@ package com.example.exoticpets;
 import androidx.room.Dao;
 import androidx.room.Delete;
 import androidx.room.Insert;
+import androidx.room.OnConflictStrategy;
 import androidx.room.Query;
 
 import java.util.List;
 
 @Dao
-public interface ExoticPetDAO {
+public interface ExoticPetDao {
     @Query("SELECT * FROM pet")
     List<ExoticPet> getAll();
 
@@ -17,6 +18,9 @@ public interface ExoticPetDAO {
 
     @Insert
     void insertPet(ExoticPet pet);
+
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    void updatePet(ExoticPet pet);
 
     @Delete
     void delete(ExoticPet pet);

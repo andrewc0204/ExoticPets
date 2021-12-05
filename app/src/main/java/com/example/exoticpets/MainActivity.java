@@ -12,7 +12,6 @@ import androidx.room.Room;
 
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -29,11 +28,8 @@ import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
 
 import java.io.File;
-import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
@@ -77,7 +73,7 @@ public class MainActivity extends AppCompatActivity {
     private File cameraPicture;
     private File cameraPicture1;
     private AppDatabase db;
-    private ExoticPetDAO exoticPetDAO;
+    private ExoticPetDao exoticPetDao;
     public static Executor executor;
     private boolean pictureTaken = false;
     public static final String SHARED_PREFS = "sharedPrefs";
@@ -142,9 +138,9 @@ public class MainActivity extends AppCompatActivity {
         executor = Executors.newSingleThreadExecutor();
         //Database
         db = Room.databaseBuilder(getApplicationContext(), AppDatabase.class, "pet_database").build();
-        exoticPetDAO = db.exoticPetDAO();
+        exoticPetDao = db.exoticPetDAO();
         executor.execute(() -> {
-            exoticPets = (ArrayList<ExoticPet>) exoticPetDAO.getAll();
+            exoticPets = (ArrayList<ExoticPet>) exoticPetDao.getAll();
         });
 
         //Vars
@@ -200,17 +196,7 @@ public class MainActivity extends AppCompatActivity {
                 easyImage.openGallery(MainActivity.this);
             }
         });
-        changePetPictureButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                ExoticPet exoticPet = new ExoticPet(null, null, null);
 
-                Glide.with(MainActivity.this)
-                        .load(cameraPicture1)
-                        .into(petPictureImageView);
-                exoticPet.setPetImage(String.valueOf(cameraPicture1));
-            }
-        });
 
         addPetButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -391,27 +377,22 @@ public class MainActivity extends AppCompatActivity {
                                 switch (spinnerSelectedPet) {
                                     case "Arachnid":
                                         exoticPet.setPetImage("https://opengameart.org/sites/default/files/styles/medium/public/SpiderEnemy.png");
-//                                    mImageUrls.add("https://opengameart.org/sites/default/files/styles/medium/public/SpiderEnemy.png");
                                         alertDialog.dismiss();
                                         break;
                                     case "Amphibian":
                                         exoticPet.setPetImage("https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTPw_xYUc0rjL5QuYa6CIEk7z1D7eH6BI5gsg&usqp=CAU");
-//                                    mImageUrls.add("https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTPw_xYUc0rjL5QuYa6CIEk7z1D7eH6BI5gsg&usqp=CAU");
                                         alertDialog.dismiss();
                                         break;
                                     case "Reptile":
                                         exoticPet.setPetImage("https://image.shutterstock.com/image-vector/vector-illustration-cartoon-snake-pixel-260nw-398666929.jpg");
-//                                    mImageUrls.add("https://image.shutterstock.com/image-vector/vector-illustration-cartoon-snake-pixel-260nw-398666929.jpg");
                                         alertDialog.dismiss();
                                         break;
                                     case "Insect":
                                         exoticPet.setPetImage("https://art.pixilart.com/eb6f46cc7831237.gif");
-//                                    mImageUrls.add("https://art.pixilart.com/eb6f46cc7831237.gif");
                                         alertDialog.dismiss();
                                         break;
                                     case "Fish":
                                         exoticPet.setPetImage("https://image.shutterstock.com/image-vector/fish-icon-pixel-style-animal-260nw-1789259792.jpg");
-//                                    mImageUrls.add("https://image.shutterstock.com/image-vector/fish-icon-pixel-style-animal-260nw-1789259792.jpg");
                                         alertDialog.dismiss();
                                         break;
                                     default:
@@ -423,12 +404,9 @@ public class MainActivity extends AppCompatActivity {
 
                                 //Insert the data into offline Room on a seperate thread (highway) instead of the UI thread (The main highway)
                                 executor.execute(() -> {
-                                    exoticPetDAO.insertPet(exoticPet);
+                                    exoticPetDao.insertPet(exoticPet);
                                 });
                                 exoticPets.add(exoticPet);
-                                //mAdapter.add -> Adds a new item to the adapter
-
-
                                 mAdapter.notifyDataSetChanged();
                                 //NotifyDataSetChanged basically tells the adapter, "Hey man, we have new data. Please refresh the UI to reflect the new data"
                             }
