@@ -28,21 +28,20 @@
             android:id="@+id/image_name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_centerVertical="true"
+            android:layout_marginTop="17dp"
             android:layout_marginLeft="30dp"
             android:layout_toRightOf="@id/pet_image"
             android:fontFamily="@font/consola"
             android:text="USA"
             android:textColor="@color/black"
-            android:textSize="17sp" />
+            android:textSize="17sp"
+            android:textStyle="bold" />
 
         <ImageView
             android:id="@+id/animal_details_arrow"
             android:layout_width="50dp"
             android:layout_height="50dp"
             android:layout_alignParentEnd="true"
-            android:layout_centerVertical="true"
-            android:layout_marginStart="10dp"
             android:layout_marginEnd="30dp"
             android:src="@drawable/ic_baseline_navigate_next_24" />
 
@@ -51,6 +50,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="30dp"
+            android:layout_marginTop="60dp"
             android:layout_toRightOf="@id/pet_image"
             android:fontFamily="@font/consola"
             android:text="Last Fed:" />
@@ -60,17 +60,36 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="100dp"
+            android:layout_marginTop="60dp"
             android:layout_toRightOf="@id/pet_image"
             android:fontFamily="@font/consola"
             android:text="Date"
             android:visibility="gone" />
 
+        <TextView
+            android:id="@+id/time_textview"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/last_fed"
+            android:layout_marginLeft="30dp"
+            android:layout_toRightOf="@id/pet_image"
+            android:fontFamily="@font/consola"
+            android:text="Time:" />
+
+        <TextView
+            android:id="@+id/timefed_textview"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/last_fed"
+            android:layout_toRightOf="@id/time_textview"
+            android:text="Time Fed"
+            android:visibility="gone"/>
+
         <com.airbnb.lottie.LottieAnimationView
             android:id="@+id/add_pet_json"
-            android:layout_width="75dp"
-            android:layout_height="75dp"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
             android:layout_alignParentEnd="true"
-            android:layout_centerVertical="true"
             android:layout_marginStart="10dp"
             android:layout_marginEnd="20dp"
             android:visibility="gone"

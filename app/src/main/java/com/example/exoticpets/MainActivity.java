@@ -238,7 +238,7 @@ public class MainActivity extends AppCompatActivity {
                                 if (!pictureTaken) {
                                     Glide.with(MainActivity.this)
                                             .asBitmap()
-                                            .load("https://opengameart.org/sites/default/files/styles/medium/public/SpiderEnemy.png")
+                                            .load(R.drawable.spider)
                                             .into(defaultImage);
                                 }
                                 break;
@@ -346,7 +346,7 @@ public class MainActivity extends AppCompatActivity {
                     @Override
                     public void onClick(View v) {
 
-                        ExoticPet exoticPet = new ExoticPet(null, null, null);
+                        ExoticPet exoticPet = new ExoticPet(null, null, null, null);
 
 //                        Random r = new Random();
 ////                        int randomIDNumber = r.nextInt(9999 - 1001) + 1001;
@@ -376,7 +376,7 @@ public class MainActivity extends AppCompatActivity {
 
                                 switch (spinnerSelectedPet) {
                                     case "Arachnid":
-                                        exoticPet.setPetImage("https://opengameart.org/sites/default/files/styles/medium/public/SpiderEnemy.png");
+                                        exoticPet.setPetImage(String.valueOf(R.drawable.spider));
                                         alertDialog.dismiss();
                                         break;
                                     case "Amphibian":
@@ -406,6 +406,7 @@ public class MainActivity extends AppCompatActivity {
                                 executor.execute(() -> {
                                     exoticPetDao.insertPet(exoticPet);
                                 });
+                                
                                 exoticPets.add(exoticPet);
                                 mAdapter.notifyDataSetChanged();
                                 //NotifyDataSetChanged basically tells the adapter, "Hey man, we have new data. Please refresh the UI to reflect the new data"

@@ -1,13 +1,6 @@
 package com.example.exoticpets;
 
-import android.app.Activity;
 import android.content.Context;
-import android.content.Intent;
-import android.graphics.Color;
-import android.graphics.ColorFilter;
-import android.graphics.PorterDuff;
-import android.graphics.PorterDuffColorFilter;
-import android.os.Bundle;
 import android.util.Log;
 import android.view.ActionMode;
 import android.view.LayoutInflater;
@@ -16,58 +9,27 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.animation.DecelerateInterpolator;
 import android.widget.Button;
-import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.ActionBarContextView;
 import androidx.appcompat.widget.AppCompatButton;
-import androidx.appcompat.widget.Toolbar;
-import androidx.fragment.app.FragmentActivity;
-import androidx.lifecycle.LifecycleOwner;
-import androidx.lifecycle.Observer;
-import androidx.lifecycle.ViewModelProvider;
-import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.room.Room;
 
 import com.airbnb.lottie.LottieAnimationView;
-import com.airbnb.lottie.LottieProperty;
-import com.airbnb.lottie.model.KeyPath;
-import com.airbnb.lottie.value.LottieFrameInfo;
-import com.airbnb.lottie.value.SimpleLottieValueCallback;
 import com.bumptech.glide.Glide;
 
 import java.io.File;
-import java.sql.Date;
-import java.text.DateFormat;
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.time.LocalTime;
-import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Collections;
-import java.util.Comparator;
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
 
 import de.hdodenhof.circleimageview.CircleImageView;
-import pl.aprilapps.easyphotopicker.ChooserType;
-import pl.aprilapps.easyphotopicker.DefaultCallback;
-import pl.aprilapps.easyphotopicker.EasyImage;
-import pl.aprilapps.easyphotopicker.MediaFile;
-import pl.aprilapps.easyphotopicker.MediaSource;
-
-import static androidx.constraintlayout.motion.utils.Oscillator.TAG;
-import static com.example.exoticpets.MainActivity.mAdapter;
 
 public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapter.ViewHolder> {
 
@@ -107,9 +69,6 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
         //Database
         db = Room.databaseBuilder(mContext.getApplicationContext(), AppDatabase.class, "pet_database").build();
         exoticPetDao = db.exoticPetDAO();
-        executor.execute(() -> {
-            exoticPets = (ArrayList<ExoticPet>) exoticPetDao.getAll();
-        });
         return holder;
     }
 
@@ -121,9 +80,12 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
 
         if (exoticPets.get(position).getWhenPetWasLastFed() != null) {
             holder.fedDateTextView.setVisibility(View.VISIBLE);
+            holder.timeFedTextView.setVisibility(View.VISIBLE);
             holder.fedDateTextView.setText(exoticPets.get(position).getWhenPetWasLastFed());
+            holder.timeFedTextView.setText(exoticPets.get(position).getTimePetWasLastFed());
         } else {
             holder.fedDateTextView.setVisibility(View.GONE);
+            holder.timeFedTextView.setVisibility(View.GONE);
         }
 
 
@@ -245,11 +207,16 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
 
                                 case R.id.feed_pet:
 
+//                                    SimpleDateFormat df = new SimpleDateFormat("MMM-dd-yyyy h:mm aa");
                                     Calendar c = Calendar.getInstance();
-                                    SimpleDateFormat df = new SimpleDateFormat("MMM-dd-yyyy h:mm aa");
+                                    SimpleDateFormat df = new SimpleDateFormat("MMM-dd-yyyy");
                                     String formattedDate = df.format(c.getTime());
+                                    Calendar c1 = Calendar.getInstance();
+                                    SimpleDateFormat tf = new SimpleDateFormat("h:mm aa");
+                                    String formattedTime = tf.format(c1.getTime());
                                         for (ExoticPet exoticPet : feedPet) {
                                         exoticPet.setWhenPetWasLastFed(formattedDate);
+                                        exoticPet.setTimePetWasLastFed(formattedTime);
                                         executor.execute(() -> {
                                             exoticPetDao.updatePet(exoticPet);
                                         });
@@ -304,6 +271,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
                 return true;
             }
         });
+
         holder.addPet.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -390,6 +358,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
         CircleImageView pet_ImageView;
         TextView petName;
         TextView fedDateTextView;
+        TextView timeFedTextView;
         ImageView ivCheckBoxImageView;
         ImageView animalDetailsArrowImageView;
 
@@ -402,7 +371,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
             ivCheckBoxImageView = itemView.findViewById(R.id.iv_check_box);
             animalDetailsArrowImageView = itemView.findViewById(R.id.animal_details_arrow);
             fedDateTextView = itemView.findViewById(R.id.fed_date);
-
+            timeFedTextView = itemView.findViewById(R.id.timefed_textview);
         }
     }
 
