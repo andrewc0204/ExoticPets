@@ -1,6 +1,7 @@
 package com.example.exoticpets;
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.util.Log;
 import android.view.ActionMode;
 import android.view.LayoutInflater;
@@ -121,6 +122,15 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
                         alertDialog.dismiss();
                     }
                 });
+                alertDialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
+                    @Override
+                    public void onDismiss(DialogInterface dialog) {
+                        alertDialog.dismiss();
+                        if(changePetPictureView.getParent() != null) {
+                            ((ViewGroup)changePetPictureView.getParent()).removeView(changePetPictureView);
+                        }
+                    }
+                });
 
 //                changePetPictureButton.setOnClickListener(new View.OnClickListener() {
 //                    @Override
@@ -166,19 +176,52 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
                             switch (id) {
                                 case R.id.menu_delete:
 
+                                    AlertDialog.Builder builder = new AlertDialog.Builder(mContext);
+                                    builder.setView(deletePetView);
+                                    AlertDialog alertDialog = builder.create();
+                                    alertDialog.show();
                                     Button okButton = deletePetView.findViewById(R.id.ok_delete_pet);
                                     Button cancelButton = deletePetView.findViewById(R.id.cancel_delete_pet_alertDialog);
+                                    okButton.setOnClickListener(new View.OnClickListener() {
+                                        @Override
+                                        public void onClick(View v) {
+                                            for (ExoticPet exoticPet : selectedPetIdsToDeleteArrayList) {
 
-                                    for (ExoticPet exoticPet : selectedPetIdsToDeleteArrayList) {
-                                        //Remove selected item from array list
-                                        exoticPets.remove(exoticPet);
-                                        executor.execute(() -> {
-                                            exoticPetDao.delete(exoticPet);
-                                        });
-                                    }
-                                    //Check condition
-                                    //Finish action mode
-                                    actionMode.finish();
+                                                //Remove selected item from array list
+                                                exoticPets.remove(exoticPet);
+                                                executor.execute(() -> {
+                                                    exoticPetDao.delete(exoticPet);
+                                                });
+                                            }
+                                            alertDialog.dismiss();
+                                            if(deletePetView.getParent() != null) {
+                                                ((ViewGroup)deletePetView.getParent()).removeView(deletePetView);
+                                            }
+                                            notifyDataSetChanged();
+                                            //Check condition
+                                            //Finish action mode
+                                            actionMode.finish();
+                                        }
+                                    });
+                                    cancelButton.setOnClickListener(new View.OnClickListener() {
+                                        @Override
+                                        public void onClick(View v) {
+                                            alertDialog.dismiss();
+                                            if(deletePetView.getParent() != null) {
+                                                ((ViewGroup)deletePetView.getParent()).removeView(deletePetView);
+                                            }
+                                            actionMode.finish();
+                                        }
+                                    });
+                                    alertDialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
+                                        @Override
+                                        public void onDismiss(DialogInterface dialog) {
+                                            alertDialog.dismiss();
+                                            if(deletePetView.getParent() != null) {
+                                                ((ViewGroup)deletePetView.getParent()).removeView(deletePetView);
+                                            }
+                                        }
+                                    });
                                     break;
                                 case R.id.menu_select_all:
                                     //When click on select all, check condition

@@ -348,9 +348,6 @@ public class MainActivity extends AppCompatActivity {
 
                         ExoticPet exoticPet = new ExoticPet(null, null, null, null);
 
-//                        Random r = new Random();
-////                        int randomIDNumber = r.nextInt(9999 - 1001) + 1001;
-////                        exoticPet.setId(String.valueOf(randomIDNumber));
 
                         //When the user clicks the button, whatever code we write here will be run
                         //Checks to see if user type in a pet name
@@ -373,7 +370,6 @@ public class MainActivity extends AppCompatActivity {
                                 exoticPet.setPetName(petNameEditText.getText().toString());
                                 //Sets text to disappear once the user adds a pet
                                 instructionView.setVisibility(View.GONE);
-
                                 switch (spinnerSelectedPet) {
                                     case "Arachnid":
                                         exoticPet.setPetImage(String.valueOf(R.drawable.spider));
@@ -402,19 +398,20 @@ public class MainActivity extends AppCompatActivity {
 
                                 pictureTaken = false;
 
-                                //Insert the data into offline Room on a seperate thread (highway) instead of the UI thread (The main highway)
-                                executor.execute(() -> {
-                                    exoticPetDao.insertPet(exoticPet);
-                                });
-                                
                                 exoticPets.add(exoticPet);
                                 mAdapter.notifyDataSetChanged();
-                                //NotifyDataSetChanged basically tells the adapter, "Hey man, we have new data. Please refresh the UI to reflect the new data"
+
                             }
+                            //Insert the data into offline Room on a seperate thread (highway) instead of the UI thread (The main highway)
+                            executor.execute(() -> {
+                                exoticPetDao.insertPet(exoticPet);
+                            });
+
 
                         }
                     }
                 });
+
             }
         });
     }

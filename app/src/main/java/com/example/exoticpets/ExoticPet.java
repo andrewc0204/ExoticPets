@@ -15,26 +15,23 @@ public class ExoticPet implements Serializable {
     @ColumnInfo(name = "pet_image")
     String petImage;
     @ColumnInfo(name = "last_fed")
-    String whenPetWasLastFed;
-
-
-
+    String datePetWasLastFed;
     @ColumnInfo(name = "last_time_fed")
     String timePetWasLastFed;
 
-    public ExoticPet(String petName, String petImage, String whenPetWasLastFed, String timePetWasLastFed) {
+    public ExoticPet(String petName, String petImage, String datePetWasLastFed, String timePetWasLastFed) {
         this.petName = petName;
         this.petImage = petImage;
-        this.whenPetWasLastFed = whenPetWasLastFed;
+        this.datePetWasLastFed = datePetWasLastFed;
         this.timePetWasLastFed = timePetWasLastFed;
     }
 
     public String getWhenPetWasLastFed() {
-        return whenPetWasLastFed;
+        return datePetWasLastFed;
     }
 
     public void setWhenPetWasLastFed(String whenPetWasLastFed) {
-        this.whenPetWasLastFed = whenPetWasLastFed;
+        this.datePetWasLastFed = whenPetWasLastFed;
     }
 
     public int getId() {
