@@ -48,7 +48,6 @@
         android:layout_marginTop="20dp"
         android:background="@drawable/recyclerview_bg">
 
-
         <TextView
             android:id="@+id/instructionView"
             android:layout_width="wrap_content"

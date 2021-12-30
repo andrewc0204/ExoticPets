@@ -35,10 +35,10 @@
                 android:layout_marginLeft="12dp"
                 android:layout_marginTop="30dp"
                 android:layout_marginRight="12dp"
+                android:fontFamily="@font/consola"
                 android:gravity="center"
                 android:singleLine="true"
                 android:text="Your Pet"
-                android:fontFamily="@font/consola"
                 android:textColor="@color/white"
                 android:textSize="25sp" />
 
@@ -59,12 +59,12 @@
                 android:layout_marginStart="12dp"
                 android:layout_marginTop="12dp"
                 android:layout_marginEnd="12dp"
-                android:gravity="center"
-                android:textColor="@color/white"
-                android:hint="Pet Name"
                 android:fontFamily="@font/consola"
+                android:gravity="center"
+                android:hint="Pet Name"
                 android:maxLines="1"
-                android:singleLine="true" />
+                android:singleLine="true"
+                android:textColor="@color/white" />
 
             <Spinner
                 android:id="@+id/spinner"
@@ -73,8 +73,8 @@
                 android:layout_below="@id/edittext_pet_name"
                 android:layout_marginLeft="12dp"
                 android:layout_marginTop="10dp"
-                android:fontFamily="@font/consola"
                 android:layout_marginRight="12dp"
+                android:fontFamily="@font/consola"
                 android:textAlignment="center" />
 
             <ImageButton

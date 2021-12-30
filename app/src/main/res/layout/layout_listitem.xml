@@ -18,7 +18,7 @@
         android:padding="10dp">
 
         <de.hdodenhof.circleimageview.CircleImageView
-            android:id="@+id/pet_image"
+            android:id="@+id/pet_image_recycleview"
             android:layout_width="75dp"
             android:layout_height="75dp"
             android:layout_centerVertical="true"
@@ -30,7 +30,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="17dp"
             android:layout_marginLeft="30dp"
-            android:layout_toRightOf="@id/pet_image"
+            android:layout_toRightOf="@id/pet_image_recycleview"
             android:fontFamily="@font/consola"
             android:text="USA"
             android:textColor="@color/black"
@@ -51,7 +51,7 @@
             android:layout_height="wrap_content"
             android:layout_marginLeft="30dp"
             android:layout_marginTop="60dp"
-            android:layout_toRightOf="@id/pet_image"
+            android:layout_toRightOf="@id/pet_image_recycleview"
             android:fontFamily="@font/consola"
             android:text="Last Fed:" />
 
@@ -61,7 +61,7 @@
             android:layout_height="wrap_content"
             android:layout_marginLeft="100dp"
             android:layout_marginTop="60dp"
-            android:layout_toRightOf="@id/pet_image"
+            android:layout_toRightOf="@id/pet_image_recycleview"
             android:fontFamily="@font/consola"
             android:text="Date"
             android:visibility="gone" />
@@ -72,7 +72,7 @@
             android:layout_height="wrap_content"
             android:layout_below="@id/last_fed"
             android:layout_marginLeft="30dp"
-            android:layout_toRightOf="@id/pet_image"
+            android:layout_toRightOf="@id/pet_image_recycleview"
             android:fontFamily="@font/consola"
             android:text="Time:" />
 

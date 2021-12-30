@@ -2,6 +2,8 @@ package com.example.exoticpets;
 
 import android.content.Context;
 import android.content.DialogInterface;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.util.Log;
 import android.view.ActionMode;
 import android.view.LayoutInflater;
@@ -13,6 +15,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
@@ -22,6 +25,8 @@ import androidx.room.Room;
 
 import com.airbnb.lottie.LottieAnimationView;
 import com.bumptech.glide.Glide;
+import com.squareup.picasso.Picasso;
+import com.squareup.picasso.Target;
 
 import java.io.File;
 import java.text.SimpleDateFormat;
@@ -38,12 +43,13 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
     public ArrayList<ExoticPet> selectedPetIdsToDeleteArrayList = new ArrayList<>();
     public ArrayList<ExoticPet> feedPet = new ArrayList<>();
     private ExoticPetDao exoticPetDao;
+
     public static Executor executor;
     private AppDatabase db;
     private Context mContext;
     private View deletePetView;
     private View changePetPictureView;
-    private File cameraPicture;
+    private File   cameraPicture1;
     boolean changePicture = false;
     boolean isEnable = false;
     boolean isSelectAll = false;
@@ -52,11 +58,11 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
 
 
 
-    public RecyclerViewAdapter(Context context, ArrayList<ExoticPet> exoticPets, View changePetPictureView, File cameraPicture, View deletePetView) {
+    public RecyclerViewAdapter(Context context, ArrayList<ExoticPet> exoticPets, View changePetPictureView, File cameraPicture1, View deletePetView) {
         this.mContext = context;
         this.exoticPets = exoticPets;
         this.changePetPictureView = changePetPictureView;
-        this.cameraPicture = cameraPicture;
+        this.cameraPicture1 = cameraPicture1;
         this.deletePetView = deletePetView;
     }
 
@@ -68,7 +74,9 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
         //create new thread
         executor = Executors.newSingleThreadExecutor();
         //Database
-        db = Room.databaseBuilder(mContext.getApplicationContext(), AppDatabase.class, "pet_database").build();
+        db = Room.databaseBuilder(mContext.getApplicationContext(), AppDatabase.class, "pet_database")
+                .fallbackToDestructiveMigration()
+                .build();
         exoticPetDao = db.exoticPetDAO();
         return holder;
     }
@@ -132,13 +140,15 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
                     }
                 });
 
-//                changePetPictureButton.setOnClickListener(new View.OnClickListener() {
-//                    @Override
-//                    public void onClick(View v) {
-//
-//                        alertDialog.dismiss();
-//                    }
-//                });
+                changePetPictureButton.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+
+
+                            Picasso.get().load(cameraPicture1).into(holder.pet_ImageView);
+
+                    }
+                });
             }
         });
 
@@ -409,13 +419,17 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
             super(itemView);
 
             addPet = itemView.findViewById(R.id.add_pet_json);
-            pet_ImageView = itemView.findViewById(R.id.pet_image);
+            pet_ImageView = itemView.findViewById(R.id.pet_image_recycleview);
             petName = itemView.findViewById(R.id.image_name);
             ivCheckBoxImageView = itemView.findViewById(R.id.iv_check_box);
             animalDetailsArrowImageView = itemView.findViewById(R.id.animal_details_arrow);
             fedDateTextView = itemView.findViewById(R.id.fed_date);
             timeFedTextView = itemView.findViewById(R.id.timefed_textview);
         }
+    }
+
+    public void changeCameraPicture(File cameraPicture){
+        this.cameraPicture1 = cameraPicture;
     }
 
 

@@ -112,7 +112,7 @@ public class AnimalDetails extends AppCompatActivity implements Serializable {
     }
 
     private void getIncomingIntent() {
-//       getIntent().getSerializableExtra("exotic_pet");
+
         getIntent().getSerializableExtra("pet_picture");
         getIntent().getSerializableExtra("pet_name");
         selectedPet = (ExoticPet) getIntent().getSerializableExtra("exotic_pet");
@@ -128,7 +128,7 @@ public class AnimalDetails extends AppCompatActivity implements Serializable {
     private void setImage(String imageUrl, String imageName) {
         TextView selectedPetName = findViewById(R.id.textview_selectedPet);
         selectedPetName.setText(imageName);
-        ImageView image = findViewById(R.id.pet_image);
+        ImageView image = findViewById(R.id.pet_image_recycleview);
         Glide.with(this)
                 .asBitmap()
                 .load(imageUrl)

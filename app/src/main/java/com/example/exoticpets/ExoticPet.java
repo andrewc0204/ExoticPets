@@ -13,13 +13,13 @@ public class ExoticPet implements Serializable {
     @ColumnInfo(name = "pet_name")
     String petName;
     @ColumnInfo(name = "pet_image")
-    String petImage;
+    int  petImage;
     @ColumnInfo(name = "last_fed")
     String datePetWasLastFed;
     @ColumnInfo(name = "last_time_fed")
     String timePetWasLastFed;
 
-    public ExoticPet(String petName, String petImage, String datePetWasLastFed, String timePetWasLastFed) {
+    public ExoticPet(String petName, int petImage, String datePetWasLastFed, String timePetWasLastFed) {
         this.petName = petName;
         this.petImage = petImage;
         this.datePetWasLastFed = datePetWasLastFed;
@@ -50,13 +50,25 @@ public class ExoticPet implements Serializable {
         this.petName = petName;
     }
 
-    public String getPetImage() {
+
+
+
+    public int getPetImage() {
         return petImage;
     }
 
-    public void setPetImage(String petImage) {
+    public void setPetImage(int petImage) {
         this.petImage = petImage;
     }
+
+    public String getDatePetWasLastFed() {
+        return datePetWasLastFed;
+    }
+
+    public void setDatePetWasLastFed(String datePetWasLastFed) {
+        this.datePetWasLastFed = datePetWasLastFed;
+    }
+
     public String getTimePetWasLastFed() {
         return timePetWasLastFed;
     }

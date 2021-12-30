@@ -3,7 +3,8 @@ package com.example.exoticpets;
 import androidx.room.Database;
 import androidx.room.RoomDatabase;
 
-@Database(entities = {ExoticPet.class}, version = 2)
+//3 for testing
+@Database(entities = {ExoticPet.class}, version = 3)
 public abstract class AppDatabase extends RoomDatabase {
     public abstract ExoticPetDao exoticPetDAO();
 
