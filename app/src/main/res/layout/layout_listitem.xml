@@ -108,6 +108,14 @@
             android:src="@drawable/ic_check_circle"
             android:visibility="gone" />
 
+        <ImageView
+            android:id="@+id/calendar_imageview"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_toRightOf="@id/image_name"
+            android:background="@drawable/ic_calendar"/>
+
+
     </RelativeLayout>
 </androidx.cardview.widget.CardView>
 

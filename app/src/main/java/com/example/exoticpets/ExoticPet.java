@@ -51,8 +51,6 @@ public class ExoticPet implements Serializable {
     }
 
 
-
-
     public int getPetImage() {
         return petImage;
     }

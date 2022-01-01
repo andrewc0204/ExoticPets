@@ -48,6 +48,7 @@
         android:layout_marginTop="20dp"
         android:background="@drawable/recyclerview_bg">
 
+
         <TextView
             android:id="@+id/instructionView"
             android:layout_width="wrap_content"
@@ -74,21 +75,13 @@
             android:id="@+id/addPetButton1"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_above="@id/bottomToolbar"
-            android:layout_marginLeft="335dp"
+            android:layout_marginTop="575dp"
+            android:layout_marginLeft="330dp"
             android:layout_marginBottom="20dp"
             android:backgroundTint="@color/button_background_selector"
             app:srcCompat="@drawable/plus" />
 
-        <androidx.appcompat.widget.Toolbar
-            android:id="@+id/bottomToolbar"
-            android:layout_width="match_parent"
-            android:layout_height="?attr/actionBarSize"
-            android:layout_alignParentBottom="true"
-            android:background="@drawable/alertbackground">
 
-
-        </androidx.appcompat.widget.Toolbar>
 
     </RelativeLayout>
     </LinearLayout>

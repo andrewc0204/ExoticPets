@@ -25,6 +25,7 @@ public interface ExoticPetDao {
     @Delete
     void delete(ExoticPet pet);
 
+
     //This method is returning several pets where the list ArrayList<Integer> intArray; int[] (List)
 //    @Query("SELECT * FROM pet WHERE id IN (:petIds)")
 //    List<ExoticPet> getPetsWithIds(int[] petIds);

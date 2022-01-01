@@ -36,6 +36,7 @@ import com.squareup.picasso.Picasso;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Random;
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
 
@@ -126,6 +127,7 @@ public class MainActivity extends AppCompatActivity {
             public void onImagePickerError(@NonNull Throwable error, @NonNull MediaSource source) {
                 //Some error handling
                 error.printStackTrace();
+
             }
 
             @Override
@@ -169,13 +171,11 @@ public class MainActivity extends AppCompatActivity {
         searchForPetTextview = findViewById(R.id.textview_searchForPet);
         ImageButton changePetCameraImageButton = changePetPictureView.findViewById(R.id.change_pet_camera_ImageButton);
         ImageButton changePetGalleryImageButton = changePetPictureView.findViewById(R.id.change_pet_gallery_ImageButton);
-         changePetPictureButton = changePetPictureView.findViewById(R.id.change_picture_button);
+        changePetPictureButton = changePetPictureView.findViewById(R.id.change_picture_button);
 
-        ExoticPet exoticPet = new ExoticPet(null,R.drawable.ladybug, null, null);
+        ExoticPet exoticPet = new ExoticPet(null, R.drawable.ladybug, null, null);
 
         initViews();
-
-
 
 
         //Allows user to take pictures
@@ -194,7 +194,6 @@ public class MainActivity extends AppCompatActivity {
                 .build();
 
 
-
         changePetCameraImageButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -208,7 +207,6 @@ public class MainActivity extends AppCompatActivity {
                 easyImage.openGallery(MainActivity.this);
             }
         });
-
 
 
         addPetButton.setOnClickListener(new View.OnClickListener() {
@@ -410,12 +408,12 @@ public class MainActivity extends AppCompatActivity {
 
                             }
                             //Insert the data into offline Room on a seperate thread (highway) instead of the UI thread (The main highway)
-
+                            mAdapter.notifyDataSetChanged();
                             exoticPets.add(exoticPet);
                             executor.execute(() -> {
                                 exoticPetDao.insertPet(exoticPet);
                             });
-                            mAdapter.notifyDataSetChanged();
+
 
 
 
@@ -426,6 +424,8 @@ public class MainActivity extends AppCompatActivity {
             }
         });
     }
+
+
 
     //This method sets up the RecycleView in the app
     private void initViews() {
