@@ -14,7 +14,7 @@
     <RelativeLayout
         android:id="@+id/parent_layout"
         android:layout_width="match_parent"
-        android:layout_height="126dp"
+        android:layout_height="175dp"
         android:padding="10dp">
 
         <de.hdodenhof.circleimageview.CircleImageView
@@ -115,6 +115,28 @@
             android:layout_toRightOf="@id/image_name"
             android:background="@drawable/ic_calendar"/>
 
+        <androidx.cardview.widget.CardView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="15dp"
+            card_view:cardCornerRadius="8dp"
+            card_view:cardElevation="5dp"
+            card_view:cardUseCompatPadding="true"
+            android:layout_below="@id/last_fed"
+            android:layout_alignParentRight="true">
+            <Button
+                android:id="@+id/quick_feed_button"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:text="Quick Feed"
+                android:textAllCaps="false"
+                android:textColor="@color/white"
+                android:fontFamily="@font/consola"
+                android:layout_alignParentRight="true"
+                android:background="@drawable/alertbackground"
+                />
+
+        </androidx.cardview.widget.CardView>
 
     </RelativeLayout>
 </androidx.cardview.widget.CardView>

@@ -1,6 +1,7 @@
 package com.example.exoticpets;
 
 import android.app.DatePickerDialog;
+import android.app.TimePickerDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.util.Log;
@@ -15,6 +16,7 @@ import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.TimePicker;
 
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
@@ -42,6 +44,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
     public ArrayList<ExoticPet> feedPet = new ArrayList<>();
     public ArrayList<ExoticPet> changePetFedDate = new ArrayList<>();
     public ArrayList<ExoticPet> changePetFedTime = new ArrayList<>();
+    public ArrayList<ExoticPet> quickFeedPets = new ArrayList<>();
     private ExoticPetDao exoticPetDao;
 
     public static Executor executor;
@@ -53,6 +56,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
     boolean changePicture = false;
     boolean isEnable = false;
     boolean isSelectAll = false;
+
 
 
 
@@ -106,8 +110,32 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
                 .load(exoticPets.get(position).getPetImage())
                 .into(holder.pet_ImageView);
 
-        holder.petName.setText(exoticPets.get(position).getPetName());
+        holder.petNameTextView.setText(exoticPets.get(position).getPetName());
 
+        holder.quickfeedButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ExoticPet quickFeedPet = exoticPets.get(holder.getAbsoluteAdapterPosition());
+                quickFeedPets.add(quickFeedPet);
+                Calendar c = Calendar.getInstance();
+                SimpleDateFormat df = new SimpleDateFormat("MMM-dd-yyyy");
+                String formattedDate = df.format(c.getTime());
+                Calendar c1 = Calendar.getInstance();
+                SimpleDateFormat tf = new SimpleDateFormat("h:mm aa");
+                String formattedTime = tf.format(c1.getTime());
+                for (ExoticPet exoticPet : quickFeedPets) {
+                    exoticPet.setDatePetWasLastFed(formattedDate);
+                    exoticPet.setTimePetWasLastFed(formattedTime);
+                    holder.fedDateTextView.setText(exoticPets.get(position).getDatePetWasLastFed());
+                    holder.timeFedTextView.setText(exoticPets.get(position).getTimePetWasLastFed());
+                    quickFeedPets.remove(quickFeedPet);
+                    executor.execute(() -> {
+                        exoticPetDao.updatePet(exoticPet);
+                    });
+                }
+
+            }
+        });
 
         holder.fedDateTextView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -129,15 +157,73 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
                             for (ExoticPet exoticPet : changePetFedDate){
                                 exoticPet.setDatePetWasLastFed(date);
                                 holder.fedDateTextView.setText(exoticPets.get(position).getDatePetWasLastFed());
+                                changePetFedDate.remove(changeFedDate);
                                 executor.execute(() -> {
                         exoticPetDao.updatePet(exoticPet);
-                        changePetFedDate.remove(changeFedDate);
                     });
                             }
                         }
                     },year, month, day);
 
                 datePickerDialog.show();
+            }
+        });
+
+        holder.timeFedTextView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ExoticPet changeFedTime = exoticPets.get(holder.getAbsoluteAdapterPosition());
+                changePetFedTime.add(changeFedTime);
+                Calendar currentTime = Calendar.getInstance();
+                int min = currentTime.get(Calendar.MINUTE);
+                int hour = currentTime.get(Calendar.HOUR_OF_DAY);
+
+                TimePickerDialog timePickerDialog = new TimePickerDialog(mContext, new TimePickerDialog.OnTimeSetListener() {
+                    @Override
+                    public void onTimeSet(TimePicker view, int selectedHour, int selectedMinute) {
+                        String choosedHour = "";
+                        String choosedMinute = "";
+                        String choosedTimeZone = "";
+                        if(selectedHour > 12){
+                            choosedTimeZone = "PM";
+                            selectedHour = selectedHour - 12;
+                            if(selectedHour < 10){
+                                choosedHour = ""+selectedHour;
+                            }else{
+                                choosedHour = ""+selectedHour;
+                            }
+                        }else{
+                            choosedTimeZone = "AM";
+                            if(selectedHour < 10){
+                                choosedHour = ""+selectedHour;
+                            }else{
+                                choosedHour = ""+selectedHour;
+                            }
+                        }
+
+                        if(selectedMinute < 10){
+                            choosedMinute = "0"+selectedMinute;
+                        }else{
+                            choosedMinute= ""+selectedMinute;
+                        }
+
+
+                        String time = choosedHour + ":" + choosedMinute + " " + choosedTimeZone;
+                        for (ExoticPet exoticPet: changePetFedTime){
+
+                            exoticPet.setTimePetWasLastFed(time);
+                            holder.timeFedTextView.setText(exoticPets.get(position).getTimePetWasLastFed());
+                            changePetFedTime.remove(changeFedTime);
+                            executor.execute(() -> {
+                                exoticPetDao.updatePet(exoticPet);
+                            });
+                        }
+                    }
+                },hour  , min,false);
+
+                timePickerDialog.show();
+
+
             }
         });
 
@@ -193,6 +279,27 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
             public void onClick(View view) {
 
 
+
+
+
+//                Intent intent = new Intent(mContext, AnimalDetails.class);
+//                Bundle bundle = new Bundle();
+//                bundle.putSerializable("exotic_pet", exoticPets.get(position));
+//                bundle.putSerializable("pet_picture", exoticPets.get(position).getPetImage());
+//                bundle.putSerializable("pet_name", exoticPets.get(position).getPetName());
+//
+//
+//                intent.putExtras(bundle);
+//                mContext.startActivity(intent);
+
+            }
+        });
+
+
+
+        holder.itemView.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View view) {
                 if (!isEnable) {
                     //When action mode is not enable
                     //Initialize action mode
@@ -339,7 +446,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
                                     Calendar c1 = Calendar.getInstance();
                                     SimpleDateFormat tf = new SimpleDateFormat("h:mm aa");
                                     String formattedTime = tf.format(c1.getTime());
-                                        for (ExoticPet exoticPet : feedPet) {
+                                    for (ExoticPet exoticPet : feedPet) {
                                         exoticPet.setDatePetWasLastFed(formattedDate);
                                         exoticPet.setTimePetWasLastFed(formattedTime);
                                         executor.execute(() -> {
@@ -375,30 +482,11 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
                     ClickItem(holder);
                 }
 
-
-//                Intent intent = new Intent(mContext, AnimalDetails.class);
-//                Bundle bundle = new Bundle();
-//                bundle.putSerializable("exotic_pet", exoticPets.get(position));
-//                bundle.putSerializable("pet_picture", exoticPets.get(position).getPetImage());
-//                bundle.putSerializable("pet_name", exoticPets.get(position).getPetName());
-//
-//
-//                intent.putExtras(bundle);
-//                mContext.startActivity(intent);
-
-            }
-        });
-
-        holder.itemView.setOnLongClickListener(new View.OnLongClickListener() {
-            @Override
-            public boolean onLongClick(View v) {
-
-
                 return true;
             }
         });
 
-        holder.addPet.setOnClickListener(new View.OnClickListener() {
+        holder.addPetAnimImageView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (isEnable) {
@@ -431,13 +519,13 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
             //When all value selected
             //Visible all check box image
             holder.animalDetailsArrowImageView.setVisibility(View.GONE);
-            holder.addPet.playAnimation();
-            holder.addPet.setVisibility(View.VISIBLE);
+            holder.addPetAnimImageView.playAnimation();
+            holder.addPetAnimImageView.setVisibility(View.VISIBLE);
         } else {
             //When all value unselected
             //Hide all check box image
             holder.animalDetailsArrowImageView.setVisibility(View.VISIBLE);
-            holder.addPet.setVisibility(View.GONE);
+            holder.addPetAnimImageView.setVisibility(View.GONE);
         }
 
     }
@@ -448,13 +536,13 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
         //Get the selected item value
         ExoticPet pets = exoticPets.get(holder.getAbsoluteAdapterPosition());
         //Check condition
-        if (holder.addPet.getVisibility() == View.GONE) {
+        if (holder.addPetAnimImageView.getVisibility() == View.GONE) {
             //When item not selected
             //Visible check box image
             //holder.toolbar.setVisibility(View.GONE);
             holder.animalDetailsArrowImageView.setVisibility(View.GONE);
-            holder.addPet.playAnimation();
-            holder.addPet.setVisibility(View.VISIBLE);
+            holder.addPetAnimImageView.playAnimation();
+            holder.addPetAnimImageView.setVisibility(View.VISIBLE);
             //Set background color
             feedPet.add(pets);
             selectedPetIdsToDeleteArrayList.add(pets);
@@ -462,7 +550,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
             //When item selected
             //Hide check box image
             holder.animalDetailsArrowImageView.setVisibility(View.VISIBLE);
-            holder.addPet.setVisibility(View.GONE);
+            holder.addPetAnimImageView.setVisibility(View.GONE);
             //Set background color
             feedPet.remove(pets);
             selectedPetIdsToDeleteArrayList.remove(pets);
@@ -482,26 +570,28 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
     public class ViewHolder extends RecyclerView.ViewHolder {
 
 
-        LottieAnimationView addPet;
+        LottieAnimationView addPetAnimImageView;
         CircleImageView pet_ImageView;
-        TextView petName;
+        TextView petNameTextView;
         TextView fedDateTextView;
         TextView timeFedTextView;
         ImageView ivCheckBoxImageView;
         ImageView animalDetailsArrowImageView;
         ImageView calendarImageView;
+        Button quickfeedButton;
 
         public ViewHolder(View itemView) {
             super(itemView);
 
-            addPet = itemView.findViewById(R.id.add_pet_json);
+            addPetAnimImageView = itemView.findViewById(R.id.add_pet_json);
             pet_ImageView = itemView.findViewById(R.id.pet_image_recycleview);
-            petName = itemView.findViewById(R.id.image_name);
+            petNameTextView = itemView.findViewById(R.id.image_name);
             ivCheckBoxImageView = itemView.findViewById(R.id.iv_check_box);
             animalDetailsArrowImageView = itemView.findViewById(R.id.animal_details_arrow);
             fedDateTextView = itemView.findViewById(R.id.fed_date);
             timeFedTextView = itemView.findViewById(R.id.timefed_textview);
             calendarImageView = itemView.findViewById(R.id.calendar_imageview);
+            quickfeedButton = itemView.findViewById(R.id.quick_feed_button);
         }
     }
 
