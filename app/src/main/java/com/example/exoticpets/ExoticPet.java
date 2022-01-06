@@ -23,11 +23,12 @@ public class ExoticPet implements Serializable {
 
 
 
-    public ExoticPet(String petName, int petImage, String datePetWasLastFed, String timePetWasLastFed) {
+    public ExoticPet(String petName, int petImage, String datePetWasLastFed, String timePetWasLastFed, String cameraPicture) {
         this.petName = petName;
         this.petImage = petImage;
         this.datePetWasLastFed = datePetWasLastFed;
         this.timePetWasLastFed = timePetWasLastFed;
+        this.cameraPicture = cameraPicture;
     }
 
     public String getCameraPicture() {

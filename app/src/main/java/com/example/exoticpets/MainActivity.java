@@ -168,10 +168,9 @@ public class MainActivity extends AppCompatActivity {
         ImageButton changePetGalleryImageButton = changePetPictureView.findViewById(R.id.change_pet_gallery_ImageButton);
         changePetPictureButton = changePetPictureView.findViewById(R.id.change_picture_button);
 
-        ExoticPet exoticPet = new ExoticPet(null, R.drawable.ladybug , null, null);
+        ExoticPet exoticPet = new ExoticPet(null, R.drawable.ladybug, null, null, null);
 
         initViews();
-
 
         //Allows user to take pictures
         easyImage = new EasyImage.Builder(MainActivity.this)
@@ -363,11 +362,8 @@ public class MainActivity extends AppCompatActivity {
                         } else {
                             if (cameraPicture != null) {
                                 exoticPet.setCameraPicture(String.valueOf(cameraPicture));
-                                exoticPets.add(exoticPet);
                                 exoticPet.setPetName(petNameEditText.getText().toString());
                                 instructionView.setVisibility(View.GONE);
-                                //NotifyDataSetChanged basically tells the adapter, "Hey man, we have new data. Please refresh the UI to reflect the new data"
-                                mAdapter.notifyItemInserted(exoticPets.size() -1 );
                                 alertDialog.dismiss();
                             } else {
                                 exoticPet.setPetName(petNameEditText.getText().toString());
@@ -398,30 +394,20 @@ public class MainActivity extends AppCompatActivity {
                                         Toast.makeText(MainActivity.this, "Type Pet Name", Toast.LENGTH_SHORT).show();
                                         break;
                                 }
-
                                 pictureTaken = false;
-
                             }
                             //Insert the data into offline Room on a seperate thread (highway) instead of the UI thread (The main highway)
-
                             exoticPets.add(exoticPet);
-                            mAdapter.notifyItemInserted(exoticPets.size() -1 );
+                            mAdapter.notifyItemInserted(exoticPets.size() - 1);
                             executor.execute(() -> {
                                 exoticPetDao.insertPet(exoticPet);
                             });
-
-
-
-
                         }
                     }
                 });
-
             }
         });
     }
-
-
 
     //This method sets up the RecycleView in the app
     private void initViews() {
@@ -429,7 +415,6 @@ public class MainActivity extends AppCompatActivity {
         mAdapter = new RecyclerViewAdapter(this, exoticPets, changePetPictureView, cameraPicture1, deletePetView);
         recyclerView.setAdapter(mAdapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
-
 
 
         //While user is typing

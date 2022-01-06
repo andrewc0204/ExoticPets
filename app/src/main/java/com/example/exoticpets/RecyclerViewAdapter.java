@@ -39,7 +39,7 @@ import de.hdodenhof.circleimageview.CircleImageView;
 
 public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapter.ViewHolder> {
 
-    public ArrayList<ExoticPet> exoticPets = new ArrayList<>();
+    public ArrayList<ExoticPet> exoticPets;
     public ArrayList<ExoticPet> selectedPetIdsToDeleteArrayList = new ArrayList<>();
     public ArrayList<ExoticPet> feedPet = new ArrayList<>();
     public ArrayList<ExoticPet> changePetFedDate = new ArrayList<>();
@@ -153,7 +153,6 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
                 int month = calendar.get(Calendar.MONTH);
                 int day = calendar.get(Calendar.DAY_OF_MONTH);
 
-
                     DatePickerDialog datePickerDialog = new DatePickerDialog(mContext, new DatePickerDialog.OnDateSetListener() {
                         @Override
                         public void onDateSet(DatePicker view, int year, int month, int day) {
@@ -225,9 +224,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
                         }
                     }
                 },hour  , min,false);
-
                 timePickerDialog.show();
-
 
             }
         });
@@ -304,7 +301,6 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
 
                             for(ExoticPet exoticPet : petChangePicture){
                                 Picasso.get().load(cameraPicture1).into(holder.pet_ImageView);
-//                                exoticPet.setPetImage(cameraPicture1);
                                 executor.execute(() -> {
                                     exoticPetDao.updatePet(exoticPet);
                                 });
@@ -334,6 +330,8 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
 //
 //                intent.putExtras(bundle);
 //                mContext.startActivity(intent);
+
+
 
             }
         });
@@ -445,43 +443,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
                                     }
 
 
-//                                case R.id.menu_calendar:
-//
-//
-//                                    Calendar currentDate = Calendar.getInstance();
-//                                    date = Calendar.getInstance();
-//
-//                                    new DatePickerDialog(mContext, new DatePickerDialog.OnDateSetListener() {
-//                                        @Override
-//                                        public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
-//                                            quickFeed.addAll(exoticPets);
-//                                            for (ExoticPet exoticPet : quickFeed){
-//
-//                                                String formatDate = String.format(String.valueOf(date), year, monthOfYear, dayOfMonth);
-//                                                exoticPet.setDatePetWasLastFed(formatDate);
-//
-//                                            }
-//
-//
-////                                            date.set(year, monthOfYear, dayOfMonth);
-////                                            for (ExoticPet exoticPet : feedPet) {
-////                                                exoticPet.setDatePetWasLastFed(formattedDate);
-////                                                exoticPet.setTimePetWasLastFed(formattedTime);
-////                                            }
-//
-//                                            new TimePickerDialog(mContext, new TimePickerDialog.OnTimeSetListener() {
-//                                                @Override
-//                                                public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
-//
-////                                                    date.set(Calendar.HOUR_OF_DAY, hourOfDay);
-////                                                    date.set(Calendar.MINUTE, minute);
-//                                                }
-//                                            }, currentDate.get(Calendar.HOUR_OF_DAY), currentDate.get(Calendar.MINUTE), false).show();
-//                                        }
-//                                    }, currentDate.get(Calendar.YEAR), currentDate.get(Calendar.MONTH), currentDate.get(Calendar.DATE)).show();
-
                                 case R.id.feed_pet:
-
 
                                     Calendar c = Calendar.getInstance();
                                     SimpleDateFormat df = new SimpleDateFormat("MMM-dd-yyyy");
@@ -600,6 +562,8 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
         }
     }
 
+
+
     //This tell the adapter how many list items are in the list
     @Override
     public int getItemCount() {
@@ -620,7 +584,6 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
         TextView timeFedTextView;
         ImageView ivCheckBoxImageView;
         ImageView animalDetailsArrowImageView;
-        ImageView calendarImageView;
         Button quickfeedButton;
 
         public ViewHolder(View itemView) {
