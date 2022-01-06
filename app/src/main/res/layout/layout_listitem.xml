@@ -14,23 +14,23 @@
     <RelativeLayout
         android:id="@+id/parent_layout"
         android:layout_width="match_parent"
-        android:layout_height="175dp"
+        android:layout_height="wrap_content"
         android:padding="10dp">
 
         <de.hdodenhof.circleimageview.CircleImageView
-            android:id="@+id/pet_image_recycleview"
+            android:id="@+id/pet_picture_imageview"
             android:layout_width="75dp"
             android:layout_height="75dp"
-            android:layout_centerVertical="true"
+
             android:src="@mipmap/ic_launcher" />
 
         <TextView
-            android:id="@+id/image_name"
+            android:id="@+id/pet_name_textview"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="17dp"
             android:layout_marginLeft="30dp"
-            android:layout_toRightOf="@id/pet_image_recycleview"
+            android:layout_marginTop="25dp"
+            android:layout_toRightOf="@id/pet_picture_imageview"
             android:fontFamily="@font/consola"
             android:text="USA"
             android:textColor="@color/black"
@@ -43,15 +43,16 @@
             android:layout_height="50dp"
             android:layout_alignParentEnd="true"
             android:layout_marginEnd="30dp"
+            android:layout_marginTop="15dp"
             android:src="@drawable/ic_baseline_navigate_next_24" />
 
         <TextView
             android:id="@+id/last_fed"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="30dp"
-            android:layout_marginTop="60dp"
-            android:layout_toRightOf="@id/pet_image_recycleview"
+            android:layout_below="@+id/pet_picture_imageview"
+            android:layout_marginLeft="20dp"
+            android:layout_marginTop="30dp"
             android:fontFamily="@font/consola"
             android:text="Last Fed:" />
 
@@ -59,22 +60,22 @@
             android:id="@+id/fed_date"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="100dp"
-            android:layout_marginTop="60dp"
-            android:layout_toRightOf="@id/pet_image_recycleview"
+            android:layout_below="@id/pet_picture_imageview"
+            android:layout_toEndOf="@id/last_fed"
+            android:layout_marginTop="30dp"
             android:fontFamily="@font/consola"
             android:text="Date"
-            android:visibility="gone" />
+            android:visibility="gone"/>
 
         <TextView
             android:id="@+id/time_textview"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@id/last_fed"
-            android:layout_marginLeft="30dp"
-            android:layout_toRightOf="@id/pet_image_recycleview"
+            android:layout_marginLeft="20dp"
             android:fontFamily="@font/consola"
-            android:text="Time:" />
+            android:text="Time:"
+            />
 
         <TextView
             android:id="@+id/timefed_textview"
@@ -92,6 +93,7 @@
             android:layout_alignParentEnd="true"
             android:layout_marginStart="10dp"
             android:layout_marginEnd="20dp"
+            android:layout_marginTop="15dp"
             android:visibility="gone"
             card_view:lottie_autoPlay="true"
             card_view:lottie_fileName="check.json"
@@ -108,12 +110,7 @@
             android:src="@drawable/ic_check_circle"
             android:visibility="gone" />
 
-        <ImageView
-            android:id="@+id/calendar_imageview"
-            android:layout_width="50dp"
-            android:layout_height="50dp"
-            android:layout_toRightOf="@id/image_name"
-            android:background="@drawable/ic_calendar"/>
+
 
         <androidx.cardview.widget.CardView
             android:layout_width="wrap_content"
@@ -122,8 +119,9 @@
             card_view:cardCornerRadius="8dp"
             card_view:cardElevation="5dp"
             card_view:cardUseCompatPadding="true"
-            android:layout_below="@id/last_fed"
+            android:layout_below="@id/pet_picture_imageview"
             android:layout_alignParentRight="true">
+
             <Button
                 android:id="@+id/quick_feed_button"
                 android:layout_width="match_parent"
@@ -132,7 +130,6 @@
                 android:textAllCaps="false"
                 android:textColor="@color/white"
                 android:fontFamily="@font/consola"
-                android:layout_alignParentRight="true"
                 android:background="@drawable/alertbackground"
                 />
 

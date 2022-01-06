@@ -45,6 +45,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
     public ArrayList<ExoticPet> changePetFedDate = new ArrayList<>();
     public ArrayList<ExoticPet> changePetFedTime = new ArrayList<>();
     public ArrayList<ExoticPet> quickFeedPets = new ArrayList<>();
+    public ArrayList<ExoticPet> petChangePicture = new ArrayList<>();
     private ExoticPetDao exoticPetDao;
 
     public static Executor executor;
@@ -56,12 +57,6 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
     boolean changePicture = false;
     boolean isEnable = false;
     boolean isSelectAll = false;
-
-
-
-
-
-
 
     public RecyclerViewAdapter(Context context, ArrayList<ExoticPet> exoticPets, View changePetPictureView, File cameraPicture1, View deletePetView) {
         this.mContext = context;
@@ -104,17 +99,27 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
             holder.timeFedTextView.setVisibility(View.GONE);
         }
 
+        if(exoticPets.get(position).getCameraPicture() != null ){
+            Glide.with(mContext)
+                    .asBitmap()
+                    .load(exoticPets.get(position).getCameraPicture())
+                    .into(holder.pet_ImageView);
+        }else{
+            Glide.with(mContext)
+                    .asBitmap()
+                    .load(exoticPets.get(position).getPetImage())
+                    .into(holder.pet_ImageView);
+        }
 
-        Glide.with(mContext)
-                .asBitmap()
-                .load(exoticPets.get(position).getPetImage())
-                .into(holder.pet_ImageView);
+
 
         holder.petNameTextView.setText(exoticPets.get(position).getPetName());
 
         holder.quickfeedButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                holder.fedDateTextView.setVisibility(View.VISIBLE);
+                holder.timeFedTextView.setVisibility(View.VISIBLE);
                 ExoticPet quickFeedPet = exoticPets.get(holder.getAbsoluteAdapterPosition());
                 quickFeedPets.add(quickFeedPet);
                 Calendar c = Calendar.getInstance();
@@ -231,10 +236,14 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
         holder.pet_ImageView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
                 AppCompatButton changePetPictureButton = changePetPictureView.findViewById(R.id.change_picture_button);
                 Button closeBtn1 = changePetPictureView.findViewById(R.id.close_btn1);
                 CircleImageView changePetPictureImageView = changePetPictureView.findViewById(R.id.change_pet_picture);
 
+
+                ExoticPet petPictureToBeChanged = exoticPets.get(holder.getAbsoluteAdapterPosition());
+                petChangePicture.add(petPictureToBeChanged);
                 changePicture = true;
                 AlertDialog.Builder builder = new AlertDialog.Builder(mContext);
                 builder.setView(changePetPictureView);
@@ -249,12 +258,14 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
                 closeBtn1.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
+                        petChangePicture.remove(petPictureToBeChanged);
                         alertDialog.dismiss();
                     }
                 });
                 alertDialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
                     @Override
                     public void onDismiss(DialogInterface dialog) {
+                        petChangePicture.remove(petPictureToBeChanged);
                         alertDialog.dismiss();
                         if(changePetPictureView.getParent() != null) {
                             ((ViewGroup)changePetPictureView.getParent()).removeView(changePetPictureView);
@@ -265,9 +276,41 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
                 changePetPictureButton.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
+//                        ExoticPet changeFedDate = exoticPets.get(holder.getAbsoluteAdapterPosition());
+//                        changePetFedDate.add(changeFedDate);
+//
+//                        Calendar calendar = Calendar.getInstance();
+//                        int year = calendar.get(Calendar.YEAR);
+//                        int month = calendar.get(Calendar.MONTH);
+//                        int day = calendar.get(Calendar.DAY_OF_MONTH);
+//
+//
+//                        DatePickerDialog datePickerDialog = new DatePickerDialog(mContext, new DatePickerDialog.OnDateSetListener() {
+//                            @Override
+//                            public void onDateSet(DatePicker view, int year, int month, int day) {
+//                                month = month+1;
+//                                String date = month+"/"+day+"/"+year;
+//                                for (ExoticPet exoticPet : changePetFedDate){
+//                                    exoticPet.setDatePetWasLastFed(date);
+//                                    holder.fedDateTextView.setText(exoticPets.get(position).getDatePetWasLastFed());
+//                                    changePetFedDate.remove(changeFedDate);
+//                                    executor.execute(() -> {
+//                                        exoticPetDao.updatePet(exoticPet);
+//                                    });
+//                                }
 
 
-                            Picasso.get().load(cameraPicture1).into(holder.pet_ImageView);
+
+
+                            for(ExoticPet exoticPet : petChangePicture){
+                                Picasso.get().load(cameraPicture1).into(holder.pet_ImageView);
+//                                exoticPet.setPetImage(cameraPicture1);
+                                executor.execute(() -> {
+                                    exoticPetDao.updatePet(exoticPet);
+                                });
+                                petChangePicture.remove(petPictureToBeChanged);
+                            }
+
                             alertDialog.dismiss();
                     }
                 });
@@ -584,13 +627,12 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
             super(itemView);
 
             addPetAnimImageView = itemView.findViewById(R.id.add_pet_json);
-            pet_ImageView = itemView.findViewById(R.id.pet_image_recycleview);
-            petNameTextView = itemView.findViewById(R.id.image_name);
+            pet_ImageView = itemView.findViewById(R.id.pet_picture_imageview);
+            petNameTextView = itemView.findViewById(R.id.pet_name_textview);
             ivCheckBoxImageView = itemView.findViewById(R.id.iv_check_box);
             animalDetailsArrowImageView = itemView.findViewById(R.id.animal_details_arrow);
             fedDateTextView = itemView.findViewById(R.id.fed_date);
             timeFedTextView = itemView.findViewById(R.id.timefed_textview);
-            calendarImageView = itemView.findViewById(R.id.calendar_imageview);
             quickfeedButton = itemView.findViewById(R.id.quick_feed_button);
         }
     }

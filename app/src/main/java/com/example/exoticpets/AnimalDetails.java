@@ -128,7 +128,7 @@ public class AnimalDetails extends AppCompatActivity implements Serializable {
     private void setImage(String imageUrl, String imageName) {
         TextView selectedPetName = findViewById(R.id.textview_selectedPet);
         selectedPetName.setText(imageName);
-        ImageView image = findViewById(R.id.pet_image_recycleview);
+        ImageView image = findViewById(R.id.pet_picture_imageview);
         Glide.with(this)
                 .asBitmap()
                 .load(imageUrl)

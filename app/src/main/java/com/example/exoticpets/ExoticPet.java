@@ -18,12 +18,24 @@ public class ExoticPet implements Serializable {
     String datePetWasLastFed;
     @ColumnInfo(name = "last_time_fed")
     String timePetWasLastFed;
+    @ColumnInfo(name = "camera_image")
+    String cameraPicture;
+
+
 
     public ExoticPet(String petName, int petImage, String datePetWasLastFed, String timePetWasLastFed) {
         this.petName = petName;
         this.petImage = petImage;
         this.datePetWasLastFed = datePetWasLastFed;
         this.timePetWasLastFed = timePetWasLastFed;
+    }
+
+    public String getCameraPicture() {
+        return cameraPicture;
+    }
+
+    public void setCameraPicture(String cameraPicture) {
+        this.cameraPicture = cameraPicture;
     }
 
     public String getWhenPetWasLastFed() {

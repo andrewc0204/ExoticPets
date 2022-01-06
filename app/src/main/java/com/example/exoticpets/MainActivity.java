@@ -6,7 +6,6 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.AppCompatButton;
 import androidx.appcompat.widget.Toolbar;
-import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.room.Room;
@@ -14,8 +13,6 @@ import androidx.room.Room;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -32,11 +29,9 @@ import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import com.squareup.picasso.Picasso;
 
 import java.io.File;
 import java.util.ArrayList;
-import java.util.Random;
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
 
@@ -163,7 +158,7 @@ public class MainActivity extends AppCompatActivity {
         recycleViewLayout = getLayoutInflater().inflate(R.layout.layout_listitem, null);
         changePetPictureView = getLayoutInflater().inflate(R.layout.change_pet_picture, null);
         animalDetailsArrowImageView = findViewById(R.id.animal_details_arrow);
-        petPictureImageView = recycleViewLayout.findViewById(R.id.pet_image_recycleview);
+        petPictureImageView = recycleViewLayout.findViewById(R.id.pet_picture_imageview);
         searchPetToobar = findViewById(R.id.toolbar);
         addPetButton = findViewById(R.id.addPetButton1);
         changePetPicture = changePetPictureView.findViewById(R.id.change_pet_picture);
@@ -173,7 +168,7 @@ public class MainActivity extends AppCompatActivity {
         ImageButton changePetGalleryImageButton = changePetPictureView.findViewById(R.id.change_pet_gallery_ImageButton);
         changePetPictureButton = changePetPictureView.findViewById(R.id.change_picture_button);
 
-        ExoticPet exoticPet = new ExoticPet(null, R.drawable.ladybug, null, null);
+        ExoticPet exoticPet = new ExoticPet(null, R.drawable.ladybug , null, null);
 
         initViews();
 
@@ -367,12 +362,12 @@ public class MainActivity extends AppCompatActivity {
                             Toast.makeText(MainActivity.this, "Choose Animal", Toast.LENGTH_SHORT).show();
                         } else {
                             if (cameraPicture != null) {
-//                                exoticPet.setPetImage(cameraPicture);
+                                exoticPet.setCameraPicture(String.valueOf(cameraPicture));
                                 exoticPets.add(exoticPet);
                                 exoticPet.setPetName(petNameEditText.getText().toString());
                                 instructionView.setVisibility(View.GONE);
                                 //NotifyDataSetChanged basically tells the adapter, "Hey man, we have new data. Please refresh the UI to reflect the new data"
-                                mAdapter.notifyDataSetChanged();
+                                mAdapter.notifyItemInserted(exoticPets.size() -1 );
                                 alertDialog.dismiss();
                             } else {
                                 exoticPet.setPetName(petNameEditText.getText().toString());
@@ -408,8 +403,9 @@ public class MainActivity extends AppCompatActivity {
 
                             }
                             //Insert the data into offline Room on a seperate thread (highway) instead of the UI thread (The main highway)
-                            mAdapter.notifyDataSetChanged();
+
                             exoticPets.add(exoticPet);
+                            mAdapter.notifyItemInserted(exoticPets.size() -1 );
                             executor.execute(() -> {
                                 exoticPetDao.insertPet(exoticPet);
                             });
@@ -433,6 +429,7 @@ public class MainActivity extends AppCompatActivity {
         mAdapter = new RecyclerViewAdapter(this, exoticPets, changePetPictureView, cameraPicture1, deletePetView);
         recyclerView.setAdapter(mAdapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
+
 
 
         //While user is typing
