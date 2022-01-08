@@ -21,7 +21,7 @@
             android:id="@+id/pet_picture_imageview"
             android:layout_width="75dp"
             android:layout_height="75dp"
-
+            android:layout_marginLeft="10dp"
             android:src="@mipmap/ic_launcher" />
 
         <TextView
@@ -34,17 +34,27 @@
             android:fontFamily="@font/consola"
             android:text="USA"
             android:textColor="@color/black"
-            android:textSize="17sp"
+            android:textSize="18dp"
             android:textStyle="bold" />
+
+<!--        <ImageView-->
+<!--            android:id="@+id/more_options_imageview"-->
+<!--            android:layout_width="45dp"-->
+<!--            android:layout_height="45dp"-->
+<!--            android:layout_alignParentRight="true"-->
+<!--            android:layout_marginTop="17dp"-->
+<!--            android:layout_marginRight="30dp"-->
+<!--            android:src="@drawable/ic_more_details" />-->
 
         <ImageView
             android:id="@+id/animal_details_arrow"
             android:layout_width="50dp"
             android:layout_height="50dp"
             android:layout_alignParentEnd="true"
-            android:layout_marginEnd="30dp"
             android:layout_marginTop="15dp"
-            android:src="@drawable/ic_baseline_navigate_next_24" />
+            android:layout_marginEnd="30dp"
+            android:src="@drawable/ic_baseline_navigate_next_24"
+            android:visibility="gone"/>
 
         <TextView
             android:id="@+id/last_fed"
@@ -94,23 +104,19 @@
             android:layout_marginStart="10dp"
             android:layout_marginEnd="20dp"
             android:layout_marginTop="15dp"
-            android:visibility="gone"
             card_view:lottie_autoPlay="true"
             card_view:lottie_fileName="check.json"
-            card_view:lottie_speed="1.75" />
+            card_view:lottie_speed="1.75"
+            android:visibility="gone"/>
 
         <ImageView
-            android:id="@+id/iv_check_box"
-            android:layout_width="50dp"
-            android:layout_height="50dp"
+            android:id="@+id/iv_check_box_main"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
             android:layout_alignParentEnd="true"
-            android:layout_centerVertical="true"
-            android:layout_marginStart="10dp"
-            android:layout_marginEnd="20dp"
-            android:src="@drawable/ic_check_circle"
-            android:visibility="gone" />
-
-
+            android:layout_marginTop="20dp"
+            android:layout_marginRight="25dp"
+            android:src="@drawable/ic_check_circle" />
 
         <androidx.cardview.widget.CardView
             android:layout_width="wrap_content"

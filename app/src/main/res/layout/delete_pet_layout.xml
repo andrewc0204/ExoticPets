@@ -45,13 +45,6 @@
                 android:textColor="@color/white"
                 android:textSize="18sp" />
 
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="2dp"
-                android:background="#80000000"
-                android:layout_below="@id/title_textview"
-                android:layout_marginTop="20dp"
-                />
 
             <Button
                 android:id="@+id/ok_delete_pet"
@@ -59,7 +52,7 @@
                 android:layout_height="wrap_content"
                 android:layout_below="@id/title_textview"
                 android:layout_alignParentStart="true"
-                android:layout_marginTop="50dp"
+                android:layout_marginTop="30dp"
                 android:background="@drawable/rounded_button_left"
                 android:fontFamily="@font/consola"
                 android:text="OK"
@@ -71,15 +64,15 @@
                 android:id="@+id/cancel_delete_pet_alertDialog"
                 android:layout_width="160dp"
                 android:layout_height="wrap_content"
-                android:layout_alignParentEnd="true"
                 android:layout_below="@id/title_textview"
-                android:layout_marginTop="50dp"
+                android:layout_alignParentEnd="true"
+                android:layout_marginTop="30dp"
                 android:layout_toRightOf="@id/ok_delete_pet"
                 android:background="@drawable/rounded_button_right"
+                android:fontFamily="@font/consola"
                 android:text="Cancel"
-                android:textSize="18sp"
                 android:textColor="@color/black"
-                android:fontFamily="@font/consola"/>
+                android:textSize="18sp" />
 
         </RelativeLayout>
 </androidx.cardview.widget.CardView>
