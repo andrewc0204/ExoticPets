@@ -1,10 +1,12 @@
-package com.example.exoticpets;
+package com.example.exoticpets.database;
 
 import androidx.room.Dao;
 import androidx.room.Delete;
 import androidx.room.Insert;
 import androidx.room.OnConflictStrategy;
 import androidx.room.Query;
+
+import com.example.exoticpets.models.ExoticPet;
 
 import java.util.List;
 
@@ -24,6 +26,7 @@ public interface ExoticPetDao {
 
     @Delete
     void delete(ExoticPet pet);
+
 
 
     //This method is returning several pets where the list ArrayList<Integer> intArray; int[] (List)

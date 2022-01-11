@@ -37,15 +37,6 @@
             android:textSize="18dp"
             android:textStyle="bold" />
 
-<!--        <ImageView-->
-<!--            android:id="@+id/more_options_imageview"-->
-<!--            android:layout_width="45dp"-->
-<!--            android:layout_height="45dp"-->
-<!--            android:layout_alignParentRight="true"-->
-<!--            android:layout_marginTop="17dp"-->
-<!--            android:layout_marginRight="30dp"-->
-<!--            android:src="@drawable/ic_more_details" />-->
-
         <ImageView
             android:id="@+id/animal_details_arrow"
             android:layout_width="50dp"
@@ -111,12 +102,13 @@
 
         <ImageView
             android:id="@+id/iv_check_box_main"
-            android:layout_width="40dp"
-            android:layout_height="40dp"
+            android:layout_width="45dp"
+            android:layout_height="45dp"
             android:layout_alignParentEnd="true"
-            android:layout_marginTop="20dp"
-            android:layout_marginRight="25dp"
-            android:src="@drawable/ic_check_circle" />
+            android:layout_marginTop="18dp"
+            android:layout_marginRight="23dp"
+
+            android:src="@drawable/capture11" />
 
         <androidx.cardview.widget.CardView
             android:layout_width="wrap_content"

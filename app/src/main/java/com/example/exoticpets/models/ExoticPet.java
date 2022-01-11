@@ -1,4 +1,4 @@
-package com.example.exoticpets;
+package com.example.exoticpets.models;
 
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;

@@ -27,6 +27,11 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
+import com.example.exoticpets.adapters.CustomSpinnerAdapter;
+import com.example.exoticpets.adapters.RecyclerViewAdapter;
+import com.example.exoticpets.database.AppDatabase;
+import com.example.exoticpets.database.ExoticPetDao;
+import com.example.exoticpets.models.ExoticPet;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.io.File;
@@ -57,6 +62,7 @@ public class MainActivity extends AppCompatActivity {
     private View view;
     private View deletePetView;
     private View changePetPictureView;
+    private View changePetNameView;
 
     //Toolbar vars
     public static Toolbar searchPetToobar;
@@ -72,7 +78,6 @@ public class MainActivity extends AppCompatActivity {
     private ImageButton changePetCameraImageButton;
     private ImageButton galleryImageButton;
     private ImageButton pictureImageButton;
-
     private FloatingActionButton addPetButton;
 
     //TextView Vars
@@ -112,7 +117,6 @@ public class MainActivity extends AppCompatActivity {
                                 .load(new File(String.valueOf(imageFile.getFile())))
                                 .into(defaultImageView);
                         cameraPicture = imageFile.getFile();
-
                         pictureTaken = true;
                     } else {
                         Glide.with(MainActivity.this)
@@ -153,6 +157,7 @@ public class MainActivity extends AppCompatActivity {
         //Database
         db = Room.databaseBuilder(getApplicationContext(), AppDatabase.class, "pet_database").build();
         exoticPetDao = db.exoticPetDAO();
+
         executor.execute(() -> {
             exoticPets = (ArrayList<ExoticPet>) exoticPetDao.getAll();
         });
@@ -160,6 +165,7 @@ public class MainActivity extends AppCompatActivity {
         //Views
         deletePetView = getLayoutInflater().inflate(R.layout.delete_pet_layout, null);
         changePetPictureView = getLayoutInflater().inflate(R.layout.change_pet_picture, null);
+        changePetNameView = getLayoutInflater().inflate(R.layout.change_pet_name, null);
 
         //ImageViews
         changePetPictureImageView = changePetPictureView.findViewById(R.id.change_pet_picture);
@@ -176,7 +182,6 @@ public class MainActivity extends AppCompatActivity {
         instructionTextView = findViewById(R.id.instruction_textview);
         searchForPetTextview = findViewById(R.id.textview_searchForPet);
 
-        ExoticPet exoticPet = new ExoticPet(null, R.drawable.ladybug, null, null, null);
         initViews();
 
         //Allows user to take pictures
@@ -193,7 +198,6 @@ public class MainActivity extends AppCompatActivity {
                 // Allow multiple picking
                 .allowMultiple(true)
                 .build();
-
 
         //Change pet picture feature
         changePetCameraImageButton.setOnClickListener(new View.OnClickListener() {
@@ -244,7 +248,7 @@ public class MainActivity extends AppCompatActivity {
                 });
 
                 //Spinner function
-                String[] listOfAnimals = {"Choose Animal", "Arachnid", "Amphibian", "Reptile", "Insect", "Fish"};
+                String[] listOfAnimals = {"Choose Animal", "Arachnid", "Amphibian", "Reptile", "Insect", "Fish", "Other"};
                 ArrayAdapter<String> arrayAdapter = new CustomSpinnerAdapter(MainActivity.this, android.R.layout.simple_spinner_dropdown_item, listOfAnimals);
                 spinner.setAdapter(arrayAdapter);
                 spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
@@ -291,6 +295,8 @@ public class MainActivity extends AppCompatActivity {
                                             .into(defaultImageView);
                                 }
                                 break;
+
+
                             default:
                                 if (!pictureTaken) {
                                     Glide.with(MainActivity.this)
@@ -326,16 +332,19 @@ public class MainActivity extends AppCompatActivity {
                     @Override
                     public void onClick(View v) {
 
-
                         //Checks to see if user type in a pet name
                         String spinnerSelectedPet = spinner.getSelectedItem().toString();
                         if (petNameEditText.getText().toString().isEmpty()) {
                             petNameEditText.setError("Please type pet name");
                             petNameEditText.requestFocus();
+
                             //Checks to see if user picked a pet type
                         } else if (spinner.getSelectedItem().toString().equals("Choose Animal")) {
                             Toast.makeText(MainActivity.this, "Choose Animal", Toast.LENGTH_SHORT).show();
+
                         } else {
+                            ExoticPet exoticPet = new ExoticPet(null, R.drawable.ladybug, null, null, null);
+
                             if (cameraPicture != null) {
                                 exoticPet.setCameraPicture(String.valueOf(cameraPicture));
                                 exoticPet.setPetName(petNameEditText.getText().toString());
@@ -366,6 +375,10 @@ public class MainActivity extends AppCompatActivity {
                                         exoticPet.setPetImage(R.drawable.fish);
                                         alertDialog.dismiss();
                                         break;
+                                    case "Other":
+                                        exoticPet.setPetImage(R.drawable.antdrawing);
+                                        alertDialog.dismiss();
+                                        break;
                                     default:
                                         Toast.makeText(MainActivity.this, "Type Pet Name", Toast.LENGTH_SHORT).show();
                                         break;
@@ -373,10 +386,12 @@ public class MainActivity extends AppCompatActivity {
                                 pictureTaken = false;
                             }
                             exoticPets.add(exoticPet);
-                            mAdapter.notifyItemInserted(exoticPets.size() - 1);
+                            mAdapter.notifyItemInserted(exoticPets.size() -1);
                             //Insert the data into offline Room on a seperate thread (highway) instead of the UI thread (The main highway)
-                            executor.execute(() -> { exoticPetDao.insertPet(exoticPet);
+                            executor.execute(() -> {
+                                exoticPetDao.insertPet(exoticPet);
                             });
+
                         }
                     }
                 });
@@ -395,7 +410,7 @@ public class MainActivity extends AppCompatActivity {
     //This method sets up the RecycleView in the app
     private void initViews() {
         RecyclerView recyclerView = findViewById(R.id.recyclerv_view);
-        mAdapter = new RecyclerViewAdapter(this, exoticPets, changePetPictureView, cameraPicture1, deletePetView, addPetButton);
+        mAdapter = new RecyclerViewAdapter(this, exoticPets, changePetPictureView, cameraPicture1, deletePetView, addPetButton,changePetNameView);
         recyclerView.setAdapter(mAdapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
@@ -429,11 +444,12 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
-//    @Override
-//    protected void onStop() {
-//        super.onStop();
-////        saveData();
-//    }
+    @Override
+    protected void onStop() {
+        super.onStop();
+
+//        saveData();
+    }
 
 
 //    public void saveData(){

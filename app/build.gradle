@@ -75,7 +75,7 @@ dependencies {
         maven { url 'https://jitpack.io' }
     }
 
-    //
+    //Circle ImageView
     compile 'de.hdodenhof:circleimageview:2.2.0'
 
 

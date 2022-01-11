@@ -1,4 +1,4 @@
-package com.example.exoticpets;
+package com.example.exoticpets.adapters;
 
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
@@ -14,9 +14,11 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.DatePicker;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.TimePicker;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
@@ -26,6 +28,10 @@ import androidx.room.Room;
 
 import com.airbnb.lottie.LottieAnimationView;
 import com.bumptech.glide.Glide;
+import com.example.exoticpets.database.AppDatabase;
+import com.example.exoticpets.models.ExoticPet;
+import com.example.exoticpets.database.ExoticPetDao;
+import com.example.exoticpets.R;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.squareup.picasso.Picasso;
 
@@ -41,7 +47,7 @@ import de.hdodenhof.circleimageview.CircleImageView;
 public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapter.ViewHolder> {
 
     public ArrayList<ExoticPet> exoticPets;
-    public ArrayList<ExoticPet> selectedPetIdsToDeleteArrayList = new ArrayList<>();
+    public ArrayList<ExoticPet> selectedPetIdsArrayList = new ArrayList<>();
     public ArrayList<ExoticPet> feedPet = new ArrayList<>();
     public ArrayList<ExoticPet> changePetFedDate = new ArrayList<>();
     public ArrayList<ExoticPet> changePetFedTime = new ArrayList<>();
@@ -54,19 +60,21 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
     private Context mContext;
     private View deletePetView;
     private View changePetPictureView;
+    private View changePetNameView;
     private File   cameraPicture1;
     private FloatingActionButton addPetButton;
-    boolean changePicture = false;
+    public boolean changePicture = false;
     boolean isEnable = false;
     boolean isSelectAll = false;
 
-    public RecyclerViewAdapter(Context context, ArrayList<ExoticPet> exoticPets, View changePetPictureView, File cameraPicture1, View deletePetView, FloatingActionButton addPetButton) {
+    public RecyclerViewAdapter(Context context, ArrayList<ExoticPet> exoticPets, View changePetPictureView, File cameraPicture1, View deletePetView, FloatingActionButton addPetButton, View changePetNameView) {
         this.mContext = context;
         this.exoticPets = exoticPets;
         this.changePetPictureView = changePetPictureView;
         this.cameraPicture1 = cameraPicture1;
         this.deletePetView = deletePetView;
         this.addPetButton = addPetButton;
+        this.changePetNameView = changePetNameView;
     }
 
     //This method is responsible for inflating the view
@@ -75,15 +83,15 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.layout_listitem, parent, false);
         ViewHolder holder = new ViewHolder(view);
 
-
-
         //create new thread
         executor = Executors.newSingleThreadExecutor();
         //Database
         db = Room.databaseBuilder(mContext.getApplicationContext(), AppDatabase.class, "pet_database")
                 .build();
         exoticPetDao = db.exoticPetDAO();
+
         return holder;
+
     }
 
     //This method gets called everytime a new item gets added to the list in RecycleView
@@ -115,8 +123,64 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
         }
 
 
-
         holder.petNameTextView.setText(exoticPets.get(position).getPetName());
+
+        holder.petNameTextView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                AlertDialog.Builder builder = new AlertDialog.Builder(mContext);
+                builder.setView(changePetNameView);
+                AlertDialog alertDialog = builder.create();
+                alertDialog.show();
+
+
+                Button okChangePetNameButton = changePetNameView.findViewById(R.id.ok_change_name_button);
+                Button cancelNameChangeButton = changePetNameView.findViewById(R.id.cancel_change_petname_alertDialog);
+                EditText changePetNameEditText = changePetNameView.findViewById(R.id.edittext_pet_name);
+
+                okChangePetNameButton.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        if (changePetNameEditText.getText().toString().isEmpty()) {
+                            changePetNameEditText.setError("Please type pet name");
+                            changePetNameEditText.requestFocus();
+
+                            //Checks to see if user picked a pet type
+                        } else{
+                            for (ExoticPet exoticPet : exoticPets){
+                                exoticPets.get(position).setPetName(changePetNameEditText.getText().toString());
+                                holder.petNameTextView.setText(changePetNameEditText.getText().toString());
+                                executor.execute(() -> {
+                                    exoticPetDao.updatePet(exoticPet);
+                                });
+                            }
+                            alertDialog.dismiss();
+                        }
+
+                    }
+                });
+
+                cancelNameChangeButton.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        alertDialog.dismiss();
+                        if(changePetNameView.getParent() != null) {
+                            ((ViewGroup)changePetNameView.getParent()).removeView(changePetNameView);
+                        }
+                    }
+                });
+
+                alertDialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
+                    @Override
+                    public void onDismiss(DialogInterface dialog) {
+                        alertDialog.dismiss();
+                        if(changePetNameView.getParent() != null) {
+                            ((ViewGroup)changePetNameView.getParent()).removeView(changePetNameView);
+                        }
+                    }
+                });
+            }
+        });
 
         holder.quickfeedButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -126,7 +190,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
                 ExoticPet quickFeedPet = exoticPets.get(holder.getAbsoluteAdapterPosition());
                 quickFeedPets.add(quickFeedPet);
                 Calendar c = Calendar.getInstance();
-                SimpleDateFormat df = new SimpleDateFormat("MMM-dd-yyyy");
+                SimpleDateFormat df = new SimpleDateFormat("MMM/dd/yyyy");
                 String formattedDate = df.format(c.getTime());
                 Calendar c1 = Calendar.getInstance();
                 SimpleDateFormat tf = new SimpleDateFormat("h:mm aa");
@@ -242,6 +306,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
                 CircleImageView changePetPictureImageView = changePetPictureView.findViewById(R.id.change_pet_picture);
 
 
+
                 ExoticPet petPictureToBeChanged = exoticPets.get(holder.getAbsoluteAdapterPosition());
                 petChangePicture.add(petPictureToBeChanged);
                 changePicture = true;
@@ -250,10 +315,17 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
                 AlertDialog alertDialog = builder.create();
                 alertDialog.show();
 
-                Glide.with(mContext)
-                        .asBitmap()
-                        .load(exoticPets.get(position).getPetImage())
-                        .into(changePetPictureImageView);
+                if(exoticPets.get(position).getCameraPicture() != null ){
+                    Glide.with(mContext)
+                            .asBitmap()
+                            .load(exoticPets.get(position).getCameraPicture())
+                            .into(changePetPictureImageView);
+                }else{
+                    Glide.with(mContext)
+                            .asBitmap()
+                            .load(exoticPets.get(position).getPetImage())
+                            .into(changePetPictureImageView);
+                }
 
                 closeBtn1.setOnClickListener(new View.OnClickListener() {
                     @Override
@@ -277,29 +349,22 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
                     @Override
                     public void onClick(View v) {
 
-
-                            for(ExoticPet exoticPet : petChangePicture){
-                                Picasso.get().load(cameraPicture1).into(holder.pet_ImageView);
-                                executor.execute(() -> {
-                                    exoticPetDao.updatePet(exoticPet);
-                                });
-                                petChangePicture.remove(petPictureToBeChanged);
+                            if (cameraPicture1 != null) {
+                                for(ExoticPet exoticPet : petChangePicture){
+                                    Picasso.get().load(cameraPicture1).into(holder.pet_ImageView);
+                                    executor.execute(() -> {
+                                        exoticPetDao.updatePet(exoticPet);
+                                    });
+                                    alertDialog.dismiss();
+                                    petChangePicture.remove(petPictureToBeChanged);
+                                }
+                            } else{
+                                Toast.makeText(mContext, "Please take a picture", Toast.LENGTH_SHORT).show();
                             }
-
-                            alertDialog.dismiss();
                     }
                 });
             }
         });
-
-//        holder.moreOptionsImageView.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//
-//
-//
-//            }
-//        });
 
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -310,6 +375,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
                 holder.timeFedTextView.setClickable(false);
                 holder.fedDateTextView.setClickable(false);
                 holder.quickfeedButton.setClickable(false);
+                holder.petNameTextView.setClickable(false);
                 addPetButton.setClickable(false);
 
                 if (!isEnable) {
@@ -350,30 +416,41 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
                                     builder.setView(deletePetView);
                                     AlertDialog alertDialog = builder.create();
                                     alertDialog.show();
+                                    TextView deletePetTextView = deletePetView.findViewById(R.id.title_textview);
                                     Button okButton = deletePetView.findViewById(R.id.ok_delete_pet);
                                     Button cancelButton = deletePetView.findViewById(R.id.cancel_delete_pet_alertDialog);
+
+                                    if (selectedPetIdsArrayList.size() > 1){
+                                        deletePetTextView.setText("Are you sure you want to delete these pets?");
+                                    } else {
+                                        deletePetTextView.setText("Are you sure you want to delete this pet?");
+                                    }
 
                                     okButton.setOnClickListener(new View.OnClickListener() {
                                         @Override
                                         public void onClick(View v) {
-                                            for (ExoticPet exoticPet : selectedPetIdsToDeleteArrayList) {
 
+                                            for (ExoticPet exoticPet : selectedPetIdsArrayList) {
                                                 //Remove selected item from array list
                                                 exoticPets.remove(exoticPet);
                                                 executor.execute(() -> {
                                                     exoticPetDao.delete(exoticPet);
                                                 });
                                             }
+
                                             alertDialog.dismiss();
+
                                             if(deletePetView.getParent() != null) {
                                                 ((ViewGroup)deletePetView.getParent()).removeView(deletePetView);
                                             }
+
                                             notifyDataSetChanged();
                                             //Check condition
                                             //Finish action mode
                                             actionMode.finish();
                                         }
                                     });
+
                                     cancelButton.setOnClickListener(new View.OnClickListener() {
                                         @Override
                                         public void onClick(View v) {
@@ -384,6 +461,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
                                             actionMode.finish();
                                         }
                                     });
+
                                     alertDialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
                                         @Override
                                         public void onDismiss(DialogInterface dialog) {
@@ -394,15 +472,16 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
                                         }
                                     });
                                     break;
+
                                 case R.id.menu_select_all:
                                     //When click on select all, check condition
-                                    if (selectedPetIdsToDeleteArrayList.size() == exoticPets.size() || feedPet.size() == exoticPets.size()) {
+                                    if (selectedPetIdsArrayList.size() == exoticPets.size() || feedPet.size() == exoticPets.size()) {
                                         //When all item selected
                                         //Set isSelectAll false
                                         isSelectAll = false;
                                         //Clear select array list
                                         feedPet.clear();
-                                        selectedPetIdsToDeleteArrayList.clear();
+                                        selectedPetIdsArrayList.clear();
                                         notifyDataSetChanged();
                                         break;
                                     } else {
@@ -410,10 +489,11 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
                                         //Set isSelectAll true
                                         isSelectAll = true;
                                         //Clear select array list
-                                        selectedPetIdsToDeleteArrayList.clear();
+                                        selectedPetIdsArrayList.clear();
+                                        feedPet.clear();
                                         //Add all value in select array list
                                         feedPet.addAll(exoticPets);
-                                        selectedPetIdsToDeleteArrayList.addAll(exoticPets);
+                                        selectedPetIdsArrayList.addAll(exoticPets);
                                         notifyDataSetChanged();
                                         break;
                                     }
@@ -448,11 +528,11 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
                             isEnable = false;
                             //Set isSelectAll false
                             isSelectAll = false;
-                            addPetButton.setClickable(true);
                             //Clear select array list
                             feedPet.clear();
-                            selectedPetIdsToDeleteArrayList.clear();
+                            selectedPetIdsArrayList.clear();
                             //Notify adapter
+                            addPetButton.setClickable(true);
                             notifyDataSetChanged();
                         }
                     };
@@ -550,14 +630,14 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
             holder.addPetAnimImageView.setVisibility(View.VISIBLE);
             //Set background color
             feedPet.add(pets);
-            selectedPetIdsToDeleteArrayList.add(pets);
+            selectedPetIdsArrayList.add(pets);
         } else {
             //When item selected
             //Hide check box image
             holder.checkBoxMainImageView.setVisibility(View.VISIBLE);
             holder.addPetAnimImageView.setVisibility(View.GONE);
             feedPet.remove(pets);
-            selectedPetIdsToDeleteArrayList.remove(pets);
+            selectedPetIdsArrayList.remove(pets);
         }
     }
 
