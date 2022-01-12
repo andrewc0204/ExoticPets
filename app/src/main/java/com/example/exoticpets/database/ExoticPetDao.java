@@ -5,6 +5,7 @@ import androidx.room.Delete;
 import androidx.room.Insert;
 import androidx.room.OnConflictStrategy;
 import androidx.room.Query;
+import androidx.room.Update;
 
 import com.example.exoticpets.models.ExoticPet;
 
@@ -21,8 +22,11 @@ public interface ExoticPetDao {
     @Insert
     void insertPet(ExoticPet pet);
 
-    @Insert(onConflict = OnConflictStrategy.REPLACE)
-    void updatePet(ExoticPet pet);
+//    @Insert(onConflict = OnConflictStrategy.REPLACE)
+//    void updatePet(ExoticPet pet);
+
+    @Update
+    void updatePetNow(ExoticPet pet);
 
     @Delete
     void delete(ExoticPet pet);

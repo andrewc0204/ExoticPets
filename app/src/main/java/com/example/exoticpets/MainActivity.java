@@ -385,13 +385,14 @@ public class MainActivity extends AppCompatActivity {
                                 }
                                 pictureTaken = false;
                             }
+
                             exoticPets.add(exoticPet);
-                            mAdapter.notifyItemInserted(exoticPets.size() -1);
+
                             //Insert the data into offline Room on a seperate thread (highway) instead of the UI thread (The main highway)
                             executor.execute(() -> {
                                 exoticPetDao.insertPet(exoticPet);
                             });
-
+                            mAdapter.notifyItemInserted(exoticPets.size() -1);
                         }
                     }
                 });
@@ -410,7 +411,7 @@ public class MainActivity extends AppCompatActivity {
     //This method sets up the RecycleView in the app
     private void initViews() {
         RecyclerView recyclerView = findViewById(R.id.recyclerv_view);
-        mAdapter = new RecyclerViewAdapter(this, exoticPets, changePetPictureView, cameraPicture1, deletePetView, addPetButton,changePetNameView);
+        mAdapter = new RecyclerViewAdapter(this, this, exoticPets, changePetPictureView, cameraPicture1, deletePetView, addPetButton,changePetNameView);
         recyclerView.setAdapter(mAdapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
