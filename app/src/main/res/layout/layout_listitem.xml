@@ -17,7 +17,8 @@
         android:layout_height="wrap_content"
         android:padding="10dp">
 
-        <de.hdodenhof.circleimageview.CircleImageView
+
+        <ImageView
             android:id="@+id/pet_picture_imageview"
             android:layout_width="75dp"
             android:layout_height="75dp"
@@ -33,6 +34,7 @@
             android:layout_toRightOf="@id/pet_picture_imageview"
             android:fontFamily="@font/consola"
             android:text="USA"
+            android:maxLength="15"
             android:textColor="@color/black"
             android:textSize="18dp"
             android:textStyle="bold" />
@@ -107,8 +109,17 @@
             android:layout_alignParentEnd="true"
             android:layout_marginTop="18dp"
             android:layout_marginRight="23dp"
-
             android:src="@drawable/gray_checkbox" />
+
+        <ImageView
+            android:id="@+id/iv_check_box_secondary"
+            android:layout_width="45dp"
+            android:layout_height="45dp"
+            android:layout_alignParentEnd="true"
+            android:layout_marginTop="18dp"
+            android:layout_marginRight="23dp"
+            android:src="@drawable/gray_checkbox"
+            android:visibility="gone"/>
 
         <androidx.cardview.widget.CardView
             android:layout_width="wrap_content"

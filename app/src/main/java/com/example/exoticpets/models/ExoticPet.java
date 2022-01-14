@@ -8,8 +8,11 @@ import java.io.Serializable;
 
 @Entity(tableName = "pet")
 public class ExoticPet implements Serializable {
+
     @PrimaryKey(autoGenerate = true)
     int id;
+    @ColumnInfo(name = "second_id")
+    String secondId;
     @ColumnInfo(name = "pet_name")
     String petName;
     @ColumnInfo(name = "pet_image")
@@ -23,12 +26,22 @@ public class ExoticPet implements Serializable {
 
 
 
-    public ExoticPet(String petName, int petImage, String datePetWasLastFed, String timePetWasLastFed, String cameraPicture) {
+    public ExoticPet(String secondId, String petName, int petImage, String datePetWasLastFed, String timePetWasLastFed, String cameraPicture) {
+        this.secondId = secondId;
         this.petName = petName;
         this.petImage = petImage;
         this.datePetWasLastFed = datePetWasLastFed;
         this.timePetWasLastFed = timePetWasLastFed;
         this.cameraPicture = cameraPicture;
+    }
+
+
+    public String getSecondId() {
+        return secondId;
+    }
+
+    public void setSecondId(String secondId) {
+        this.secondId = secondId;
     }
 
     public String getCameraPicture() {

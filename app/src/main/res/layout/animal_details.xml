@@ -11,7 +11,7 @@
     </include>
 
     <de.hdodenhof.circleimageview.CircleImageView
-        android:id="@+id/pet_picture_imageview"
+        android:id="@+id/pet_picture_imageview1"
         android:layout_width="match_parent"
         android:layout_height="300dp"
         android:src="@mipmap/ic_launcher" />

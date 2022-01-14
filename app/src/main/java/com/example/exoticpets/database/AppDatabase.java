@@ -7,7 +7,7 @@ import com.example.exoticpets.database.ExoticPetDao;
 import com.example.exoticpets.models.ExoticPet;
 
 //3 for testing
-@Database(entities = {ExoticPet.class}, version = 4)
+@Database(entities = {ExoticPet.class}, version = 5)
 public abstract class AppDatabase extends RoomDatabase {
     public abstract ExoticPetDao exoticPetDAO();
 

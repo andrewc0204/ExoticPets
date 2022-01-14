@@ -31,6 +31,13 @@ public interface ExoticPetDao {
     @Delete
     void delete(ExoticPet pet);
 
+    @Query("DELETE FROM pet WHERE second_id = :secondId")
+    void deleteBySecondID(String secondId);
+
+
+//    fiz — Today at 2:02 PM
+//    @Query("DELETE FROM action_object WHERE shared_task_action_id = :sharedActionTaskId")
+//    void delete(String sharedActionTaskId);
 
 
     //This method is returning several pets where the list ArrayList<Integer> intArray; int[] (List)

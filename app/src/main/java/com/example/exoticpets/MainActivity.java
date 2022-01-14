@@ -36,6 +36,7 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.UUID;
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
 
@@ -149,8 +150,10 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+
         //Hides the action bar
         //getSupportActionBar().hide();
+
 
         //create new thread
         executor = Executors.newSingleThreadExecutor();
@@ -161,6 +164,7 @@ public class MainActivity extends AppCompatActivity {
         executor.execute(() -> {
             exoticPets = (ArrayList<ExoticPet>) exoticPetDao.getAll();
         });
+
 
         //Views
         deletePetView = getLayoutInflater().inflate(R.layout.delete_pet_layout, null);
@@ -183,7 +187,7 @@ public class MainActivity extends AppCompatActivity {
         searchForPetTextview = findViewById(R.id.textview_searchForPet);
 
         initViews();
-
+        mAdapter.notifyDataSetChanged();
         //Allows user to take pictures
         easyImage = new EasyImage.Builder(MainActivity.this)
                 //.setChooserTitle("Pick media")
@@ -259,7 +263,7 @@ public class MainActivity extends AppCompatActivity {
                                 if (!pictureTaken) {
                                     Glide.with(MainActivity.this)
                                             .asBitmap()
-                                            .load(R.drawable.spider)
+                                            .load(R.drawable.spidercaca)
                                             .into(defaultImageView);
                                 }
                                 break;
@@ -267,7 +271,7 @@ public class MainActivity extends AppCompatActivity {
                                 if (!pictureTaken) {
                                     Glide.with(MainActivity.this)
                                             .asBitmap()
-                                            .load(R.drawable.frog)
+                                            .load(R.drawable.ic_frog)
                                             .into(defaultImageView);
                                 }
                                 break;
@@ -275,7 +279,7 @@ public class MainActivity extends AppCompatActivity {
                                 if (!pictureTaken) {
                                     Glide.with(MainActivity.this)
                                             .asBitmap()
-                                            .load(R.drawable.snake)
+                                            .load(R.drawable.ic_snake)
                                             .into(defaultImageView);
                                 }
                                 break;
@@ -343,7 +347,7 @@ public class MainActivity extends AppCompatActivity {
                             Toast.makeText(MainActivity.this, "Choose Animal", Toast.LENGTH_SHORT).show();
 
                         } else {
-                            ExoticPet exoticPet = new ExoticPet(null, R.drawable.ladybug, null, null, null);
+                            ExoticPet exoticPet = new ExoticPet(UUID.randomUUID().toString(),null, R.drawable.ladybug, null, null, null);
 
                             if (cameraPicture != null) {
                                 exoticPet.setCameraPicture(String.valueOf(cameraPicture));
@@ -356,15 +360,15 @@ public class MainActivity extends AppCompatActivity {
                                 instructionTextView.setVisibility(View.GONE);
                                 switch (spinnerSelectedPet) {
                                     case "Arachnid":
-                                        exoticPet.setPetImage(R.drawable.spider);
+                                        exoticPet.setPetImage(R.drawable.spidercaca);
                                         alertDialog.dismiss();
                                         break;
                                     case "Amphibian":
-                                        exoticPet.setPetImage(R.drawable.frog);
+                                        exoticPet.setPetImage(R.drawable.ic_frog);
                                         alertDialog.dismiss();
                                         break;
                                     case "Reptile":
-                                        exoticPet.setPetImage(R.drawable.snake);
+                                        exoticPet.setPetImage(R.drawable.ic_snake);
                                         alertDialog.dismiss();
                                         break;
                                     case "Insect":
