@@ -29,10 +29,10 @@
                 android:background="@drawable/ic_close"
                 app:backgroundTint="@color/white" />
 
-            <de.hdodenhof.circleimageview.CircleImageView
+            <ImageView
                 android:id="@+id/change_pet_picture"
-                android:layout_width="200dp"
-                android:layout_height="200dp"
+                android:layout_width="175dp"
+                android:layout_height="175dp"
                 android:layout_centerHorizontal="true"
                 android:layout_marginTop="10dp"
                 android:src="@mipmap/ic_launcher" />

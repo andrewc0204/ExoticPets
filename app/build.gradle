@@ -76,7 +76,7 @@ dependencies {
     }
 
     //Circle ImageView
-    compile 'de.hdodenhof:circleimageview:2.2.0'
+    implementation 'de.hdodenhof:circleimageview:2.2.0'
 
 
 

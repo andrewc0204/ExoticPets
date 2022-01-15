@@ -27,6 +27,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.RequestOptions;
 import com.example.exoticpets.adapters.CustomSpinnerAdapter;
 import com.example.exoticpets.adapters.RecyclerViewAdapter;
 import com.example.exoticpets.database.AppDatabase;
@@ -70,7 +71,7 @@ public class MainActivity extends AppCompatActivity {
 
     //ImageView vars
     private ImageView defaultImageView;
-    private CircleImageView changePetPictureImageView;
+    private ImageView changePetPictureImageView;
 
     //Button Vars
     private AppCompatButton createPetButton;
@@ -116,16 +117,18 @@ public class MainActivity extends AppCompatActivity {
                     if (!mAdapter.changePicture) {
                         Glide.with(MainActivity.this)
                                 .load(new File(String.valueOf(imageFile.getFile())))
+                                .apply(RequestOptions.circleCropTransform())
                                 .into(defaultImageView);
                         cameraPicture = imageFile.getFile();
                         pictureTaken = true;
+                        mAdapter.changePicture = false;
                     } else {
                         Glide.with(MainActivity.this)
                                 .load(new File(String.valueOf(imageFile.getFile())))
+                                .apply(RequestOptions.circleCropTransform())
                                 .into(changePetPictureImageView);
                         cameraPicture1 = imageFile.getFile();
                         mAdapter.changeCameraPicture(cameraPicture1);
-                        mAdapter.changePicture = false;
                     }
                     break;
                 }
@@ -158,7 +161,9 @@ public class MainActivity extends AppCompatActivity {
         //create new thread
         executor = Executors.newSingleThreadExecutor();
         //Database
-        db = Room.databaseBuilder(getApplicationContext(), AppDatabase.class, "pet_database").build();
+        db = Room.databaseBuilder(getApplicationContext(), AppDatabase.class, "pet_database")
+                .fallbackToDestructiveMigration()
+                .build();
         exoticPetDao = db.exoticPetDAO();
 
         executor.execute(() -> {
@@ -271,7 +276,7 @@ public class MainActivity extends AppCompatActivity {
                                 if (!pictureTaken) {
                                     Glide.with(MainActivity.this)
                                             .asBitmap()
-                                            .load(R.drawable.ic_frog)
+                                            .load(R.drawable.frogtest)
                                             .into(defaultImageView);
                                 }
                                 break;
@@ -287,7 +292,7 @@ public class MainActivity extends AppCompatActivity {
                                 if (!pictureTaken) {
                                     Glide.with(MainActivity.this)
                                             .asBitmap()
-                                            .load(R.drawable.ladybug)
+                                            .load(R.drawable.ic_ant)
                                             .into(defaultImageView);
                                 }
                                 break;
@@ -364,7 +369,7 @@ public class MainActivity extends AppCompatActivity {
                                         alertDialog.dismiss();
                                         break;
                                     case "Amphibian":
-                                        exoticPet.setPetImage(R.drawable.ic_frog);
+                                        exoticPet.setPetImage(R.drawable.frogtest);
                                         alertDialog.dismiss();
                                         break;
                                     case "Reptile":
@@ -372,7 +377,7 @@ public class MainActivity extends AppCompatActivity {
                                         alertDialog.dismiss();
                                         break;
                                     case "Insect":
-                                        exoticPet.setPetImage(R.drawable.ladybug);
+                                        exoticPet.setPetImage(R.drawable.ic_ant);
                                         alertDialog.dismiss();
                                         break;
                                     case "Fish":

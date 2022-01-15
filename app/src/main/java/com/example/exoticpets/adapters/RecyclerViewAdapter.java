@@ -56,6 +56,8 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
     public ArrayList<ExoticPet> changePetFedTime = new ArrayList<>();
     public ArrayList<ExoticPet> quickFeedPets = new ArrayList<>();
     public ArrayList<ExoticPet> petChangePicture = new ArrayList<>();
+    public ArrayList<ExoticPet> addAllExoticPets = new ArrayList<>();
+
 
     private ExoticPetDao exoticPetDao;
     public static Executor executor;
@@ -69,9 +71,11 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
     public boolean changePicture = false;
     boolean isEnable = false;
     boolean isSelectAll = false;
+    boolean turnOnButtons = false;
     MainActivity mainActivity;
 
-    public RecyclerViewAdapter(Context context, MainActivity mainActivity, ArrayList<ExoticPet> exoticPets, View changePetPictureView, File cameraPicture1, View deletePetView, FloatingActionButton addPetButton, View changePetNameView) {
+    public RecyclerViewAdapter(Context context, MainActivity mainActivity, ArrayList<ExoticPet> exoticPets, View changePetPictureView, File cameraPicture1,
+                               View deletePetView, FloatingActionButton addPetButton, View changePetNameView) {
         this.mContext = context;
         this.exoticPets = exoticPets;
         this.changePetPictureView = changePetPictureView;
@@ -80,6 +84,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
         this.addPetButton = addPetButton;
         this.changePetNameView = changePetNameView;
         this.mainActivity = mainActivity;
+
     }
 
     //This method is responsible for inflating the view
@@ -104,6 +109,22 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
     @Override
     public void onBindViewHolder(RecyclerViewAdapter.ViewHolder holder, int position) {
 
+//        if(!isEnable){
+//
+//            holder.pet_ImageView.setClickable(false);
+//            holder.timeFedTextView.setClickable(false);
+//            holder.fedDateTextView.setClickable(false);
+//            holder.quickfeedButton.setClickable(false);
+//            holder.petNameTextView.setClickable(false);
+//            addPetButton.setClickable(false);
+//        }else{
+//            holder.pet_ImageView.setClickable(true);
+//            holder.timeFedTextView.setClickable(true);
+//            holder.fedDateTextView.setClickable(true);
+//            holder.quickfeedButton.setClickable(true);
+//            holder.petNameTextView.setClickable(true);
+//            addPetButton.setClickable(true);
+//        }
 
         if (exoticPets.get(position).getWhenPetWasLastFed() != null) {
             holder.fedDateTextView.setVisibility(View.VISIBLE);
@@ -116,13 +137,12 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
         }
 
         if (exoticPets.get(position).getCameraPicture() != null) {
-            Glide.with(mContext)
+                    Glide.with(mContext)
                     .asBitmap()
                     .load(exoticPets.get(position).getCameraPicture())
                     .apply(RequestOptions.circleCropTransform())
                     .into(holder.pet_ImageView);
         } else {
-
             Glide.with(mContext)
                     .asBitmap()
                     .load(exoticPets.get(position).getPetImage())
@@ -313,7 +333,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
 
                 AppCompatButton changePetPictureButton = changePetPictureView.findViewById(R.id.change_picture_button);
                 Button closeBtn1 = changePetPictureView.findViewById(R.id.close_btn1);
-                CircleImageView changePetPictureImageView = changePetPictureView.findViewById(R.id.change_pet_picture);
+                ImageView changePetPictureImageView = changePetPictureView.findViewById(R.id.change_pet_picture);
 
 
                 ExoticPet petPictureToBeChanged = exoticPets.get(holder.getAbsoluteAdapterPosition());
@@ -328,6 +348,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
                     Glide.with(mContext)
                             .asBitmap()
                             .load(exoticPets.get(position).getCameraPicture())
+                            .apply(RequestOptions.circleCropTransform())
                             .into(changePetPictureImageView);
                 } else {
                     Glide.with(mContext)
@@ -360,7 +381,10 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
 
                         if (cameraPicture1 != null) {
                             for (ExoticPet exoticPet : petChangePicture) {
-                                Picasso.get().load(cameraPicture1).into(holder.pet_ImageView);
+                                Picasso.get()
+                                        .load(cameraPicture1)
+                                        .transform(new CropCircleTransformation())
+                                        .into(holder.pet_ImageView);
                                 executor.execute(() -> {
                                     exoticPetDao.updatePetNow(exoticPet);
                                 });
@@ -389,15 +413,15 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
             public void onClick(View view) {
 
 
-                holder.pet_ImageView.setClickable(false);
-                holder.timeFedTextView.setClickable(false);
-                holder.fedDateTextView.setClickable(false);
-                holder.quickfeedButton.setClickable(false);
-                holder.petNameTextView.setClickable(false);
-                addPetButton.setClickable(false);
+//                holder.pet_ImageView.setClickable(false);
+//                holder.timeFedTextView.setClickable(false);
+//                holder.fedDateTextView.setClickable(false);
+//                holder.quickfeedButton.setClickable(false);
+//                holder.petNameTextView.setClickable(false);
+//                addPetButton.setClickable(false);
+
 
                 if (!isEnable) {
-
                     //When action mode is not enable
                     //Initialize action mode
                     ActionMode.Callback callback = new ActionMode.Callback() {
@@ -406,7 +430,6 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
                             //Initialize menu inflater
                             MenuInflater menuInflater = actionMode.getMenuInflater();
                             //Inflate menu
-
                             menuInflater.inflate(R.menu.selectallmenu, menu);
 
                             return true;
@@ -414,16 +437,15 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
 
                         @Override
                         public boolean onPrepareActionMode(ActionMode actionMode, Menu menu) {
-                            //When action mode is prepare, set isEnable true
                             isEnable = true;
-
-
+                            turnOnButtons = false;
                             ClickItem(holder);
                             return true;
                         }
 
                         @Override
                         public boolean onActionItemClicked(ActionMode actionMode, MenuItem menuItem) {
+
                             //When click on action mode item, get item id
                             int id = menuItem.getItemId();
                             //When click on delete, user for loop
@@ -551,6 +573,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
 
                         @Override
                         public void onDestroyActionMode(ActionMode actionMode) {
+                            turnOnButtons = true;
                             //When action mode is destroy, set isEnable false
                             isEnable = false;
                             //Set isSelectAll false
@@ -561,6 +584,8 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
                             //Notify adapter
                             addPetButton.setClickable(true);
                             notifyDataSetChanged();
+
+
                         }
                     };
                     //Start action mode
