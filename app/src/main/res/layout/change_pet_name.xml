@@ -41,14 +41,14 @@
                 android:id="@+id/edittext_pet_name"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_centerHorizontal="true"
                 android:layout_below="@id/layout_line"
+                android:layout_centerHorizontal="true"
                 android:fontFamily="@font/consola"
                 android:gravity="center"
                 android:hint="Pet Name"
                 android:maxLines="1"
                 android:singleLine="true"
-
+                android:maxLength="15"
                 android:textColor="@color/white" />
 
             <Button

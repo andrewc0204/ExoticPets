@@ -41,7 +41,6 @@ import java.util.UUID;
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
 
-import de.hdodenhof.circleimageview.CircleImageView;
 import pl.aprilapps.easyphotopicker.ChooserType;
 import pl.aprilapps.easyphotopicker.DefaultCallback;
 import pl.aprilapps.easyphotopicker.EasyImage;
@@ -92,7 +91,7 @@ public class MainActivity extends AppCompatActivity {
     private File cameraPicture1;
 
     //Room vars
-    private AppDatabase db;
+    private AppDatabase appDatabase;
     private ExoticPetDao exoticPetDao;
     public static Executor executor;
 
@@ -161,14 +160,15 @@ public class MainActivity extends AppCompatActivity {
         //create new thread
         executor = Executors.newSingleThreadExecutor();
         //Database
-        db = Room.databaseBuilder(getApplicationContext(), AppDatabase.class, "pet_database")
+        appDatabase = Room.databaseBuilder(getApplicationContext(), AppDatabase.class, "pet_database")
                 .fallbackToDestructiveMigration()
                 .build();
-        exoticPetDao = db.exoticPetDAO();
+        exoticPetDao = appDatabase.exoticPetDAO();
 
         executor.execute(() -> {
             exoticPets = (ArrayList<ExoticPet>) exoticPetDao.getAll();
         });
+
 
 
         //Views
@@ -208,6 +208,11 @@ public class MainActivity extends AppCompatActivity {
                 .allowMultiple(true)
                 .build();
 
+//        if (exoticPets.isEmpty()){
+//            instructionTextView.setVisibility(View.VISIBLE);
+//        }else{
+//            instructionTextView.setVisibility(View.GONE);
+//        }
         //Change pet picture feature
         changePetCameraImageButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -354,15 +359,16 @@ public class MainActivity extends AppCompatActivity {
                         } else {
                             ExoticPet exoticPet = new ExoticPet(UUID.randomUUID().toString(),null, R.drawable.ladybug, null, null, null);
 
-                            if (cameraPicture != null) {
+                            if (cameraPicture != null && pictureTaken == true) {
                                 exoticPet.setCameraPicture(String.valueOf(cameraPicture));
                                 exoticPet.setPetName(petNameEditText.getText().toString());
-                                instructionTextView.setVisibility(View.GONE);
+//                                instructionTextView.setVisibility(View.GONE);
                                 alertDialog.dismiss();
                             } else {
+                                pictureTaken = false;
                                 exoticPet.setPetName(petNameEditText.getText().toString());
                                 //Sets text to disappear once the user adds a pet
-                                instructionTextView.setVisibility(View.GONE);
+//                                instructionTextView.setVisibility(View.GONE);
                                 switch (spinnerSelectedPet) {
                                     case "Arachnid":
                                         exoticPet.setPetImage(R.drawable.spidercaca);
@@ -392,9 +398,8 @@ public class MainActivity extends AppCompatActivity {
                                         Toast.makeText(MainActivity.this, "Type Pet Name", Toast.LENGTH_SHORT).show();
                                         break;
                                 }
-                                pictureTaken = false;
                             }
-
+                            pictureTaken = false;
                             exoticPets.add(exoticPet);
 
                             //Insert the data into offline Room on a seperate thread (highway) instead of the UI thread (The main highway)
@@ -420,7 +425,7 @@ public class MainActivity extends AppCompatActivity {
     //This method sets up the RecycleView in the app
     private void initViews() {
         RecyclerView recyclerView = findViewById(R.id.recyclerv_view);
-        mAdapter = new RecyclerViewAdapter(this, this, exoticPets, changePetPictureView, cameraPicture1, deletePetView, addPetButton,changePetNameView);
+        mAdapter = new RecyclerViewAdapter(this, this, exoticPets, changePetPictureView, cameraPicture1, deletePetView, addPetButton,changePetNameView,instructionTextView);
         recyclerView.setAdapter(mAdapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
 

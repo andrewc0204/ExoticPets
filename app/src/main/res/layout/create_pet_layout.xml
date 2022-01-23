@@ -63,8 +63,8 @@
                 android:fontFamily="@font/consola"
                 android:gravity="center"
                 android:hint="Pet Name"
-                android:maxLines="1"
                 android:maxLength="15"
+                android:maxLines="1"
                 android:singleLine="true"
                 android:textColor="@color/white" />
 

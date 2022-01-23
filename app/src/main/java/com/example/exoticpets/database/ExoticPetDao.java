@@ -19,14 +19,18 @@ public interface ExoticPetDao {
     @Insert
     void insertAll(ExoticPet... pets);
 
+
     @Insert
     void insertPet(ExoticPet pet);
 
-//    @Insert(onConflict = OnConflictStrategy.REPLACE)
-//    void updatePet(ExoticPet pet);
+//    @Query ("UPDATE pet SET pet_name = :petName ")
+//    void updatePetName(String petName);
 
     @Update
-    void updatePetNow(ExoticPet pet);
+    void updateNow (ExoticPet pet);
+
+//    @Update(onConflict = OnConflictStrategy.REPLACE)
+//    void updateNow (ExoticPet pet);
 
     @Delete
     void delete(ExoticPet pet);
