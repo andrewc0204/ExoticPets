@@ -28,6 +28,7 @@ import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
+import com.example.exoticpets.ViewModels.MainActivityViewModel;
 import com.example.exoticpets.adapters.CustomSpinnerAdapter;
 import com.example.exoticpets.adapters.RecyclerViewAdapter;
 import com.example.exoticpets.database.AppDatabase;
@@ -100,6 +101,9 @@ public class MainActivity extends AppCompatActivity {
 //    public static final String SHARED_PREFS = "sharedPrefs";
 //    public static final String TEXT = "sharedPrefs";
 //    public static final String KEY_CONNECTIONS = "KEY_CONNECTIONS";
+
+    //ViewModels
+    private MainActivityViewModel mainActivityViewModel;
 
 
     //Camera Feature
@@ -208,11 +212,7 @@ public class MainActivity extends AppCompatActivity {
                 .allowMultiple(true)
                 .build();
 
-//        if (exoticPets.isEmpty()){
-//            instructionTextView.setVisibility(View.VISIBLE);
-//        }else{
-//            instructionTextView.setVisibility(View.GONE);
-//        }
+
         //Change pet picture feature
         changePetCameraImageButton.setOnClickListener(new View.OnClickListener() {
             @Override

@@ -6,7 +6,7 @@ import androidx.room.RoomDatabase;
 import com.example.exoticpets.models.ExoticPet;
 
 
-@Database(entities = {ExoticPet.class}, version = 5)
+@Database(entities = {ExoticPet.class}, version = 6)
 public abstract class AppDatabase extends RoomDatabase {
 
     public abstract ExoticPetDao exoticPetDAO();

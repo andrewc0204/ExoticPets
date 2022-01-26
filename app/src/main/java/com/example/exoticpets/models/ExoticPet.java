@@ -17,7 +17,7 @@ public class ExoticPet implements Serializable {
     String petName;
     @ColumnInfo(name = "pet_image")
     int  petImage;
-    @ColumnInfo(name = "last_fed")
+    @ColumnInfo(name = "last_date_fed")
     String datePetWasLastFed;
     @ColumnInfo(name = "last_time_fed")
     String timePetWasLastFed;
