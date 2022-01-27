@@ -38,6 +38,7 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.squareup.picasso.Picasso;
 
 import java.io.File;
+import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -265,15 +266,20 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
                 int month = calendar.get(Calendar.MONTH);
                 int day = calendar.get(Calendar.DAY_OF_MONTH);
 
+
                 DatePickerDialog datePickerDialog = new DatePickerDialog(mContext, new DatePickerDialog.OnDateSetListener() {
                     @Override
                     public void onDateSet(DatePicker view, int year, int month, int day) {
-                        month = month + 1;
-                        String date = month + "/" + day + "/" + year;
+
+                        calendar.set(Calendar.YEAR, year);
+                        calendar.set(Calendar.MONTH, month);
+                        calendar.set(Calendar.DAY_OF_MONTH, day);
+                        SimpleDateFormat df = new SimpleDateFormat("MMM/dd/yyyy");
+                        String formattedDate = df.format(calendar.getTime());
 
                         for (ExoticPet exoticPet : exoticPets) {
-                            exoticPet.setDatePetWasLastFed(date);
-                            holder.fedDateTextView.setText(exoticPet.getDatePetWasLastFed());
+                            exoticPets.get(position).setDatePetWasLastFed(formattedDate);
+                            holder.fedDateTextView.setText(exoticPets.get(position).getDatePetWasLastFed());
                             executor.execute(() -> {
                                 exoticPetDao.updateDateFed(exoticPet.getDatePetWasLastFed(), exoticPet.getSecondId());
                             });
@@ -326,9 +332,8 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
                         String time = choosedHour + ":" + choosedMinute + " " + choosedTimeZone;
 
                         for (ExoticPet exoticPet: exoticPets){
-
-                            exoticPet.setTimePetWasLastFed(time);
-                            holder.timeFedTextView.setText(exoticPet.getTimePetWasLastFed());
+                            exoticPets.get(position).setTimePetWasLastFed(time);
+                            holder.timeFedTextView.setText(exoticPets.get(position).getTimePetWasLastFed());
                             executor.execute(() -> {
                                 exoticPetDao.updateTimeFed(exoticPet.getTimePetWasLastFed(), exoticPet.getSecondId());
                             });
