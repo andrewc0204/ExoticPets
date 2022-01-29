@@ -33,10 +33,10 @@
             android:layout_marginTop="25dp"
             android:layout_toRightOf="@id/pet_picture_imageview"
             android:fontFamily="@font/consola"
-            android:text="USA"
             android:maxLength="15"
+            android:text="USA"
             android:textColor="@color/black"
-            android:textSize="18dp"
+            android:textSize="20dp"
             android:textStyle="bold" />
 
         <ImageView
@@ -56,6 +56,7 @@
             android:layout_below="@+id/pet_picture_imageview"
             android:layout_marginLeft="20dp"
             android:layout_marginTop="30dp"
+            android:textSize="15dp"
             android:fontFamily="@font/consola"
             android:text="Last Fed:" />
 
@@ -64,11 +65,11 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@id/pet_picture_imageview"
-            android:layout_toEndOf="@id/last_fed"
             android:layout_marginTop="30dp"
+            android:layout_toEndOf="@id/last_fed"
             android:fontFamily="@font/consola"
-            android:text="Date"
-            android:visibility="gone"/>
+            android:textSize="15dp"
+            android:text="Date" />
 
         <TextView
             android:id="@+id/time_textview"
@@ -76,18 +77,20 @@
             android:layout_height="wrap_content"
             android:layout_below="@id/last_fed"
             android:layout_marginLeft="20dp"
+            android:layout_marginTop="5dp"
+            android:textSize="15dp"
             android:fontFamily="@font/consola"
-            android:text="Time:"
-            />
+            android:text="Time:" />
 
         <TextView
             android:id="@+id/timefed_textview"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@id/last_fed"
+            android:layout_marginTop="5dp"
             android:layout_toRightOf="@id/time_textview"
             android:text="Time Fed"
-            android:visibility="gone"/>
+            android:textSize="15dp" />
 
         <com.airbnb.lottie.LottieAnimationView
             android:id="@+id/add_pet_json"

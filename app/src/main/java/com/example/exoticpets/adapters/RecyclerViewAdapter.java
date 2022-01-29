@@ -56,7 +56,6 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
     public ArrayList<ExoticPet> changePetFedTime = new ArrayList<>();
     public ArrayList<ExoticPet> quickFeedPets = new ArrayList<>();
     public ArrayList<ExoticPet> petChangePicture = new ArrayList<>();
-    public ArrayList<ExoticPet> addAllExoticPets = new ArrayList<>();
 
 
     //Room
@@ -86,7 +85,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
     public boolean changePicture = false;
     boolean isEnable = false;
     boolean isSelectAll = false;
-    boolean turnOnButtons = false;
+
 
 
     public RecyclerViewAdapter(Context context, MainActivity mainActivity, ArrayList<ExoticPet> exoticPets, View changePetPictureView, File cameraPicture1,
@@ -125,22 +124,6 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
     @Override
     public void onBindViewHolder(RecyclerViewAdapter.ViewHolder holder, int position) {
 
-//        if(!isEnable){
-//
-//            holder.pet_ImageView.setClickable(false);
-//            holder.timeFedTextView.setClickable(false);
-//            holder.fedDateTextView.setClickable(false);
-//            holder.quickfeedButton.setClickable(false);
-//            holder.petNameTextView.setClickable(false);
-//            addPetButton.setClickable(false);
-//        }else{
-//            holder.pet_ImageView.setClickable(true);
-//            holder.timeFedTextView.setClickable(true);
-//            holder.fedDateTextView.setClickable(true);
-//            holder.quickfeedButton.setClickable(true);
-//            holder.petNameTextView.setClickable(true);
-//            addPetButton.setClickable(true);
-//        }
         //Sets the Feed date visibility
         if (exoticPets.get(position).getWhenPetWasLastFed() != null) {
             holder.fedDateTextView.setVisibility(View.VISIBLE);
@@ -152,7 +135,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
             holder.timeFedTextView.setVisibility(View.GONE);
         }
 
-        //
+        //Sets the pet picture
         if (exoticPets.get(position).getCameraPicture() != null) {
             Glide.with(mContext)
                     .asBitmap()
@@ -175,6 +158,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
 
         holder.petNameTextView.setText(exoticPets.get(position).getPetName());
 
+        //Changes Pet Name
         holder.petNameTextView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -230,6 +214,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
             }
         });
 
+        //Quick Feed function
         holder.quickfeedButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -258,6 +243,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
             }
         });
 
+        //Changes the date pet is fed
         holder.fedDateTextView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -290,6 +276,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
             }
         });
 
+        //Changes the time pet is fed
         holder.timeFedTextView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -305,6 +292,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
                         String choosedHour = "";
                         String choosedMinute = "";
                         String choosedTimeZone = "";
+
                         if (selectedHour > 12) {
                             choosedTimeZone = "PM";
                             selectedHour = selectedHour - 12;
@@ -321,17 +309,15 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
                                 choosedHour = "" + selectedHour;
                             }
                         }
-
                         if (selectedMinute < 10) {
                             choosedMinute = "0" + selectedMinute;
                         } else {
                             choosedMinute = "" + selectedMinute;
                         }
 
-
                         String time = choosedHour + ":" + choosedMinute + " " + choosedTimeZone;
 
-                        for (ExoticPet exoticPet: exoticPets){
+                        for (ExoticPet exoticPet : exoticPets) {
                             exoticPets.get(position).setTimePetWasLastFed(time);
                             holder.timeFedTextView.setText(exoticPets.get(position).getTimePetWasLastFed());
                             executor.execute(() -> {
@@ -344,7 +330,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
             }
         });
 
-
+        //Changes the pet picture
         holder.pet_ImageView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -419,19 +405,10 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
         });
 
 
-
+        //Enables user to click multiple of pets
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
-
-//                holder.pet_ImageView.setClickable(false);
-//                holder.timeFedTextView.setClickable(false);
-//                holder.fedDateTextView.setClickable(false);
-//                holder.quickfeedButton.setClickable(false);
-//                holder.petNameTextView.setClickable(false);
-//                addPetButton.setClickable(false);
-
 
                 if (!isEnable) {
                     //When action mode is not enable
@@ -450,7 +427,6 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
                         @Override
                         public boolean onPrepareActionMode(ActionMode actionMode, Menu menu) {
                             isEnable = true;
-                            turnOnButtons = false;
                             ClickItem(holder);
                             return true;
                         }
@@ -492,8 +468,6 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
                                                     exoticPetDao.deleteBySecondID(exoticPet.getSecondId());
                                                 });
 
-
-                                                Toast.makeText(mContext, "" + exoticPet.getId(), Toast.LENGTH_SHORT).show();
 
                                                 notifyDataSetChanged();
 
@@ -591,7 +565,6 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
 
                         @Override
                         public void onDestroyActionMode(ActionMode actionMode) {
-                            turnOnButtons = true;
                             //When action mode is destroy, set isEnable false
                             isEnable = false;
                             //Set isSelectAll false
@@ -616,58 +589,37 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
                 }
 
 
-//                Intent intent = new Intent(mContext, AnimalDetails.class);
-//                Bundle bundle = new Bundle();
-//                bundle.putSerializable("exotic_pet", exoticPets.get(position));
-//                bundle.putSerializable("pet_picture", exoticPets.get(position).getPetImage());
-//                bundle.putSerializable("pet_name", exoticPets.get(position).getPetName());
-//
-//
-//                intent.putExtras(bundle);
-//                mContext.startActivity(intent);
-
-
             }
         });
 
-
-        holder.itemView.setOnLongClickListener(new View.OnLongClickListener() {
-            @Override
-            public boolean onLongClick(View view) {
-
-
-                return true;
-            }
-        });
-
-        holder.addPetAnimImageView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (isEnable) {
-                    //When action mode is enable
-                    //Call method
-                    ClickItem(holder);
-                } else {
-                    //When action mode is not enable
-                    //Display toast
-                    Log.d("TAG", "You clicked me");
-                }
-            }
-        });
-        holder.checkBoxMainImageView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (isEnable) {
-                    //When action mode is enable
-                    //Call method
-                    ClickItem(holder);
-                } else {
-                    //When action mode is not enable
-                    //Display toast
-                    Log.d("TAG", "You clicked me");
-                }
-            }
-        });
+//        holder.addPetAnimImageView.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                if (isEnable) {
+//                    //When action mode is enable
+//                    //Call method
+//                    ClickItem(holder);
+//                } else {
+//                    //When action mode is not enable
+//                    //Display toast
+//                    Log.d("TAG", "You clicked me");
+//                }
+//            }
+//        });
+//        holder.checkBoxMainImageView.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                if (isEnable) {
+//                    //When action mode is enable
+//                    //Call method
+//                    ClickItem(holder);
+//                } else {
+//                    //When action mode is not enable
+//                    //Display toast
+//                    Log.d("TAG", "You clicked me");
+//                }
+//            }
+//        });
 
 
         //Check condition
@@ -684,6 +636,9 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
             holder.addPetAnimImageView.setVisibility(View.GONE);
         }
     }
+
+
+
 
 
     private void ClickItem(ViewHolder holder) {
@@ -708,13 +663,13 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
             feedPet.remove(pets);
             selectedPetIdsArrayList.remove(pets);
         }
+
     }
 
 
     //This tell the adapter how many list items are in the list
     @Override
     public int getItemCount() {
-
         return exoticPets.size();
     }
 
@@ -722,7 +677,6 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
     //ViewHolder holds the each individual widget in memory
     //Where we initialize data
     public class ViewHolder extends RecyclerView.ViewHolder {
-
 
         LottieAnimationView addPetAnimImageView;
         ImageView pet_ImageView;
@@ -753,9 +707,21 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
         this.cameraPicture1 = cameraPicture;
     }
 
-
     public void updateDisplayedPets(ArrayList<ExoticPet> searchedPets) {
         exoticPets = searchedPets;
     }
 
+    public void updatePets(ArrayList <ExoticPet> updatePet){
+        exoticPets = updatePet;
+    }
+
 }
+//                Intent intent = new Intent(mContext, AnimalDetails.class);
+//                Bundle bundle = new Bundle();
+//                bundle.putSerializable("exotic_pet", exoticPets.get(position));
+//                bundle.putSerializable("pet_picture", exoticPets.get(position).getPetImage());
+//                bundle.putSerializable("pet_name", exoticPets.get(position).getPetName());
+//
+//
+//                intent.putExtras(bundle);
+//                mContext.startActivity(intent);

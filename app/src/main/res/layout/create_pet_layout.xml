@@ -49,7 +49,7 @@
                 android:layout_below="@id/title_textview"
                 android:layout_centerHorizontal="true"
                 android:layout_marginTop="12dp"
-                android:src="@drawable/ic_pawprint" />
+                android:src="@drawable/ic_paw_print" />
 
             <EditText
                 android:id="@+id/edittext_pet_name"

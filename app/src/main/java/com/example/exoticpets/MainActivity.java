@@ -150,16 +150,10 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
-
-        //Hides the action bar
-        //getSupportActionBar().hide();
-
 
         //create new thread
         executor = Executors.newSingleThreadExecutor();
@@ -315,7 +309,7 @@ public class MainActivity extends AppCompatActivity {
                                 if (!pictureTaken) {
                                     Glide.with(MainActivity.this)
                                             .asBitmap()
-                                            .load(R.drawable.ic_pawprint)
+                                            .load(R.drawable.ic_paw_print)
                                             .into(defaultImageView);
                                 }
                                 break;
@@ -362,13 +356,11 @@ public class MainActivity extends AppCompatActivity {
                             if (cameraPicture != null && pictureTaken == true) {
                                 exoticPet.setCameraPicture(String.valueOf(cameraPicture));
                                 exoticPet.setPetName(petNameEditText.getText().toString());
-//                                instructionTextView.setVisibility(View.GONE);
                                 alertDialog.dismiss();
                             } else {
                                 pictureTaken = false;
                                 exoticPet.setPetName(petNameEditText.getText().toString());
-                                //Sets text to disappear once the user adds a pet
-//                                instructionTextView.setVisibility(View.GONE);
+
                                 switch (spinnerSelectedPet) {
                                     case "Arachnid":
                                         exoticPet.setPetImage(R.drawable.spidercaca);
@@ -391,22 +383,26 @@ public class MainActivity extends AppCompatActivity {
                                         alertDialog.dismiss();
                                         break;
                                     case "Other":
-                                        exoticPet.setPetImage(R.drawable.antdrawing);
+                                        exoticPet.setPetImage(R.drawable.ic_black_paw_print);
                                         alertDialog.dismiss();
                                         break;
                                     default:
                                         Toast.makeText(MainActivity.this, "Type Pet Name", Toast.LENGTH_SHORT).show();
                                         break;
                                 }
+
                             }
+
                             pictureTaken = false;
                             exoticPets.add(exoticPet);
-
+                            Toast.makeText(MainActivity.this, exoticPets.size() + "", Toast.LENGTH_SHORT).show();
+                            mAdapter.updatePets(exoticPets);
+                            mAdapter.notifyItemInserted(exoticPets.size());
                             //Insert the data into offline Room on a seperate thread (highway) instead of the UI thread (The main highway)
                             executor.execute(() -> {
                                 exoticPetDao.insertPet(exoticPet);
                             });
-                            mAdapter.notifyItemInserted(exoticPets.size() -1);
+
                         }
                     }
                 });
@@ -417,7 +413,6 @@ public class MainActivity extends AppCompatActivity {
                         pictureTaken = false;
                     }
                 });
-
             }
         });
     }
