@@ -47,11 +47,10 @@ import jp.wasabeef.picasso.transformations.CropCircleTransformation;
 
 public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapter.ViewHolder> {
 
+    //ArrayLists
     public ArrayList<ExoticPet> exoticPets;
     public ArrayList<ExoticPet> selectedPetIdsArrayList = new ArrayList<>();
     public ArrayList<ExoticPet> feedPet = new ArrayList<>();
-    public ArrayList<ExoticPet> changePetFedDate = new ArrayList<>();
-    public ArrayList<ExoticPet> changePetFedTime = new ArrayList<>();
     public ArrayList<ExoticPet> quickFeedPets = new ArrayList<>();
     public ArrayList<ExoticPet> petChangePicture = new ArrayList<>();
 
@@ -83,7 +82,6 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
     public boolean changePicture = false;
     boolean isEnable = false;
     boolean isSelectAll = false;
-
 
 
     public RecyclerViewAdapter(Context context, MainActivity mainActivity, ArrayList<ExoticPet> exoticPets, View changePetPictureView, File cameraPicture1,
@@ -123,15 +121,20 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
     public void onBindViewHolder(RecyclerViewAdapter.ViewHolder holder, int position) {
 
         //Sets the Feed date visibility
-        if (exoticPets.get(position).getWhenPetWasLastFed() != null) {
+        if (exoticPets.get(position).getDatePetWasLastFed() != null) {
             holder.fedDateTextView.setVisibility(View.VISIBLE);
-            holder.timeFedTextView.setVisibility(View.VISIBLE);
             holder.fedDateTextView.setText(exoticPets.get(position).getDatePetWasLastFed());
-            holder.timeFedTextView.setText(exoticPets.get(position).getTimePetWasLastFed());
         } else {
             holder.fedDateTextView.setVisibility(View.GONE);
+        }
+
+        if (exoticPets.get(position).getTimePetWasLastFed() != null) {
+            holder.timeFedTextView.setVisibility(View.VISIBLE);
+            holder.timeFedTextView.setText(exoticPets.get(position).getTimePetWasLastFed());
+        } else {
             holder.timeFedTextView.setVisibility(View.GONE);
         }
+
 
         //Sets the pet picture
         if (exoticPets.get(position).getCameraPicture() != null) {
@@ -241,10 +244,9 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
             }
         });
 
-        //Changes the date pet is fed
-        holder.fedDateTextView.setOnClickListener(new View.OnClickListener() {
+        holder.lastFedTextView.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v) {
+            public void onClick(View view) {
                 Calendar calendar = Calendar.getInstance();
                 int year = calendar.get(Calendar.YEAR);
                 int month = calendar.get(Calendar.MONTH);
@@ -264,6 +266,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
                         for (ExoticPet exoticPet : exoticPets) {
                             exoticPets.get(position).setDatePetWasLastFed(formattedDate);
                             holder.fedDateTextView.setText(exoticPets.get(position).getDatePetWasLastFed());
+                            notifyDataSetChanged();
                             executor.execute(() -> {
                                 exoticPetDao.updateDateFed(exoticPet.getDatePetWasLastFed(), exoticPet.getSecondId());
                             });
@@ -274,12 +277,9 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
             }
         });
 
-        //Changes the time pet is fed
-        holder.timeFedTextView.setOnClickListener(new View.OnClickListener() {
+        holder.timeTextView.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v) {
-                ExoticPet changeFedTime = exoticPets.get(holder.getAbsoluteAdapterPosition());
-                changePetFedTime.add(changeFedTime);
+            public void onClick(View view) {
                 Calendar currentTime = Calendar.getInstance();
                 int min = currentTime.get(Calendar.MINUTE);
                 int hour = currentTime.get(Calendar.HOUR_OF_DAY);
@@ -318,6 +318,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
                         for (ExoticPet exoticPet : exoticPets) {
                             exoticPets.get(position).setTimePetWasLastFed(time);
                             holder.timeFedTextView.setText(exoticPets.get(position).getTimePetWasLastFed());
+                            notifyDataSetChanged();
                             executor.execute(() -> {
                                 exoticPetDao.updateTimeFed(exoticPet.getTimePetWasLastFed(), exoticPet.getSecondId());
                             });
@@ -325,6 +326,21 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
                     }
                 }, hour, min, false);
                 timePickerDialog.show();
+            }
+        });
+        //Changes the date pet is fed
+        holder.fedDateTextView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+            }
+        });
+
+        //Changes the time pet is fed
+        holder.timeFedTextView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
             }
         });
 
@@ -636,9 +652,6 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
     }
 
 
-
-
-
     private void ClickItem(ViewHolder holder) {
         //Get the selected item value
 
@@ -681,6 +694,8 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
         TextView petNameTextView;
         TextView fedDateTextView;
         TextView timeFedTextView;
+        TextView lastFedTextView;
+        TextView timeTextView;
         ImageView checkBoxMainImageView;
         ImageView checkBoxSecondaryImageView;
         ImageView animalDetailsArrowImageView;
@@ -690,13 +705,15 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
             super(itemView);
 
             pet_ImageView = itemView.findViewById(R.id.pet_picture_imageview);
-            petNameTextView = itemView.findViewById(R.id.pet_name_textview);
             addPetAnimImageView = itemView.findViewById(R.id.add_pet_json);
             animalDetailsArrowImageView = itemView.findViewById(R.id.animal_details_arrow);
             checkBoxMainImageView = itemView.findViewById(R.id.iv_check_box_main);
             checkBoxSecondaryImageView = itemView.findViewById(R.id.iv_check_box_secondary);
+            petNameTextView = itemView.findViewById(R.id.pet_name_textview);
             fedDateTextView = itemView.findViewById(R.id.fed_date);
             timeFedTextView = itemView.findViewById(R.id.timefed_textview);
+            lastFedTextView = itemView.findViewById(R.id.last_fed_textview);
+            timeTextView = itemView.findViewById(R.id.time_textview);
             quickfeedButton = itemView.findViewById(R.id.quick_feed_button);
         }
     }
@@ -709,7 +726,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
         exoticPets = searchedPets;
     }
 
-    public void updatePets(ArrayList <ExoticPet> updatePet){
+    public void updatePets(ArrayList<ExoticPet> updatePet) {
         exoticPets = updatePet;
     }
 

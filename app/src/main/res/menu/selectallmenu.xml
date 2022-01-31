@@ -17,7 +17,7 @@
 
     <item
         android:id="@+id/feed_pet"
-        android:title="Feed Pet"
+        android:title="Feed Pets"
         app:showAsAction="always" />
 
 </menu>

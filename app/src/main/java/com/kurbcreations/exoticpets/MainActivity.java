@@ -167,8 +167,6 @@ public class MainActivity extends AppCompatActivity {
             exoticPets = (ArrayList<ExoticPet>) exoticPetDao.getAll();
         });
 
-
-
         //Views
         deletePetView = getLayoutInflater().inflate(R.layout.delete_pet_layout, null);
         changePetPictureView = getLayoutInflater().inflate(R.layout.change_pet_picture, null);
@@ -190,7 +188,6 @@ public class MainActivity extends AppCompatActivity {
         searchForPetTextview = findViewById(R.id.textview_searchForPet);
 
         initViews();
-        mAdapter.notifyDataSetChanged();
 
         instructionTextView.setText("Click add button\n  to create pet");
         //Allows user to take pictures
@@ -417,6 +414,12 @@ public class MainActivity extends AppCompatActivity {
                 });
             }
         });
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        mAdapter.notifyDataSetChanged();
     }
 
     //This method sets up the RecycleView in the app
