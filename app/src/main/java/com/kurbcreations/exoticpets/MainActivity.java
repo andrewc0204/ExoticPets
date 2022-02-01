@@ -28,6 +28,7 @@ import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
+import com.google.android.material.snackbar.Snackbar;
 import com.kurbcreations.exoticpets.ViewModels.MainActivityViewModel;
 import com.kurbcreations.exoticpets.adapters.CustomSpinnerAdapter;
 import com.kurbcreations.exoticpets.adapters.RecyclerViewAdapter;
@@ -347,8 +348,8 @@ public class MainActivity extends AppCompatActivity {
 
                             //Checks to see if user picked a pet type
                         } else if (spinner.getSelectedItem().toString().equals("Choose Animal")) {
-                            Toast.makeText(MainActivity.this, "Choose Animal", Toast.LENGTH_SHORT).show();
-
+                            Snackbar.make(view, "Choose Animal", Snackbar.LENGTH_LONG)
+                            .setAction("Action", null).show();
                         } else {
                             ExoticPet exoticPet = new ExoticPet(UUID.randomUUID().toString(),null, R.drawable.ladybug, null, null, null);
 
