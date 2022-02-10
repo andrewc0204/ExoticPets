@@ -4,7 +4,6 @@ import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
 import android.content.Context;
 import android.content.DialogInterface;
-import android.os.AsyncTask;
 import android.view.ActionMode;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -35,7 +34,6 @@ import com.kurbcreations.exoticpets.models.ExoticPet;
 import com.kurbcreations.exoticpets.database.ExoticPetDao;
 import com.kurbcreations.exoticpets.R;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import com.squareup.picasso.Picasso;
 
 import java.io.File;
 import java.text.SimpleDateFormat;
@@ -44,9 +42,8 @@ import java.util.Calendar;
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
 
-import jp.wasabeef.picasso.transformations.CropCircleTransformation;
-
 public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapter.ViewHolder> {
+
 
     //ArrayLists
     public ArrayList<ExoticPet> exoticPets;
@@ -80,7 +77,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
 
     //Booleans
     public boolean changePicture = false;
-    boolean isEnable = false;
+    public boolean isCardViewClicked = false;
     boolean isSelectAll = false;
 
 
@@ -98,12 +95,12 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
 
     }
 
+
     //This method is responsible for inflating the view
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.layout_listitem, parent, false);
         ViewHolder holder = new ViewHolder(view);
-
         //create new thread
         executor = Executors.newSingleThreadExecutor();
         //Database
@@ -112,7 +109,6 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
         exoticPetDao = db.exoticPetDAO();
 
         return holder;
-
     }
 
     //This method gets called everytime a new item gets added to the list in RecycleView
@@ -159,59 +155,63 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
 
         holder.petNameTextView.setText(exoticPets.get(position).getPetName());
 
+
         //Changes Pet Name
         holder.petNameTextView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                AlertDialog.Builder builder = new AlertDialog.Builder(mContext);
-                builder.setView(changePetNameView);
-                AlertDialog alertDialog = builder.create();
-                alertDialog.show();
+                if (!isCardViewClicked) {
+                    holder.petNameTextView.setClickable(false);
+                    AlertDialog.Builder builder = new AlertDialog.Builder(mContext);
+                    builder.setView(changePetNameView);
+                    AlertDialog alertDialog = builder.create();
+                    alertDialog.show();
 
-                Button okChangePetNameButton = changePetNameView.findViewById(R.id.ok_change_name_button);
-                Button cancelNameChangeButton = changePetNameView.findViewById(R.id.cancel_change_petname_alertDialog);
-                EditText changePetNameEditText = changePetNameView.findViewById(R.id.edittext_pet_name);
+                    Button okChangePetNameButton = changePetNameView.findViewById(R.id.ok_change_name_button);
+                    Button cancelNameChangeButton = changePetNameView.findViewById(R.id.cancel_change_petname_alertDialog);
+                    EditText changePetNameEditText = changePetNameView.findViewById(R.id.edittext_pet_name);
 
-                okChangePetNameButton.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        if (changePetNameEditText.getText().toString().isEmpty()) {
-                            changePetNameEditText.setError("Please type pet name");
-                            changePetNameEditText.requestFocus();
+                    okChangePetNameButton.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            if (changePetNameEditText.getText().toString().isEmpty()) {
+                                changePetNameEditText.setError("Please type pet name");
+                                changePetNameEditText.requestFocus();
 
-                            //Checks to see if user picked a pet type
-                        } else {
-                            for (ExoticPet exoticPet : exoticPets) {
-                                exoticPets.get(position).setPetName(changePetNameEditText.getText().toString());
-                                holder.petNameTextView.setText(changePetNameEditText.getText().toString());
-                                executor.execute(() -> {
-                                    exoticPetDao.updateName(exoticPet.getPetName(), exoticPet.getSecondId());
-                                });
+                                //Checks to see if user picked a pet type
+                            } else {
+                                for (ExoticPet exoticPet : exoticPets) {
+                                    exoticPets.get(position).setPetName(changePetNameEditText.getText().toString());
+                                    holder.petNameTextView.setText(changePetNameEditText.getText().toString());
+                                    executor.execute(() -> {
+                                        exoticPetDao.updateName(exoticPet.getPetName(), exoticPet.getSecondId());
+                                    });
+                                }
+                                alertDialog.dismiss();
                             }
+                        }
+                    });
+
+                    cancelNameChangeButton.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
                             alertDialog.dismiss();
+                            if (changePetNameView.getParent() != null) {
+                                ((ViewGroup) changePetNameView.getParent()).removeView(changePetNameView);
+                            }
                         }
-                    }
-                });
+                    });
 
-                cancelNameChangeButton.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        alertDialog.dismiss();
-                        if (changePetNameView.getParent() != null) {
-                            ((ViewGroup) changePetNameView.getParent()).removeView(changePetNameView);
+                    alertDialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
+                        @Override
+                        public void onDismiss(DialogInterface dialog) {
+                            alertDialog.dismiss();
+                            if (changePetNameView.getParent() != null) {
+                                ((ViewGroup) changePetNameView.getParent()).removeView(changePetNameView);
+                            }
                         }
-                    }
-                });
-
-                alertDialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
-                    @Override
-                    public void onDismiss(DialogInterface dialog) {
-                        alertDialog.dismiss();
-                        if (changePetNameView.getParent() != null) {
-                            ((ViewGroup) changePetNameView.getParent()).removeView(changePetNameView);
-                        }
-                    }
-                });
+                    });
+                }
             }
         });
 
@@ -219,201 +219,200 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
         holder.quickfeedButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                holder.fedDateTextView.setVisibility(View.VISIBLE);
-                holder.timeFedTextView.setVisibility(View.VISIBLE);
-                ExoticPet quickFeedPet = exoticPets.get(holder.getAbsoluteAdapterPosition());
-                quickFeedPets.add(quickFeedPet);
-                Calendar c = Calendar.getInstance();
-                SimpleDateFormat df = new SimpleDateFormat("MMM/dd/yyyy");
-                String formattedDate = df.format(c.getTime());
-                Calendar c1 = Calendar.getInstance();
-                SimpleDateFormat tf = new SimpleDateFormat("h:mm aa");
-                String formattedTime = tf.format(c1.getTime());
-                for (ExoticPet exoticPet : quickFeedPets) {
-                    exoticPet.setDatePetWasLastFed(formattedDate);
-                    exoticPet.setTimePetWasLastFed(formattedTime);
-                    holder.fedDateTextView.setText(exoticPets.get(position).getDatePetWasLastFed());
-                    holder.timeFedTextView.setText(exoticPets.get(position).getTimePetWasLastFed());
-                    quickFeedPets.remove(quickFeedPet);
-                    executor.execute(() -> {
-                        exoticPetDao.updateDateFed(exoticPet.getDatePetWasLastFed(), exoticPet.getSecondId());
-                        exoticPetDao.updateTimeFed(exoticPet.getTimePetWasLastFed(), exoticPet.getSecondId());
-                    });
+                if (!isCardViewClicked) {
+                    holder.quickfeedButton.setClickable(false);
+                    holder.fedDateTextView.setVisibility(View.VISIBLE);
+                    holder.timeFedTextView.setVisibility(View.VISIBLE);
+                    ExoticPet quickFeedPet = exoticPets.get(holder.getAbsoluteAdapterPosition());
+                    quickFeedPets.add(quickFeedPet);
+                    Calendar c = Calendar.getInstance();
+                    SimpleDateFormat df = new SimpleDateFormat("MMM/dd/yyyy");
+                    String formattedDate = df.format(c.getTime());
+                    Calendar c1 = Calendar.getInstance();
+                    SimpleDateFormat tf = new SimpleDateFormat("h:mm aa");
+                    String formattedTime = tf.format(c1.getTime());
+                    for (ExoticPet exoticPet : quickFeedPets) {
+                        exoticPet.setDatePetWasLastFed(formattedDate);
+                        exoticPet.setTimePetWasLastFed(formattedTime);
+                        holder.fedDateTextView.setText(exoticPets.get(position).getDatePetWasLastFed());
+                        holder.timeFedTextView.setText(exoticPets.get(position).getTimePetWasLastFed());
+                        quickFeedPets.remove(quickFeedPet);
+                        executor.execute(() -> {
+                            exoticPetDao.updateDateFed(exoticPet.getDatePetWasLastFed(), exoticPet.getSecondId());
+                            exoticPetDao.updateTimeFed(exoticPet.getTimePetWasLastFed(), exoticPet.getSecondId());
+                        });
+                    }
                 }
-
             }
         });
 
-        holder.lastFedTextView.setOnClickListener(new View.OnClickListener() {
+        holder.lastFedButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Calendar calendar = Calendar.getInstance();
-                int year = calendar.get(Calendar.YEAR);
-                int month = calendar.get(Calendar.MONTH);
-                int day = calendar.get(Calendar.DAY_OF_MONTH);
+                if (!isCardViewClicked) {
+                    holder.lastFedButton.setClickable(false);
+                    Calendar calendar = Calendar.getInstance();
+                    int year = calendar.get(Calendar.YEAR);
+                    int month = calendar.get(Calendar.MONTH);
+                    int day = calendar.get(Calendar.DAY_OF_MONTH);
 
+                    DatePickerDialog datePickerDialog = new DatePickerDialog(mContext, new DatePickerDialog.OnDateSetListener() {
+                        @Override
+                        public void onDateSet(DatePicker view, int year, int month, int day) {
 
-                DatePickerDialog datePickerDialog = new DatePickerDialog(mContext, new DatePickerDialog.OnDateSetListener() {
-                    @Override
-                    public void onDateSet(DatePicker view, int year, int month, int day) {
+                            calendar.set(Calendar.YEAR, year);
+                            calendar.set(Calendar.MONTH, month);
+                            calendar.set(Calendar.DAY_OF_MONTH, day);
+                            SimpleDateFormat df = new SimpleDateFormat("MMM/dd/yyyy");
+                            String formattedDate = df.format(calendar.getTime());
 
-                        calendar.set(Calendar.YEAR, year);
-                        calendar.set(Calendar.MONTH, month);
-                        calendar.set(Calendar.DAY_OF_MONTH, day);
-                        SimpleDateFormat df = new SimpleDateFormat("MMM/dd/yyyy");
-                        String formattedDate = df.format(calendar.getTime());
-
-                        for (ExoticPet exoticPet : exoticPets) {
-                            exoticPets.get(position).setDatePetWasLastFed(formattedDate);
-                            holder.fedDateTextView.setText(exoticPets.get(position).getDatePetWasLastFed());
-                            notifyDataSetChanged();
-                            executor.execute(() -> {
-                                exoticPetDao.updateDateFed(exoticPet.getDatePetWasLastFed(), exoticPet.getSecondId());
-                            });
+                            for (ExoticPet exoticPet : exoticPets) {
+                                exoticPets.get(position).setDatePetWasLastFed(formattedDate);
+                                holder.fedDateTextView.setText(exoticPets.get(position).getDatePetWasLastFed());
+                                notifyDataSetChanged();
+                                executor.execute(() -> {
+                                    exoticPetDao.updateDateFed(exoticPet.getDatePetWasLastFed(), exoticPet.getSecondId());
+                                });
+                            }
                         }
-                    }
-                }, year, month, day);
-                datePickerDialog.show();
+                    }, year, month, day);
+                    datePickerDialog.show();
+                }
             }
         });
 
-        holder.timeTextView.setOnClickListener(new View.OnClickListener() {
+        holder.timeButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Calendar currentTime = Calendar.getInstance();
-                int min = currentTime.get(Calendar.MINUTE);
-                int hour = currentTime.get(Calendar.HOUR_OF_DAY);
+                if (!isCardViewClicked){
+                    holder.timeButton.setClickable(false);
+                    Calendar currentTime = Calendar.getInstance();
+                    int min = currentTime.get(Calendar.MINUTE);
+                    int hour = currentTime.get(Calendar.HOUR_OF_DAY);
 
-                TimePickerDialog timePickerDialog = new TimePickerDialog(mContext, new TimePickerDialog.OnTimeSetListener() {
-                    @Override
-                    public void onTimeSet(TimePicker view, int selectedHour, int selectedMinute) {
-                        String choosedHour = "";
-                        String choosedMinute = "";
-                        String choosedTimeZone = "";
+                    TimePickerDialog timePickerDialog = new TimePickerDialog(mContext, new TimePickerDialog.OnTimeSetListener() {
+                        @Override
+                        public void onTimeSet(TimePicker view, int selectedHour, int selectedMinute) {
+                            String choosedHour = "";
+                            String choosedMinute = "";
+                            String choosedTimeZone = "";
 
-                        if (selectedHour > 12) {
-                            choosedTimeZone = "PM";
-                            selectedHour = selectedHour - 12;
-                            if (selectedHour < 10) {
-                                choosedHour = "" + selectedHour;
+                            if (selectedHour > 12) {
+                                choosedTimeZone = "PM";
+                                selectedHour = selectedHour - 12;
+                                if (selectedHour < 10) {
+                                    choosedHour = "" + selectedHour;
+                                } else {
+                                    choosedHour = "" + selectedHour;
+                                }
                             } else {
-                                choosedHour = "" + selectedHour;
+                                choosedTimeZone = "AM";
+                                if (selectedHour < 10) {
+                                    choosedHour = "" + selectedHour;
+                                } else {
+                                    choosedHour = "" + selectedHour;
+                                }
                             }
-                        } else {
-                            choosedTimeZone = "AM";
-                            if (selectedHour < 10) {
-                                choosedHour = "" + selectedHour;
+                            if (selectedMinute < 10) {
+                                choosedMinute = "0" + selectedMinute;
                             } else {
-                                choosedHour = "" + selectedHour;
+                                choosedMinute = "" + selectedMinute;
+                            }
+
+                            String time = choosedHour + ":" + choosedMinute + " " + choosedTimeZone;
+
+                            for (ExoticPet exoticPet : exoticPets) {
+                                exoticPets.get(position).setTimePetWasLastFed(time);
+                                holder.timeFedTextView.setText(exoticPets.get(position).getTimePetWasLastFed());
+                                notifyDataSetChanged();
+                                executor.execute(() -> {
+                                    exoticPetDao.updateTimeFed(exoticPet.getTimePetWasLastFed(), exoticPet.getSecondId());
+                                });
                             }
                         }
-                        if (selectedMinute < 10) {
-                            choosedMinute = "0" + selectedMinute;
-                        } else {
-                            choosedMinute = "" + selectedMinute;
-                        }
-
-                        String time = choosedHour + ":" + choosedMinute + " " + choosedTimeZone;
-
-                        for (ExoticPet exoticPet : exoticPets) {
-                            exoticPets.get(position).setTimePetWasLastFed(time);
-                            holder.timeFedTextView.setText(exoticPets.get(position).getTimePetWasLastFed());
-                            notifyDataSetChanged();
-                            executor.execute(() -> {
-                                exoticPetDao.updateTimeFed(exoticPet.getTimePetWasLastFed(), exoticPet.getSecondId());
-                            });
-                        }
-                    }
-                }, hour, min, false);
-                timePickerDialog.show();
-            }
-        });
-        //Changes the date pet is fed
-        holder.fedDateTextView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
+                    }, hour, min, false);
+                    timePickerDialog.show();
+                }
             }
         });
 
-        //Changes the time pet is fed
-        holder.timeFedTextView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-            }
-        });
 
         //Changes the pet picture
         holder.pet_ImageView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                if (!isCardViewClicked) {
+                    holder.pet_ImageView.setClickable(false);
+                    AppCompatButton changePetPictureButton = changePetPictureView.findViewById(R.id.change_picture_button);
+                    Button closeBtn1 = changePetPictureView.findViewById(R.id.close_btn1);
+                    ImageView changePetPictureImageView = changePetPictureView.findViewById(R.id.change_pet_picture);
 
-                AppCompatButton changePetPictureButton = changePetPictureView.findViewById(R.id.change_picture_button);
-                Button closeBtn1 = changePetPictureView.findViewById(R.id.close_btn1);
-                ImageView changePetPictureImageView = changePetPictureView.findViewById(R.id.change_pet_picture);
+                    changePicture = true;
+                    AlertDialog.Builder builder = new AlertDialog.Builder(mContext);
+                    builder.setView(changePetPictureView);
+                    AlertDialog alertDialog = builder.create();
+                    alertDialog.show();
 
-                changePicture = true;
-                AlertDialog.Builder builder = new AlertDialog.Builder(mContext);
-                builder.setView(changePetPictureView);
-                AlertDialog alertDialog = builder.create();
-                alertDialog.show();
-
-                if (exoticPets.get(position).getCameraPicture() != null) {
-                    Glide.with(mContext)
-                            .asBitmap()
-                            .load(exoticPets.get(position).getCameraPicture())
-                            .apply(RequestOptions.circleCropTransform())
-                            .into(changePetPictureImageView);
-                } else {
-                    Glide.with(mContext)
-                            .asBitmap()
-                            .load(exoticPets.get(position).getPetImage())
-                            .into(changePetPictureImageView);
-                }
-
-                closeBtn1.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-
-                        alertDialog.dismiss();
+                    if (exoticPets.get(position).getCameraPicture() != null) {
+                        Glide.with(mContext)
+                                .asBitmap()
+                                .load(exoticPets.get(position).getCameraPicture())
+                                .apply(RequestOptions.circleCropTransform())
+                                .into(changePetPictureImageView);
+                    } else {
+                        Glide.with(mContext)
+                                .asBitmap()
+                                .load(exoticPets.get(position).getPetImage())
+                                .into(changePetPictureImageView);
                     }
-                });
-                alertDialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
-                    @Override
-                    public void onDismiss(DialogInterface dialog) {
 
-                        alertDialog.dismiss();
-                        if (changePetPictureView.getParent() != null) {
-                            ((ViewGroup) changePetPictureView.getParent()).removeView(changePetPictureView);
+                    closeBtn1.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+
+                            alertDialog.dismiss();
                         }
-                    }
-                });
+                    });
+                    alertDialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
+                        @Override
+                        public void onDismiss(DialogInterface dialog) {
 
-                changePetPictureButton.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-
-                        if (cameraPicture1 != null) {
-                            for (ExoticPet exoticPet : exoticPets) {
-                                Picasso.get()
-                                        .load(cameraPicture1)
-                                        .transform(new CropCircleTransformation())
-                                        .into(holder.pet_ImageView);
-
-                                exoticPets.get(position).setCameraPicture(String.valueOf(cameraPicture1));
-                                executor.execute(() -> {
-                                    exoticPetDao.updatePetPicture(exoticPet.getCameraPicture(), exoticPet.getSecondId());
-                                });
-                                alertDialog.dismiss();
+                            alertDialog.dismiss();
+                            if (changePetPictureView.getParent() != null) {
+                                ((ViewGroup) changePetPictureView.getParent()).removeView(changePetPictureView);
                             }
-                        } else {
-                            Snackbar.make(v, "Please take a picture", Snackbar.LENGTH_LONG)
-                                    .setAction("Action", null).show();
-//                            Toast.makeText(mContext, "Please take a picture", Toast.LENGTH_SHORT).show();
                         }
-                    }
-                });
+                    });
+
+                    changePetPictureButton.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            if (cameraPicture1 != null) {
+                                for (ExoticPet exoticPet : exoticPets) {
+                                    Glide.with(mContext)
+                                            .load(cameraPicture1)
+                                            .apply(RequestOptions.circleCropTransform())
+                                            .into(holder.pet_ImageView);
+//                                Picasso.get()
+//                                        .load(cameraPicture1)
+//                                        .transform(new CropCircleTransformation())
+//                                        .into(holder.pet_ImageView);
+
+                                    exoticPets.get(position).setCameraPicture(String.valueOf(cameraPicture1));
+                                    executor.execute(() -> {
+                                        exoticPetDao.updatePetPicture(exoticPet.getCameraPicture(), exoticPet.getSecondId());
+                                    });
+                                    alertDialog.dismiss();
+                                }
+                            } else {
+                                Snackbar.make(v, "Please take a picture", Snackbar.LENGTH_LONG)
+                                        .setAction("Action", null).show();
+//                            Toast.makeText(mContext, "Please take a picture", Toast.LENGTH_SHORT).show();
+                            }
+
+                        }
+                    });
+                }
             }
         });
 
@@ -422,8 +421,9 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
-                if (!isEnable) {
+                addPetButton.setClickable(false);
+                if (!isCardViewClicked) {
+                    isCardViewClicked = true;
                     //When action mode is not enable
                     //Initialize action mode
                     ActionMode.Callback callback = new ActionMode.Callback() {
@@ -439,7 +439,6 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
 
                         @Override
                         public boolean onPrepareActionMode(ActionMode actionMode, Menu menu) {
-                            isEnable = true;
                             ClickItem(holder);
                             return true;
                         }
@@ -576,7 +575,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
                         @Override
                         public void onDestroyActionMode(ActionMode actionMode) {
                             //When action mode is destroy, set isEnable false
-                            isEnable = false;
+                            isCardViewClicked = false;
                             //Set isSelectAll false
                             isSelectAll = false;
                             //Clear select array list
@@ -594,7 +593,6 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
                 } else {
                     //When action mode is already enable
                     //Call method
-
                     ClickItem(holder);
                 }
 
@@ -673,13 +671,11 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
 
     }
 
-
     //This tell the adapter how many list items are in the list
     @Override
     public int getItemCount() {
         return exoticPets.size();
     }
-
 
     //ViewHolder holds the each individual widget in memory
     //Where we initialize data
@@ -690,12 +686,13 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
         TextView petNameTextView;
         TextView fedDateTextView;
         TextView timeFedTextView;
-        TextView lastFedTextView;
-        TextView timeTextView;
         ImageView checkBoxMainImageView;
         ImageView checkBoxSecondaryImageView;
         ImageView animalDetailsArrowImageView;
         Button quickfeedButton;
+        Button timeButton;
+        Button lastFedButton;
+
 
         public ViewHolder(View itemView) {
             super(itemView);
@@ -708,9 +705,9 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
             petNameTextView = itemView.findViewById(R.id.pet_name_textview);
             fedDateTextView = itemView.findViewById(R.id.fed_date);
             timeFedTextView = itemView.findViewById(R.id.timefed_textview);
-            lastFedTextView = itemView.findViewById(R.id.last_fed_textview);
-            timeTextView = itemView.findViewById(R.id.time_textview);
             quickfeedButton = itemView.findViewById(R.id.quick_feed_button);
+            timeButton = itemView.findViewById(R.id.time_button);
+            lastFedButton = itemView.findViewById(R.id.last_fed_button);
         }
     }
 

@@ -15,6 +15,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -56,12 +57,14 @@ public class MainActivity extends AppCompatActivity {
 
     //RecycleView vars
     public static RecyclerViewAdapter mAdapter;
+    private RecyclerView recyclerView;
 
     //ArrayList vars
     private ArrayList<ExoticPet> exoticPets = new ArrayList<>();
     private ArrayList<ExoticPet> mSearchedNamesArrayList = new ArrayList<>();
 
     //View vars
+
     private View view;
     private View deletePetView;
     private View changePetPictureView;
@@ -111,12 +114,10 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable @org.jetbrains.annotations.Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-
         easyImage.handleActivityResult(requestCode, resultCode, data, this, new DefaultCallback() {
             //Loads user picture into imageView
             @Override
             public void onMediaFilesPicked(MediaFile[] imageFiles, MediaSource source) {
-
                 for (MediaFile imageFile : imageFiles) {
                     if (!mAdapter.changePicture) {
                         Glide.with(MainActivity.this)
@@ -148,7 +149,6 @@ public class MainActivity extends AppCompatActivity {
                 //Not necessary to remove any files manually anymore
             }
         });
-
     }
 
     @Override
@@ -168,10 +168,14 @@ public class MainActivity extends AppCompatActivity {
             exoticPets = (ArrayList<ExoticPet>) exoticPetDao.getAll();
         });
 
+        //RecycleViews
+        recyclerView = findViewById(R.id.recyclerv_view);
+
         //Views
         deletePetView = getLayoutInflater().inflate(R.layout.delete_pet_layout, null);
         changePetPictureView = getLayoutInflater().inflate(R.layout.change_pet_picture, null);
         changePetNameView = getLayoutInflater().inflate(R.layout.change_pet_name, null);
+
 
         //ImageViews
         changePetPictureImageView = changePetPictureView.findViewById(R.id.change_pet_picture);
@@ -188,7 +192,11 @@ public class MainActivity extends AppCompatActivity {
         instructionTextView = findViewById(R.id.instruction_textview);
         searchForPetTextview = findViewById(R.id.textview_searchForPet);
 
+
         initViews();
+
+        Toast.makeText(MainActivity.this, exoticPets.size() + "", Toast.LENGTH_SHORT).show();
+
 
         instructionTextView.setText("Click add button\n  to create pet");
         //Allows user to take pictures
@@ -395,7 +403,6 @@ public class MainActivity extends AppCompatActivity {
 
                             pictureTaken = false;
                             exoticPets.add(exoticPet);
-                            Toast.makeText(MainActivity.this, exoticPets.size() + "", Toast.LENGTH_SHORT).show();
                             mAdapter.updatePets(exoticPets);
                             mAdapter.notifyItemInserted(exoticPets.size());
                             //Insert the data into offline Room on a seperate thread (highway) instead of the UI thread (The main highway)
@@ -417,19 +424,34 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
+
     @Override
-    protected void onStart() {
-        super.onStart();
+    protected void onResume() {
+        super.onResume();
         mAdapter.notifyDataSetChanged();
     }
 
     //This method sets up the RecycleView in the app
     private void initViews() {
-        RecyclerView recyclerView = findViewById(R.id.recyclerv_view);
         mAdapter = new RecyclerViewAdapter(this, this, exoticPets, changePetPictureView, cameraPicture1, deletePetView, addPetButton,changePetNameView,instructionTextView);
         recyclerView.setAdapter(mAdapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        recyclerView.addOnItemTouchListener(new RecyclerView.OnItemTouchListener() {
+            @Override
+            public boolean onInterceptTouchEvent(@NonNull RecyclerView rv, @NonNull MotionEvent e) {
+                return false;
+            }
 
+            @Override
+            public void onTouchEvent(@NonNull RecyclerView rv, @NonNull MotionEvent e) {
+
+            }
+
+            @Override
+            public void onRequestDisallowInterceptTouchEvent(boolean disallowIntercept) {
+
+            }
+        });
 
         //Search Pet Feature
         //While user is typing
@@ -460,12 +482,12 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
-    @Override
-    protected void onStop() {
-        super.onStop();
-
-//        saveData();
-    }
+//    @Override
+//    protected void onStop() {
+//        super.onStop();
+//
+////        saveData();
+//    }
 
 
 //    public void saveData(){

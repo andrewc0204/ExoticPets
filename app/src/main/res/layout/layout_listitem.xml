@@ -17,7 +17,6 @@
         android:layout_height="wrap_content"
         android:padding="10dp">
 
-
         <ImageView
             android:id="@+id/pet_picture_imageview"
             android:layout_width="75dp"
@@ -49,46 +48,74 @@
             android:src="@drawable/ic_baseline_navigate_next_24"
             android:visibility="gone"/>
 
-        <TextView
-            android:id="@+id/last_fed_textview"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/pet_picture_imageview"
-            android:layout_marginLeft="20dp"
-            android:layout_marginTop="30dp"
-            android:fontFamily="@font/consola"
-            android:text="Last Fed:"
-            android:textSize="18dp" />
 
         <TextView
             android:id="@+id/fed_date"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@id/pet_picture_imageview"
-            android:layout_marginTop="30dp"
-            android:layout_toEndOf="@id/last_fed_textview"
+            android:layout_marginLeft="5dp"
+            android:layout_marginTop="28dp"
+            android:layout_toRightOf="@id/last_fed_cardview"
             android:fontFamily="@font/consola"
-            android:textSize="18dp"
-            android:text="Date" />
-
-        <TextView
-            android:id="@+id/time_textview"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/last_fed_textview"
-            android:layout_marginLeft="20dp"
-            android:layout_marginTop="5dp"
-            android:fontFamily="@font/consola"
-            android:text="Time:"
+            android:text="Date"
             android:textSize="18dp" />
+
+        <androidx.cardview.widget.CardView
+            android:id="@+id/last_fed_cardview"
+            android:layout_width="115dp"
+            android:layout_height="50dp"
+            android:layout_marginTop="15dp"
+            card_view:cardCornerRadius="8dp"
+            card_view:cardElevation="5dp"
+            card_view:cardUseCompatPadding="true"
+            android:layout_below="@id/pet_picture_imageview"
+           >
+
+            <Button
+                android:id="@+id/last_fed_button"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:text="Last Fed"
+                android:textAllCaps="false"
+                android:textColor="@color/white"
+                android:fontFamily="@font/consola"
+                android:textSize="18dp"
+                android:background="@drawable/rounded_button_left" />
+
+        </androidx.cardview.widget.CardView>
+
+        <androidx.cardview.widget.CardView
+            android:id="@+id/time_button_cardview"
+            android:layout_width="80dp"
+            android:layout_height="50dp"
+            android:layout_below="@id/last_fed_cardview"
+            card_view:cardCornerRadius="8dp"
+            card_view:cardElevation="5dp"
+            card_view:cardUseCompatPadding="true">
+
+            <Button
+                android:id="@+id/time_button"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:text="Time"
+                android:textAllCaps="false"
+                android:textColor="@color/white"
+                android:fontFamily="@font/consola"
+                android:textSize="18dp"
+                android:background="@drawable/rounded_button_left" />
+
+        </androidx.cardview.widget.CardView>
+
 
         <TextView
             android:id="@+id/timefed_textview"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@id/last_fed_textview"
-            android:layout_marginTop="5dp"
-            android:layout_toRightOf="@id/time_textview"
+            android:layout_below="@id/last_fed_cardview"
+            android:layout_marginLeft="5dp"
+            android:layout_marginTop="13dp"
+            android:layout_toRightOf="@id/time_button_cardview"
             android:text="Time Fed"
             android:textSize="18dp" />
 
@@ -127,7 +154,7 @@
         <androidx.cardview.widget.CardView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="15dp"
+            android:layout_marginTop="30dp"
             card_view:cardCornerRadius="8dp"
             card_view:cardElevation="5dp"
             card_view:cardUseCompatPadding="true"
@@ -142,7 +169,7 @@
                 android:textAllCaps="false"
                 android:textColor="@color/white"
                 android:fontFamily="@font/consola"
-                android:background="@drawable/alertbackground"
+                android:background="@drawable/rounded_button_left"
                 />
 
         </androidx.cardview.widget.CardView>
