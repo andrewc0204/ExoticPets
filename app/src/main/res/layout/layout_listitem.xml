@@ -59,11 +59,11 @@
             android:layout_toRightOf="@id/last_fed_cardview"
             android:fontFamily="@font/consola"
             android:text="Date"
-            android:textSize="18dp" />
+            android:textSize="16dp" />
 
         <androidx.cardview.widget.CardView
             android:id="@+id/last_fed_cardview"
-            android:layout_width="115dp"
+            android:layout_width="110dp"
             android:layout_height="50dp"
             android:layout_marginTop="15dp"
             card_view:cardCornerRadius="8dp"
@@ -80,14 +80,14 @@
                 android:textAllCaps="false"
                 android:textColor="@color/white"
                 android:fontFamily="@font/consola"
-                android:textSize="18dp"
+                android:textSize="16dp"
                 android:background="@drawable/rounded_button_left" />
 
         </androidx.cardview.widget.CardView>
 
         <androidx.cardview.widget.CardView
             android:id="@+id/time_button_cardview"
-            android:layout_width="80dp"
+            android:layout_width="75dp"
             android:layout_height="50dp"
             android:layout_below="@id/last_fed_cardview"
             card_view:cardCornerRadius="8dp"
@@ -102,7 +102,7 @@
                 android:textAllCaps="false"
                 android:textColor="@color/white"
                 android:fontFamily="@font/consola"
-                android:textSize="18dp"
+                android:textSize="16dp"
                 android:background="@drawable/rounded_button_left" />
 
         </androidx.cardview.widget.CardView>
@@ -117,7 +117,7 @@
             android:layout_marginTop="13dp"
             android:layout_toRightOf="@id/time_button_cardview"
             android:text="Time Fed"
-            android:textSize="18dp" />
+            android:textSize="16dp" />
 
         <com.airbnb.lottie.LottieAnimationView
             android:id="@+id/add_pet_json"
@@ -152,7 +152,7 @@
             android:visibility="gone"/>
 
         <androidx.cardview.widget.CardView
-            android:layout_width="wrap_content"
+            android:layout_width="120dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="30dp"
             card_view:cardCornerRadius="8dp"
@@ -166,6 +166,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:text="Quick Feed"
+                android:textSize="16dp"
                 android:textAllCaps="false"
                 android:textColor="@color/white"
                 android:fontFamily="@font/consola"

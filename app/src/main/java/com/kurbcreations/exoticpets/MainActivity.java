@@ -40,6 +40,7 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
@@ -194,6 +195,8 @@ public class MainActivity extends AppCompatActivity {
 
 
         initViews();
+
+
 
         Toast.makeText(MainActivity.this, exoticPets.size() + "", Toast.LENGTH_SHORT).show();
 
@@ -428,7 +431,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        mAdapter.notifyDataSetChanged();
+
     }
 
     //This method sets up the RecycleView in the app
@@ -436,22 +439,6 @@ public class MainActivity extends AppCompatActivity {
         mAdapter = new RecyclerViewAdapter(this, this, exoticPets, changePetPictureView, cameraPicture1, deletePetView, addPetButton,changePetNameView,instructionTextView);
         recyclerView.setAdapter(mAdapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
-        recyclerView.addOnItemTouchListener(new RecyclerView.OnItemTouchListener() {
-            @Override
-            public boolean onInterceptTouchEvent(@NonNull RecyclerView rv, @NonNull MotionEvent e) {
-                return false;
-            }
-
-            @Override
-            public void onTouchEvent(@NonNull RecyclerView rv, @NonNull MotionEvent e) {
-
-            }
-
-            @Override
-            public void onRequestDisallowInterceptTouchEvent(boolean disallowIntercept) {
-
-            }
-        });
 
         //Search Pet Feature
         //While user is typing

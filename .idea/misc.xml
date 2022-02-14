@@ -6,6 +6,7 @@
         <entry key="..\:/Users/andre/AndroidStudioProjects/ExoticPets/app/src/main/res/drawable/alertbackground.xml" value="0.3828125" />
         <entry key="..\:/Users/andre/AndroidStudioProjects/ExoticPets/app/src/main/res/drawable/circle.xml" value="0.3828125" />
         <entry key="..\:/Users/andre/AndroidStudioProjects/ExoticPets/app/src/main/res/drawable/circle_background.xml" value="0.32916666666666666" />
+        <entry key="..\:/Users/andre/AndroidStudioProjects/ExoticPets/app/src/main/res/drawable/gradient.xml" value="0.168" />
         <entry key="..\:/Users/andre/AndroidStudioProjects/ExoticPets/app/src/main/res/drawable/ic_baseline_add_circle_outline_24.xml" value="0.3828125" />
         <entry key="..\:/Users/andre/AndroidStudioProjects/ExoticPets/app/src/main/res/drawable/ic_baseline_image_24.xml" value="0.3828125" />
         <entry key="..\:/Users/andre/AndroidStudioProjects/ExoticPets/app/src/main/res/drawable/ic_baseline_navigate_next_24.xml" value="0.3828125" />
@@ -22,6 +23,9 @@
         <entry key="..\:/Users/andre/AndroidStudioProjects/ExoticPets/app/src/main/res/drawable/ic_pawprint.xml" value="0.3828125" />
         <entry key="..\:/Users/andre/AndroidStudioProjects/ExoticPets/app/src/main/res/drawable/ic_select_all.xml" value="0.316" />
         <entry key="..\:/Users/andre/AndroidStudioProjects/ExoticPets/app/src/main/res/drawable/ic_select_all_test.xml" value="0.316" />
+        <entry key="..\:/Users/andre/AndroidStudioProjects/ExoticPets/app/src/main/res/drawable/main_screen_background.xml" value="0.168" />
+        <entry key="..\:/Users/andre/AndroidStudioProjects/ExoticPets/app/src/main/res/drawable/rounded_button_left.xml" value="0.316" />
+        <entry key="..\:/Users/andre/AndroidStudioProjects/ExoticPets/app/src/main/res/drawable/rounded_button_right.xml" value="0.316" />
         <entry key="..\:/Users/andre/AndroidStudioProjects/ExoticPets/app/src/main/res/layout/activity_main.xml" value="0.33" />
         <entry key="..\:/Users/andre/AndroidStudioProjects/ExoticPets/app/src/main/res/layout/activity_main2.xml" value="0.27291666666666664" />
         <entry key="..\:/Users/andre/AndroidStudioProjects/ExoticPets/app/src/main/res/layout/animal_details.xml" value="0.328804347826087" />
