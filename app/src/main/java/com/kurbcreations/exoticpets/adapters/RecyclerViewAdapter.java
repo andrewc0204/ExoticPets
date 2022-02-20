@@ -17,6 +17,7 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.TimePicker;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
@@ -39,10 +40,14 @@ import java.io.File;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.HashMap;
 import java.util.concurrent.Executor;
+
 import java.util.concurrent.Executors;
 
 public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapter.ViewHolder> {
+
+    ActionMode mActionMode;
 
 
     //ArrayLists
@@ -284,7 +289,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
         holder.timeButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (!isCardViewClicked){
+                if (!isCardViewClicked) {
                     holder.timeButton.setClickable(false);
                     Calendar currentTime = Calendar.getInstance();
                     int min = currentTime.get(Calendar.MINUTE);
@@ -335,7 +340,6 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
                 }
             }
         });
-
 
         //Changes the pet picture
         holder.pet_ImageView.setOnClickListener(new View.OnClickListener() {
@@ -421,9 +425,10 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-//                addPetButton.setClickable(false);
+
                 addPetButton.setVisibility(View.GONE);
                 if (!isCardViewClicked) {
+
                     isCardViewClicked = true;
                     //When action mode is not enable
                     //Initialize action mode
@@ -434,13 +439,17 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
                             MenuInflater menuInflater = actionMode.getMenuInflater();
                             //Inflate menu
                             menuInflater.inflate(R.menu.selectallmenu, menu);
-
+                           mActionMode = actionMode;
                             return true;
                         }
 
                         @Override
                         public boolean onPrepareActionMode(ActionMode actionMode, Menu menu) {
                             ClickItem(holder);
+
+                            if (selectedPetIdsArrayList.isEmpty()){
+                                actionMode.finish();
+                            }
                             return true;
                         }
 
@@ -548,7 +557,6 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
                                         break;
                                     }
 
-
                                 case R.id.feed_pet:
 
                                     Calendar c = Calendar.getInstance();
@@ -582,8 +590,8 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
                             //Clear select array list
                             feedPet.clear();
                             selectedPetIdsArrayList.clear();
-                            //Notify adapter
-//                            addPetButton.setClickable(true);
+                            mActionMode = null;
+
                             addPetButton.setVisibility(View.VISIBLE);
                             notifyDataSetChanged();
 
@@ -649,8 +657,8 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
 
 
     private void ClickItem(ViewHolder holder) {
-        //Get the selected item value
 
+        //Get the selected item value
         ExoticPet pets = exoticPets.get(holder.getAbsoluteAdapterPosition());
         //Check condition
         if (holder.addPetAnimImageView.getVisibility() == View.GONE) {
@@ -659,7 +667,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
             holder.checkBoxMainImageView.setVisibility(View.GONE);
             holder.addPetAnimImageView.playAnimation();
             holder.addPetAnimImageView.setVisibility(View.VISIBLE);
-            //Set background color
+
             feedPet.add(pets);
             selectedPetIdsArrayList.add(pets);
         } else {
@@ -669,6 +677,9 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
             holder.addPetAnimImageView.setVisibility(View.GONE);
             feedPet.remove(pets);
             selectedPetIdsArrayList.remove(pets);
+            if (mActionMode != null && selectedPetIdsArrayList.isEmpty()){
+                mActionMode.finish();
+            }
         }
 
     }
