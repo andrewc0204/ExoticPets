@@ -421,7 +421,8 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                addPetButton.setClickable(false);
+//                addPetButton.setClickable(false);
+                addPetButton.setVisibility(View.GONE);
                 if (!isCardViewClicked) {
                     isCardViewClicked = true;
                     //When action mode is not enable
@@ -582,7 +583,8 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
                             feedPet.clear();
                             selectedPetIdsArrayList.clear();
                             //Notify adapter
-                            addPetButton.setClickable(true);
+//                            addPetButton.setClickable(true);
+                            addPetButton.setVisibility(View.VISIBLE);
                             notifyDataSetChanged();
 
 

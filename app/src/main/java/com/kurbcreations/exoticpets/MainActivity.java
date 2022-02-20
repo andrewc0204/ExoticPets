@@ -198,7 +198,7 @@ public class MainActivity extends AppCompatActivity {
 
 
 
-        Toast.makeText(MainActivity.this, exoticPets.size() + "", Toast.LENGTH_SHORT).show();
+//        Toast.makeText(MainActivity.this, exoticPets.size() + "", Toast.LENGTH_SHORT).show();
 
 
         instructionTextView.setText("Click add button\n  to create pet");
