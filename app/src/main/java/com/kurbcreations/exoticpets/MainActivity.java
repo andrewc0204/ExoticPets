@@ -30,6 +30,7 @@ import android.widget.Toast;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 import com.google.android.material.snackbar.Snackbar;
+import com.google.firebase.analytics.FirebaseAnalytics;
 import com.kurbcreations.exoticpets.ViewModels.MainActivityViewModel;
 import com.kurbcreations.exoticpets.adapters.CustomSpinnerAdapter;
 import com.kurbcreations.exoticpets.adapters.RecyclerViewAdapter;
@@ -87,6 +88,7 @@ public class MainActivity extends AppCompatActivity {
     private ImageButton pictureImageButton;
     private FloatingActionButton addPetButton;
 
+
     //TextView Vars
     private TextView searchForPetTextview;
     private TextView instructionTextView;
@@ -103,6 +105,9 @@ public class MainActivity extends AppCompatActivity {
 
     //Booleans
     private boolean pictureTaken = false;
+
+    //FireBase
+    private FirebaseAnalytics mFirebaseAnalytics;
 //    public static final String SHARED_PREFS = "sharedPrefs";
 //    public static final String TEXT = "sharedPrefs";
 //    public static final String KEY_CONNECTIONS = "KEY_CONNECTIONS";
@@ -169,6 +174,8 @@ public class MainActivity extends AppCompatActivity {
             exoticPets = (ArrayList<ExoticPet>) exoticPetDao.getAll();
         });
 
+
+
         //RecycleViews
         recyclerView = findViewById(R.id.recyclerv_view);
 
@@ -193,10 +200,12 @@ public class MainActivity extends AppCompatActivity {
         instructionTextView = findViewById(R.id.instruction_textview);
         searchForPetTextview = findViewById(R.id.textview_searchForPet);
 
+        //FireBase Analytics
+        // Obtain the FirebaseAnalytics instance.
+        mFirebaseAnalytics = FirebaseAnalytics.getInstance(this);
+
 
         initViews();
-
-
 
 //        Toast.makeText(MainActivity.this, exoticPets.size() + "", Toast.LENGTH_SHORT).show();
 
@@ -266,6 +275,7 @@ public class MainActivity extends AppCompatActivity {
                     }
                 });
 
+                String[] phone_numbers;
                 //Spinner function
                 String[] listOfAnimals = {"Choose Animal", "Arachnid", "Amphibian", "Reptile", "Insect", "Fish", "Other"};
                 ArrayAdapter<String> arrayAdapter = new CustomSpinnerAdapter(MainActivity.this, android.R.layout.simple_spinner_dropdown_item, listOfAnimals);
@@ -296,6 +306,7 @@ public class MainActivity extends AppCompatActivity {
                                             .asBitmap()
                                             .load(R.drawable.ic_snake)
                                             .into(defaultImageView);
+
                                 }
                                 break;
                             case "Insect":

@@ -397,10 +397,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
                                             .load(cameraPicture1)
                                             .apply(RequestOptions.circleCropTransform())
                                             .into(holder.pet_ImageView);
-//                                Picasso.get()
-//                                        .load(cameraPicture1)
-//                                        .transform(new CropCircleTransformation())
-//                                        .into(holder.pet_ImageView);
+
 
                                     exoticPets.get(position).setCameraPicture(String.valueOf(cameraPicture1));
                                     executor.execute(() -> {
