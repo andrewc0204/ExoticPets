@@ -29,6 +29,8 @@ import com.airbnb.lottie.LottieAnimationView;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 import com.google.android.material.snackbar.Snackbar;
+import com.google.android.material.timepicker.MaterialTimePicker;
+import com.google.android.material.timepicker.TimeFormat;
 import com.kurbcreations.exoticpets.MainActivity;
 import com.kurbcreations.exoticpets.database.AppDatabase;
 import com.kurbcreations.exoticpets.models.ExoticPet;
@@ -48,7 +50,7 @@ import java.util.concurrent.Executors;
 public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapter.ViewHolder> {
 
     ActionMode mActionMode;
-
+    private MaterialTimePicker picker;
 
     //ArrayLists
     public ArrayList<ExoticPet> exoticPets;
@@ -70,6 +72,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
     private View deletePetView;
     private View changePetPictureView;
     private View changePetNameView;
+    private View addNotificationView;
 
     //EasyImage
     private File cameraPicture1;
@@ -87,7 +90,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
 
 
     public RecyclerViewAdapter(Context context, MainActivity mainActivity, ArrayList<ExoticPet> exoticPets, View changePetPictureView, File cameraPicture1,
-                               View deletePetView, FloatingActionButton addPetButton, View changePetNameView, TextView instructionTextView) {
+                               View deletePetView, FloatingActionButton addPetButton, View changePetNameView, TextView instructionTextView, View addNotificationView) {
         this.mContext = context;
         this.exoticPets = exoticPets;
         this.changePetPictureView = changePetPictureView;
@@ -97,6 +100,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
         this.changePetNameView = changePetNameView;
         this.mainActivity = mainActivity;
         this.instructionTextView = instructionTextView;
+        this.addNotificationView = addNotificationView;
 
     }
 
@@ -251,6 +255,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
             }
         });
 
+        //Changes when the pet was last fed
         holder.lastFedButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -286,6 +291,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
             }
         });
 
+        //Changes the time when pet was fed
         holder.timeButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -607,6 +613,41 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
             }
         });
 
+        holder.addAlarmImageView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(!isCardViewClicked){
+
+                    Button addNotifyButton = addNotificationView.findViewById(R.id.ok_add_notify_button);
+                    Button cancelNotifyButton = addNotificationView.findViewById(R.id.cancel_notification_button);
+
+                    AlertDialog.Builder builder = new AlertDialog.Builder(mContext);
+                    builder.setView(addNotificationView);
+                    AlertDialog alertDialog = builder.create();
+                    alertDialog.show();
+
+                    addNotifyButton.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+
+                        }
+                    });
+
+                    cancelNotifyButton.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            alertDialog.dismiss();
+                            if (addNotificationView.getParent() != null) {
+                                ((ViewGroup) addNotificationView.getParent()).removeView(addNotificationView);
+                            }
+                        }
+                    });
+
+                }
+
+            }
+        });
+
 //        holder.addPetAnimImageView.setOnClickListener(new View.OnClickListener() {
 //            @Override
 //            public void onClick(View v) {
@@ -699,6 +740,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
         ImageView checkBoxMainImageView;
         ImageView checkBoxSecondaryImageView;
         ImageView animalDetailsArrowImageView;
+        ImageView addAlarmImageView;
         Button quickfeedButton;
         Button timeButton;
         Button lastFedButton;
@@ -712,6 +754,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
             animalDetailsArrowImageView = itemView.findViewById(R.id.animal_details_arrow);
             checkBoxMainImageView = itemView.findViewById(R.id.iv_check_box_main);
             checkBoxSecondaryImageView = itemView.findViewById(R.id.iv_check_box_secondary);
+            addAlarmImageView = itemView.findViewById(R.id.add_alarm_imageview);
             petNameTextView = itemView.findViewById(R.id.pet_name_textview);
             fedDateTextView = itemView.findViewById(R.id.fed_date);
             timeFedTextView = itemView.findViewById(R.id.timefed_textview);

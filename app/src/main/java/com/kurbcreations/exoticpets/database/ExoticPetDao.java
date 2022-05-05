@@ -30,6 +30,8 @@ public interface ExoticPetDao {
     @Query("UPDATE pet SET camera_image = :cameraImage WHERE second_id = :id" )
     void updatePetPicture (String cameraImage, String id);
 
+
+
     @Query("DELETE FROM pet WHERE second_id = :secondId")
     void deleteBySecondID(String secondId);
 

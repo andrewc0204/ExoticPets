@@ -152,9 +152,10 @@
             android:visibility="gone"/>
 
         <androidx.cardview.widget.CardView
+            android:id="@+id/quick_feed_layout"
             android:layout_width="120dp"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="30dp"
+            android:layout_height="50dp"
+            android:layout_marginTop="15dp"
             card_view:cardCornerRadius="8dp"
             card_view:cardElevation="5dp"
             card_view:cardUseCompatPadding="true"
@@ -174,6 +175,16 @@
                 />
 
         </androidx.cardview.widget.CardView>
+
+        <ImageView
+            android:id="@+id/add_alarm_imageview"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_below="@id/quick_feed_layout"
+            android:layout_alignParentRight="true"
+            android:layout_marginTop="10dp"
+            android:layout_marginRight="15dp"
+            android:src="@drawable/ic_add_notification" />
 
     </RelativeLayout>
 </androidx.cardview.widget.CardView>

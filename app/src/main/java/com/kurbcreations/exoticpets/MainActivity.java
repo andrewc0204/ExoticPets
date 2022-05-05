@@ -10,8 +10,11 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.room.Room;
 
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -71,6 +74,7 @@ public class MainActivity extends AppCompatActivity {
     private View deletePetView;
     private View changePetPictureView;
     private View changePetNameView;
+    private View addNotificationView;
 
     //Toolbar vars
     public static Toolbar searchPetToobar;
@@ -183,6 +187,7 @@ public class MainActivity extends AppCompatActivity {
         deletePetView = getLayoutInflater().inflate(R.layout.delete_pet_layout, null);
         changePetPictureView = getLayoutInflater().inflate(R.layout.change_pet_picture, null);
         changePetNameView = getLayoutInflater().inflate(R.layout.change_pet_name, null);
+        addNotificationView = getLayoutInflater().inflate(R.layout.add_notification, null);
 
 
         //ImageViews
@@ -204,7 +209,7 @@ public class MainActivity extends AppCompatActivity {
         // Obtain the FirebaseAnalytics instance.
         mFirebaseAnalytics = FirebaseAnalytics.getInstance(this);
 
-
+        createNotificationChannel();
         initViews();
 
 //        Toast.makeText(MainActivity.this, exoticPets.size() + "", Toast.LENGTH_SHORT).show();
@@ -438,6 +443,19 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
+    private void createNotificationChannel() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O){
+            CharSequence name = "MyReminderChannel";
+            String description = "Channel for Alarm Manager";
+            int importance = NotificationManager.IMPORTANCE_HIGH;
+            NotificationChannel channel = new NotificationChannel("foxandroid", name, importance);
+            channel.setDescription(description);
+
+            NotificationManager notificationManager = getSystemService(NotificationManager.class);
+            notificationManager.createNotificationChannel(channel);
+        }
+    }
+
 
     @Override
     protected void onResume() {
@@ -447,7 +465,7 @@ public class MainActivity extends AppCompatActivity {
 
     //This method sets up the RecycleView in the app
     private void initViews() {
-        mAdapter = new RecyclerViewAdapter(this, this, exoticPets, changePetPictureView, cameraPicture1, deletePetView, addPetButton,changePetNameView,instructionTextView);
+        mAdapter = new RecyclerViewAdapter(this, this, exoticPets, changePetPictureView, cameraPicture1, deletePetView, addPetButton,changePetNameView,instructionTextView,addNotificationView);
         recyclerView.setAdapter(mAdapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
 

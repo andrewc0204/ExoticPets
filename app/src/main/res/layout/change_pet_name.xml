@@ -46,9 +46,9 @@
                 android:fontFamily="@font/consola"
                 android:gravity="center"
                 android:hint="Pet Name"
+                android:maxLength="15"
                 android:maxLines="1"
                 android:singleLine="true"
-                android:maxLength="15"
                 android:textColor="@color/white" />
 
             <Button

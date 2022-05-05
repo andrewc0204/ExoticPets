@@ -1,12 +1,13 @@
 package com.kurbcreations.exoticpets.ViewModels;
 
 import androidx.lifecycle.MutableLiveData;
+import androidx.lifecycle.ViewModel;
 
 import com.kurbcreations.exoticpets.models.ExoticPet;
 
 import java.util.List;
 
-public class MainActivityViewModel {
+public class MainActivityViewModel extends ViewModel {
 
     public MutableLiveData <List<ExoticPet>> mExoticPets = new MutableLiveData<>();
 

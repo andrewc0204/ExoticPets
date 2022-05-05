@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="match_parent"
+    xmlns:card_view="http://schemas.android.com/tools"
+    android:background="#80000000">
+
+    <androidx.cardview.widget.CardView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        card_view:cardCornerRadius="8dp"
+        card_view:cardElevation="5dp"
+        card_view:cardUseCompatPadding="true">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/alertbackground">
+
+            <TextView
+                android:id="@+id/every_textview"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:layout_toLeftOf="@id/days_edittext"
+                android:text="Every"
+                android:textColor="@color/white"
+                android:textSize="25dp" />
+
+            <EditText
+                android:id="@+id/days_edittext"
+                android:layout_width="30dp"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:inputType="number"
+                android:maxLength="2"
+                android:maxLines="1"
+                android:singleLine="true"
+                android:textColor="@color/white" />
+
+            <TextView
+                android:id="@+id/days_textview"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:layout_toRightOf="@id/days_edittext"
+                android:text="Days"
+                android:textColor="@color/white"
+                android:textSize="25dp" />
+
+            <TextView
+                android:id="@+id/time_notification_textview"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/days_edittext"
+                android:layout_toLeftOf="@id/clock_notificiation_textview"
+                android:text="Time: "
+                android:textColor="@color/white"
+                android:textSize="25dp" />
+
+            <TextView
+                android:id="@+id/clock_notificiation_textview"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/days_edittext"
+                android:layout_centerHorizontal="true"
+                android:text="Time"
+                android:textColor="@color/white"
+                android:textSize="25dp"
+                />
+
+            <Button
+                android:id="@+id/ok_add_notify_button"
+                android:layout_width="190dp"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/time_notification_textview"
+                android:layout_alignParentStart="true"
+                android:layout_marginTop="10dp"
+                android:background="@drawable/rounded_button_left"
+                android:fontFamily="@font/consola"
+                android:text="OK"
+                android:textColor="@color/white"
+                android:textSize="18sp" />
+
+            <Button
+                android:id="@+id/cancel_notification_button"
+                android:layout_width="160dp"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/time_notification_textview"
+                android:layout_alignParentEnd="true"
+                android:layout_marginTop="10dp"
+                android:layout_toRightOf="@id/ok_add_notify_button"
+                android:background="@drawable/rounded_button_right"
+                android:fontFamily="@font/consola"
+                android:text="Cancel"
+                android:textColor="@color/black"
+                android:textSize="18sp" />
+        </RelativeLayout>
+
+
+    </androidx.cardview.widget.CardView>
+
+</RelativeLayout>
